@@ -1,0 +1,15 @@
+{
+  "name": "basketball-stats",
+  "version": "1.0.0",
+  "description": "A web app for pro stats of NBA players",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "/Users/Jon/code/src/basketball-stats/.git/"
+  },
+  "author": "Jonathan Aellen",
+  "license": "ISC"
+}
