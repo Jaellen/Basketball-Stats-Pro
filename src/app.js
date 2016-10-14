@@ -1,34 +1,47 @@
 "use strict";
 
-
 var chai = require('chai');
 var assert = chai.assert;
 var $ = require('jquery');
 var Promise = require('promise');
 
 
-console.log('');
+//Program Declarations
 
-//APP START HERE
+  //Utility functions
 
-function testAjax() {
-  return Promise.resolve($.ajax({
-      url: "https://api.meetup.com/2/cities",
-      dataType: 'jsonp'
-  }));
+function showMessage(msg) {
+  var elt = document.createElement("div");
+  elt.textContent = msg
+  return document.body.appendChild(elt);
 }
 
-var promise = testAjax();
-var stats;
+function get(url) {
+  return new Promise(function(resolve, reject) {
+    var req = new XMLHttpRequest();
+    req.open("GET", url, true);
+    req.addEventListener("load", function() {
+      if (req.status < 400) { resolve(req.responseText); }
+      else { reject(new Error("Request failed: " + req.statusText)); }
+    });
+    req.addEventListener("error", function() {
+      reject(new Error("Network error"));
+    });
+    req.send(null);
+  });
+}
 
-promise.then(data => alert(data.results[0].city));
+function getJSON(url) {
+  return get(url).then(JSON.parse);
+}
+
+//Program Logic
+var loading = showMessage("Loading...");
+
+getJSON("https://api.meetup.com/2/cities").then(function(){
+    console.log(req.responseText);
+});
 
 
 
-/* Modules
-require('nav');
-require('stats');
-require('compare');
-require('favourites');
-require('account');
-*/
+//Test and Assertions

@@ -1,3 +1,11 @@
 {
-  "esversion": 6  
+  "esversion": 6,
+  "strict": false,
+  "asi": true,
+  "eqnull": true,
+  "browser": true,
+  "devel": true,
+  "jquery": true,
+  "mocha": true,
+  "node": true  
 }

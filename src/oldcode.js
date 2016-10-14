@@ -1,5 +1,22 @@
 /* May need later code
 
+
+function testAjax() {
+  return Promise.resolve($.ajax({
+      url: "https://api.meetup.com/2/cities",
+      dataType: 'jsonp'
+  }));
+}
+
+var promise = testAjax();
+var stats;
+
+promise.then(data => alert(data.results[0].city));
+
+
+
+
+
 var getCumulativePlayerStats = function() {
 
   return  $.ajax({
