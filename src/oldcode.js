@@ -1,5 +1,21 @@
 /* May need later code
 
+function get(url) {
+  //Return a new promise
+  return new Promise(function(resolve, reject) {
+    var req = new XMLHttpRequest();
+    req.open("GET", url, true);
+    req.addEventListener("load", function() {
+      if (req.status < 400) { resolve(req.responseText); }
+      else { reject(new Error("Request failed: " + req.statusText)); }
+    });
+    req.addEventListener("error", function() {
+      reject(new Error("Network error"));
+    });
+    req.send(null);
+  });
+}
+
 
 function testAjax() {
   return Promise.resolve($.ajax({

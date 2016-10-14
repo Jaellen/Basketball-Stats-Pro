@@ -17,17 +17,28 @@ function showMessage(msg) {
 }
 
 function get(url) {
+  //Return a new promise
   return new Promise(function(resolve, reject) {
     var req = new XMLHttpRequest();
     req.open("GET", url, true);
-    req.addEventListener("load", function() {
-      if (req.status < 400) { resolve(req.responseText); }
-      else { reject(new Error("Request failed: " + req.statusText)); }
-    });
-    req.addEventListener("error", function() {
-      reject(new Error("Network error"));
-    });
-    req.send(null);
+
+    req.onload = function() {
+      //Check the status
+      if (req.status === 200) {
+          resolve(req.response);
+      }
+      else {
+        reject(Error(req.statusText));
+      }
+    };
+
+    //Handle network errors
+    req.onerror = function() {
+      reject(Error("Network Error"))
+    };
+
+    //Make the request
+    req.send();
   });
 }
 
@@ -36,12 +47,14 @@ function getJSON(url) {
 }
 
 //Program Logic
-var loading = showMessage("Loading...");
 
-getJSON("https://api.meetup.com/2/cities").then(function(){
-    console.log(req.responseText);
-});
 
 
 
 //Test and Assertions
+
+getJSON('https://api.meetup.com/2/cities').then(function(response) {
+  console.log("Success", response);
+}, function(error) {
+  console.error("Failed", console.error);
+})
