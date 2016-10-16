@@ -1,0 +1,7 @@
+.search-field {
+  display: block;
+  width: 30%;
+  margin: 1em auto 0;
+  border: 1px solid #999;
+  font-size: 130%;
+}

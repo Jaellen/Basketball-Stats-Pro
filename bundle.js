@@ -60,9 +60,15 @@
 	var $ = __webpack_require__(42);
 	var Promise = __webpack_require__(43);
 
-	//Program Declarations
+	/* --- Program Logic --- */
 
-	//Utility functions
+	getJSON('https://api.meetup.com/2/cities').then(function (response) {
+	  console.log(response.results[0].city);
+	}, function (error) {
+	  console.error("Failed", console.error);
+	});
+
+	/* --- Utility functions --- */
 
 	function showMessage(msg) {
 	  var elt = document.createElement("div");
@@ -99,15 +105,7 @@
 	  return get(url).then(JSON.parse);
 	}
 
-	//Program Logic
-
-	getJSON('https://api.meetup.com/2/cities/i').then(function (response) {
-	  console.log("Success", response);
-	}, function (error) {
-	  console.error("Failed", console.error);
-	});
-
-	//Test and Assertions
+	/* --- Test and Assertions --- */
 
 /***/ },
 /* 2 */
