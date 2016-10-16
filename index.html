@@ -12,25 +12,10 @@
 
   <!-- Autocomple Search bar-->
 
-  <h1>Search Field</h1>
-  <input type="text" id="searchBox">
-  <button id="button">Search</button>
-  <ul id="searchResults" class="term-list"></ul>
+  <h1>Recommendations Search</h1>
+  <input type="text" id="searchBox" class="search-field" autoFocus />
+  <ul id="searchResults" class="term-list hidden"></ul>
 
-  <script>
-    var text;
-
-    //create a variable that points to button
-    var button = document.querySelector("button");
-
-    //add click event listener to button
-    button.addEventListener("click", function() {
-      //create a new paragraph element
-      document.createElement("p");
-
-    });
-
-  </script>
 
   <!-- App Entry file -->
   <script src="bundle.js" charset="utf-8"></script>

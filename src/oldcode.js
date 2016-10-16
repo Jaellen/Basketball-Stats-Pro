@@ -1,5 +1,20 @@
 /* May need later code
 
+<script>
+  var text;
+
+  //create a variable that points to button
+  var button = document.querySelector("button");
+
+  //add click event listener to button
+  button.addEventListener("click", function() {
+    //create a new paragraph element
+    document.createElement("p");
+
+  });
+
+</script>
+
 function get(url) {
   //Return a new promise
   return new Promise(function(resolve, reject) {
