@@ -8,6 +8,8 @@ var searchIndex = require('./js/components/data-service.js');
 
 /* --- Program Logic --- */
 
+
+
 // Search Recommendation Feature
 
 var input = document.getElementById("searchBox"),
@@ -33,6 +35,8 @@ var search = function() {
 
   evaluateResults();
 };
+
+
 
 var evaluateResults = function() {
   if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
@@ -83,11 +87,18 @@ input.addEventListener("keyup", search, false);
 
 // Retrieve API data
 
-getJSON('https://api.meetup.com/2/cities').then(function(response) {
-  console.log(response.results[0].city);
+
+
+
+getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function(response) {
+  var activePlayers = [];
+  for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
+    activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
+  }
 }, function(error) {
   console.error("Failed", console.error);
 })
+
 
 
 /* --- Utility functions --- */
@@ -104,6 +115,7 @@ function get(url) {
   return new Promise(function(resolve, reject) {
     var req = new XMLHttpRequest();
     req.open("GET", url, true);
+    req.setRequestHeader("Authorization", "Basic " + btoa("jaellen:adanaC4032"));
 
     req.onload = function() {
       //Check the status

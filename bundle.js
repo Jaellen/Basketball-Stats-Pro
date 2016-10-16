@@ -137,8 +137,12 @@
 
 	// Retrieve API data
 
-	getJSON('https://api.meetup.com/2/cities').then(function (response) {
-	  console.log(response.results[0].city);
+
+	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
+	  var activePlayers = [];
+	  for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
+	    activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
+	  }
 	}, function (error) {
 	  console.error("Failed", console.error);
 	});
@@ -156,6 +160,7 @@
 	  return new Promise(function (resolve, reject) {
 	    var req = new XMLHttpRequest();
 	    req.open("GET", url, true);
+	    req.setRequestHeader("Authorization", "Basic " + btoa("jaellen:adanaC4032"));
 
 	    req.onload = function () {
 	      //Check the status

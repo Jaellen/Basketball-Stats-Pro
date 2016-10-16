@@ -1,6 +1,10 @@
 /* May need later code
 
 <script>
+
+console.log(response.activeplayers.playerentry.length);
+console.log(response.activeplayers.playerentry[0].player.LastName);
+
   var text;
 
   //create a variable that points to button
