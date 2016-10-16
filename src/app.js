@@ -16,28 +16,6 @@ var input = document.getElementById("searchBox"),
     ul = document.getElementById("searchResults"),
     inputTerms, termsArray, prefix, terms, results, sortedResults;
 
-
-var search = function() {
-  inputTerms = input.value.toLowerCase();
-  results = [];
-  termsArray = inputTerms.split(' ');
-  prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
-  terms = termsArray[termsArray.length -1].toLowerCase();
-
-  for (var i = 0; i < searchIndex.length; i++) {
-    var a = searchIndex[i].toLowerCase(),
-        t = a.indexOf(terms);
-
-    if (t > -1) {
-      results.push(a);
-    }
-  }
-
-  evaluateResults();
-};
-
-
-
 var evaluateResults = function() {
   if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
     sortedResults = results.sort(sortResults);
@@ -82,22 +60,51 @@ var clearResults = function() {
   ul.innerHTML = '';
 };
 
-input.addEventListener("keyup", search, false);
-
-
-// Retrieve API data
 
 
 
+// GetJSON will:
+// 1. Retrieve API data
+// 2. Create an array of all players' first and last name
+// 3. Use that list in the auto complete recommendation field
 
-getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function(response) {
-  var activePlayers = [];
-  for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
-    activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
-  }
-}, function(error) {
-  console.error("Failed", console.error);
+
+getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json')
+.then( function(response) {
+    var activePlayers = [];
+    for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
+      activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
+    }
+    return activePlayers;
+
+  }, function(error) {
+    console.error("GET Request Failed", console.error);
 })
+.then( function(activePlayers) {
+
+  var search = function() {
+  inputTerms = input.value.toLowerCase();
+  results = [];
+  termsArray = inputTerms.split(' ');
+  prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
+  terms = termsArray[termsArray.length -1].toLowerCase();
+
+  for (var i = 0; i < activePlayers.length; i++) {
+    var a = activePlayers[i].toLowerCase(),
+        t = a.indexOf(terms);
+
+    if (t > -1) {
+      results.push(a);
+    }
+  }
+   evaluateResults();
+  };
+
+ input.addEventListener("keyup", search, false);
+
+});
+
+
 
 
 
