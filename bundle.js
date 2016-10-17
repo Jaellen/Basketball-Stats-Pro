@@ -79,7 +79,7 @@
 	    sortedResults = results.sort(sortResults);
 	    appendResults();
 	  } else if (inputTerms.length > 0 && terms.length !== 0) {
-	    ul.innerHTML = '<li>Whoah! <strong>' + inputTerms + '</strong> is not in the index. <br></li>';
+	    ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
 	  } else if (inputTerms.length !== 0 && terms.length === 0) {
 	    return;
 	  } else {
@@ -97,11 +97,23 @@
 	  clearResults();
 
 	  for (var i = 0; i < sortedResults.length && i < 5; i++) {
-	    var li = document.createElement("li"),
-	        result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>');
 
+	    //create variables for new element tags 'li' and 'a' 
+	    var li = document.createElement("li");
+	    var a = document.createElement("a");
+
+	    //set li's id attribute to the string version of the i loop variable --> this will be useful later
+	    li.setAttribute('id', i.toString());
+
+	    //set the result to the following:    
+	    var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>');
+	    //Attach the 'result' to the innerHTML
 	    li.innerHTML = result;
-	    ul.appendChild(li);
+
+	    //create and append an 'a' tag to 'ul' tag
+	    ul.appendChild(a);
+	    //create and append an 'li' tag to 'a' element
+	    a.appendChild(li);
 	  }
 
 	  if (ul.className !== "term-list") {
