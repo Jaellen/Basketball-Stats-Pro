@@ -55,15 +55,17 @@
 
 	"use strict";
 
+	/* -------------------------- Module Dependencies -------------------------- */
+
 	var chai = __webpack_require__(2);
 	var assert = chai.assert;
 	var $ = __webpack_require__(42);
 	var Promise = __webpack_require__(43);
 	var searchIndex = __webpack_require__(53);
 
-	/* --- Program Logic --- */
+	/* -------------------------- Program Logic -------------------------- */
 
-	// Search Recommendation Feature
+	// Feature: Auto Complete Search and Recommendation 
 
 	var input = document.getElementById("searchBox"),
 	    ul = document.getElementById("searchResults"),
@@ -85,12 +87,6 @@
 	  } else {
 	    clearResults();
 	  }
-	};
-
-	var sortResults = function sortResults(a, b) {
-	  if (a.indexOf(terms) < b.indexOf(terms)) return -1;
-	  if (a.indexOf(terms) > b.indexOf(terms)) return 1;
-	  return 0;
 	};
 
 	var appendResults = function appendResults() {
@@ -126,22 +122,21 @@
 	  ul.innerHTML = '';
 	};
 
-	// GetJSON will:
-	// 1. Retrieve API data
-	// 2. Create an array of all players' first and last name
-	// 3. Use that list in the auto complete recommendation field
-
-
+	// Make a GET Request and return a Promise 
 	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
+	  // Create an array of all players' first and last name
 	  var activePlayers = [];
 	  for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
 	    activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
 	  }
 	  return activePlayers;
+
+	  //throw error if request fails  
 	}, function (error) {
 	  console.error("GET Request Failed", console.error);
 	}).then(function (activePlayers) {
 
+	  // Create a new array for results, push the results from the search
 	  var search = function search() {
 	    inputTerms = input.value.toLowerCase();
 	    results = [];
@@ -152,18 +147,17 @@
 	    for (var i = 0; i < activePlayers.length; i++) {
 	      var a = activePlayers[i].toLowerCase(),
 	          t = a.indexOf(terms);
-
 	      if (t > -1) {
 	        results.push(a);
 	      }
 	    }
 	    evaluateResults();
 	  };
-
+	  //listen for 'keyup' event and run search on value in text field
 	  input.addEventListener("keyup", search, false);
 	});
 
-	/* --- Utility functions --- */
+	/* -------------------------- Utility functions -------------------------- */
 
 	function showMessage(msg) {
 	  var elt = document.createElement("div");
@@ -176,6 +170,8 @@
 	  return new Promise(function (resolve, reject) {
 	    var req = new XMLHttpRequest();
 	    req.open("GET", url, true);
+
+	    //Authorization details go here 
 	    req.setRequestHeader("Authorization", "Basic " + btoa("jaellen:adanaC4032"));
 
 	    req.onload = function () {
@@ -186,12 +182,10 @@
 	        reject(Error(req.statusText));
 	      }
 	    };
-
 	    //Handle network errors
 	    req.onerror = function () {
 	      reject(Error("Network Error"));
 	    };
-
 	    //Make the request
 	    req.send();
 	  });
@@ -201,7 +195,13 @@
 	  return get(url).then(JSON.parse);
 	}
 
-	/* --- Test and Assertions --- */
+	var sortResults = function sortResults(a, b) {
+	  if (a.indexOf(terms) < b.indexOf(terms)) return -1;
+	  if (a.indexOf(terms) > b.indexOf(terms)) return 1;
+	  return 0;
+	};
+
+	/* -------------------------- Test and Assertions -------------------------- */
 
 /***/ },
 /* 2 */
