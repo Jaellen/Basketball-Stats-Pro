@@ -35,33 +35,35 @@ var evaluateResults = function() {
 };
 
 var appendResults = function () {
+  
   clearResults();
 
   //Note: A maximum of 5 recommendations set here 
   for (var i = 0; i < sortedResults.length && i < 5; i++) {
     
-    //create variables for new element tags 'li' and 'a' 
-    var li = document.createElement("li");
-    var a = document.createElement("a");
+      //create variables for new element tags 'li' and 'a' 
+      var li = document.createElement("li");
+      var a = document.createElement("a");
 
-    //set a's id attribute to the string version of the i loop variable
-    a.setAttribute('id', i.toString());
-    
-    //add a click eventListener to 'a'
-    a.addEventListener("click", function(event) {
-      console.log(sortedResults[event.currentTarget.getAttribute('id')]);
-    });    
+      //set a's id attribute to the string version of the i loop variable
+      a.setAttribute('id', i.toString());
+      
+      //add a click eventListener to 'a'
+      a.addEventListener("click", function(event) {
+        var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+        filterPlayerStats(player_clicked);
+      });    
 
-    //set the result to the following:    
-    var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
-    
-    //Attach the 'result' to the innerHTML
-    li.innerHTML = result;
+      //set the result to the following:    
+      var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
+      
+      //Attach the 'result' to the innerHTML
+      li.innerHTML = result;
 
-    //create and append an 'a' tag to 'ul' tag
-    ul.appendChild(a);
-    //create and append an 'li' tag to 'a' element
-    a.appendChild(li);
+      //create and append an 'a' tag to 'ul' tag
+      ul.appendChild(a);
+      //create and append an 'li' tag to 'a' element
+      a.appendChild(li);
   }
 
   if ( ul.className !== "term-list") {
@@ -73,6 +75,10 @@ var clearResults = function() {
   ul.className = "term-list hidden";
   ul.innerHTML = '';
 };
+
+var filterPlayerStats = function(player) {
+  console.log(player);
+}
 
 
 // Make a GET Request and return a Promise 

@@ -90,6 +90,7 @@
 	};
 
 	var appendResults = function appendResults() {
+
 	  clearResults();
 
 	  //Note: A maximum of 5 recommendations set here 
@@ -104,7 +105,8 @@
 
 	    //add a click eventListener to 'a'
 	    a.addEventListener("click", function (event) {
-	      console.log(sortedResults[event.currentTarget.getAttribute('id')]);
+	      var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+	      filterPlayerStats(player_clicked);
 	    });
 
 	    //set the result to the following:    
@@ -127,6 +129,10 @@
 	var clearResults = function clearResults() {
 	  ul.className = "term-list hidden";
 	  ul.innerHTML = '';
+	};
+
+	var filterPlayerStats = function filterPlayerStats(player) {
+	  console.log(player);
 	};
 
 	// Make a GET Request and return a Promise 
