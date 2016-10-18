@@ -92,17 +92,24 @@
 	var appendResults = function appendResults() {
 	  clearResults();
 
+	  //Note: A maximum of 5 recommendations set here 
 	  for (var i = 0; i < sortedResults.length && i < 5; i++) {
 
 	    //create variables for new element tags 'li' and 'a' 
 	    var li = document.createElement("li");
 	    var a = document.createElement("a");
 
-	    //set li's id attribute to the string version of the i loop variable --> this will be useful later
-	    li.setAttribute('id', i.toString());
+	    //set a's id attribute to the string version of the i loop variable
+	    a.setAttribute('id', i.toString());
+
+	    //add a click eventListener to 'a'
+	    a.addEventListener("click", function (event) {
+	      console.log(sortedResults[event.currentTarget.getAttribute('id')]);
+	    });
 
 	    //set the result to the following:    
 	    var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>');
+
 	    //Attach the 'result' to the innerHTML
 	    li.innerHTML = result;
 
