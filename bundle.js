@@ -109,29 +109,8 @@
 	      //retrieves the name of the player clicked
 	      var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 
-	      //executes a GET request for that player's stats
-	      getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
-
-	        console.log("CLICKED!");
-
-	        var response_array = response.cumulativeplayerstats.playerstatsentry;
-
-	        //filter array for the player name clicked
-	        //console.log(response_array.filter(function(player){
-	        //if (response_array.player.FirstName + " " + response_array.player.FirstName == player_clicked) {
-	        //return true;
-	        //break;
-	        //}
-	        //}));
-
-	        console.log(response_array[0].player.FirstName + " " + response_array.player.FirstName);
-	        console.log(player_clicked);
-
-	        //display the relevant stats of that player 
-	        console.log(response_array[0].player.LastName);
-	        console.log(response_array[0].team.Name);
-	        console.log(response_array[0].stats.GamesPlayed["#text"]);
-	      });
+	      //pass player clicked into getCumulativeStats function
+	      getCumulativeStats(player_clicked);
 	    });
 
 	    //set the result to the following:    
@@ -159,6 +138,7 @@
 	// Make a GET Request and return a Promise 
 	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
 	  // Create an array of all players' first and last name
+	  var activePlayersJSON = response;
 	  var activePlayers = [];
 	  for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
 	    activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
@@ -190,6 +170,42 @@
 	  //listen for 'keyup' event and run search on value in text field
 	  input.addEventListener("keyup", search, false);
 	});
+
+	var getCumulativeStats = function getCumulativeStats(player) {
+
+	  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
+
+	    var data = response.cumulativeplayerstats.playerstatsentry[0].player;
+	    var x = (data.FirstName + " " + data.LastName).toLowerCase();
+
+	    console.log(player);
+	    console.log(x);
+
+	    if (x == player) {
+	      console.log("TRUE!");
+	    } else {
+	      console.log('false');
+	    }
+
+	    //var response_array = response.cumulativeplayerstats.playerstatsentry;
+
+	    //filter array for the player name clicked
+	    //console.log(response_array.filter(function(player){
+	    //if (response_array.player.FirstName + " " + response_array.player.FirstName == player_clicked) {
+	    //return true;
+	    //break;
+	    //}
+	    //}));
+
+	    //console.log(response_array[0].player.FirstName + " " + response_array.player.FirstName);
+	    //console.log(player_clicked);
+
+	    //display the relevant stats of that player 
+	    //console.log(response_array[0].player.LastName);
+	    //console.log(response_array[0].team.Name);
+	    //console.log(response_array[0].stats.GamesPlayed["#text"]);
+	  });
+	};
 
 	/* -------------------------- Utility functions -------------------------- */
 
