@@ -103,10 +103,35 @@
 	    //set a's id attribute to the string version of the i loop variable
 	    a.setAttribute('id', i.toString());
 
-	    //add a click eventListener to 'a'
+	    //add an event listener to 'a' tag that if triggered...
 	    a.addEventListener("click", function (event) {
+
+	      //retrieves the name of the player clicked
 	      var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-	      filterPlayerStats(player_clicked);
+
+	      //executes a GET request for that player's stats
+	      getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
+
+	        console.log("CLICKED!");
+
+	        var response_array = response.cumulativeplayerstats.playerstatsentry;
+
+	        //filter array for the player name clicked
+	        //console.log(response_array.filter(function(player){
+	        //if (response_array.player.FirstName + " " + response_array.player.FirstName == player_clicked) {
+	        //return true;
+	        //break;
+	        //}
+	        //}));
+
+	        console.log(response_array[0].player.FirstName + " " + response_array.player.FirstName);
+	        console.log(player_clicked);
+
+	        //display the relevant stats of that player 
+	        console.log(response_array[0].player.LastName);
+	        console.log(response_array[0].team.Name);
+	        console.log(response_array[0].stats.GamesPlayed["#text"]);
+	      });
 	    });
 
 	    //set the result to the following:    
@@ -129,10 +154,6 @@
 	var clearResults = function clearResults() {
 	  ul.className = "term-list hidden";
 	  ul.innerHTML = '';
-	};
-
-	var filterPlayerStats = function filterPlayerStats(player) {
-	  console.log(player);
 	};
 
 	// Make a GET Request and return a Promise 
