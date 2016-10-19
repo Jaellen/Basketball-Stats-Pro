@@ -135,6 +135,18 @@
 	  ul.innerHTML = '';
 	};
 
+	var findPlayerClickedIndex = function findPlayerClickedIndex(array, player) {
+
+	  var index;
+
+	  for (var i = 0; i < array.length; i++) {
+	    if ((array[i].player.FirstName + " " + array[i].player.LastName).toLowerCase() == player) {
+	      index = i;
+	      return index;
+	    }
+	  }
+	};
+
 	// Make a GET Request and return a Promise 
 	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
 	  // Create an array of all players' first and last name
@@ -175,35 +187,30 @@
 
 	  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
 
-	    var data = response.cumulativeplayerstats.playerstatsentry[0].player;
-	    var x = (data.FirstName + " " + data.LastName).toLowerCase();
+	    var data = response.cumulativeplayerstats.playerstatsentry;
 
+	    var index = findPlayerClickedIndex(data, player);
+
+	    console.log(index);
+
+	    /*
 	    console.log(player);
-	    console.log(x);
-
-	    if (x == player) {
-	      console.log("TRUE!");
-	    } else {
-	      console.log('false');
-	    }
-
-	    //var response_array = response.cumulativeplayerstats.playerstatsentry;
-
-	    //filter array for the player name clicked
-	    //console.log(response_array.filter(function(player){
-	    //if (response_array.player.FirstName + " " + response_array.player.FirstName == player_clicked) {
-	    //return true;
-	    //break;
+	    console.log(x);          
+	       
+	       //if (x == player) {
+	     //console.log("TRUE!");
 	    //}
-	    //}));
-
-	    //console.log(response_array[0].player.FirstName + " " + response_array.player.FirstName);
-	    //console.log(player_clicked);
-
-	    //display the relevant stats of that player 
-	    //console.log(response_array[0].player.LastName);
-	    //console.log(response_array[0].team.Name);
-	    //console.log(response_array[0].stats.GamesPlayed["#text"]);
+	    //else {
+	     //console.log('false');
+	    //}
+	     //Find the player clicked within the JSON data
+	            //var response_array = response.cumulativeplayerstats.playerstatsentry;
+	            //console.log(response_array[0].player.FirstName + " " + response_array.player.FirstName);
+	          //console.log(player_clicked);
+	           //display the relevant stats of that player 
+	          //console.log(response_array[0].player.LastName);
+	          //console.log(response_array[0].team.Name);
+	          //console.log(response_array[0].stats.GamesPlayed["#text"]); */
 	  });
 	};
 
