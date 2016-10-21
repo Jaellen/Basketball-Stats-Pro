@@ -159,11 +159,10 @@
 	      a.addEventListener("click", function (event) {
 
 	        //retrieve the name of the player clicked
-	        var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 	        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 
 	        // display that player's data
-	        playerClickedEvent(player_clicked);
+	        displayStats();
 	      });
 
 	      var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>');
@@ -185,22 +184,49 @@
 	  input.addEventListener("keyup", search, false);
 	});
 
-	var playerClickedEvent = function playerClickedEvent(player) {
+	var displayStats = function displayStats(player) {
 
-	  var index = findPlayerClickedIndex(stats_array, player);
-	  console.log(stats_array[index].team.City);
+	  //CLEAR THE RESULTS HERE!
+
 
 	  //1.d) GET Request for player's profile stats
 	  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
 
-	    profile_array = response.activeplayers.playerentry;
-
 	    // 1.d) Display that players' relevant data from both GET requests 
-	    console.log(current_player_clicked);
-	    var a_index = findPlayerClickedIndex(profile_array, current_player_clicked);
+	    //Display profile data
 
-	    console.log(profile_array[a_index].player.Height);
+	    profile_array = response.activeplayers.playerentry;
+	    var index2 = findPlayerClickedIndex(profile_array, current_player_clicked);
+
+	    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.FirstName, " ", profile_array[index2].player.LastName));
+	    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Position));
+	    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].team.City, " ", profile_array[index2].team.Name));
+	    document.getElementById("profile").appendChild(createElement("li", "# ", profile_array[index2].player.JerseyNumber));
+	    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Age, " yrs old"));
+	    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Height, " ft"));
+	    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Weight, " lbs"));
+	    document.getElementById("profile").appendChild(createElement("li", "Rookie? ", profile_array[index2].player.IsRookie));
+	    document.getElementById("profile").appendChild(createElement("li", "Injury Status: "));
 	  });
+
+	  //Display stats data
+	  var index1 = findPlayerClickedIndex(stats_array, current_player_clicked);
+
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.GamesPlayed["#text"]));
+	  /* document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
+	   */
 	};
 
 	/* -------------------------- Utility functions ---------------------------- */
@@ -244,6 +270,18 @@
 	      return index;
 	    }
 	  }
+	}
+
+	function createElement(type) {
+	  var node = document.createElement(type);
+	  for (var i = 1; i < arguments.length; i++) {
+	    var child = arguments[i];
+	    if (typeof child == "string") {
+	      child = document.createTextNode(child);
+	    }
+	    node.appendChild(child);
+	  }
+	  return node;
 	}
 
 	/* -------------------------- Test and Assertions -------------------------- */
