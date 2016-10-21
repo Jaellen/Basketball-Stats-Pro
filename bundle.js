@@ -188,6 +188,8 @@
 
 	  //CLEAR THE RESULTS HERE!
 
+	  document.getElementById("profile").innerHTML = '';
+	  document.getElementById("stats").innerHTML = '';
 
 	  //1.d) GET Request for player's profile stats
 	  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
@@ -213,20 +215,19 @@
 	  var index1 = findPlayerClickedIndex(stats_array, current_player_clicked);
 
 	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.GamesPlayed["#text"]));
-	  /* document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.City));
-	   */
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.PtsPerGame["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.AstPerGame["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.RebPerGame["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.BlkPerGame["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.FoulPersPerGame["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.FgPct["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.FtPct["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg2PtPct["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg3PtPct["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg2PtMadePerGame["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg3PtMadePerGame["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.PlusMinus["#text"]));
+	  document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.MinSecondsPerGame["#text"]));
 	};
 
 	/* -------------------------- Utility functions ---------------------------- */
