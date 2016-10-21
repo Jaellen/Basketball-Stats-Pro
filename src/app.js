@@ -2,38 +2,41 @@
 
 /* ----------------------- Module Dependencies ----------------------------- */
 
-var chai = require('chai');
-var assert = chai.assert;
-var $ = require('jquery');
 var Promise = require('promise');
 var searchIndex = require('./js/components/data-service.js');
+var chai = require('chai');
+var assert = chai.assert;
 
 /* ------------------------------ Logic ------------------------------------ */
 
 /* Program Steps:
-1. Retrieve player first and last name data 
-  a) Make GET request and create sorted array of players first and last names
-  b) Use 'activePlayers' array to recommend resuts from user's search input   
-  c) Display the results of recommendations if they exist
-  d) When user selects player from search, display data on that player  
+1. XMLHttpRequest for Stats Data and AutoComplete Search Functionality  
+  a) GET request for cumulative player stats data 
+  b) Create an array of all players' first and last names for search recommendations
+  c) Use array to recommend and display search results from user's search input   
+  d) When user selects from search results, 
+    - GET Request for player's profile stats
+    - Display that players' relevant data from both GET requests    
 */
 
-var cumulative_stats_array;
-var active_players_array;
+//1. XMLHttpRequest for Stats Data and AutoComplete Search Functionality
+
+//Declare global variables
+var stats_array;
+var profile_array;
 var current_player_clicked; 
 
-// 1.a) Make GET request and create sorted array of players first and last names
+// 1.a) GET request for cumulative player stats data
 getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?')
 .then( function(response) {
     
-    cumulative_stats_array = response.cumulativeplayerstats.playerstatsentry;
+    stats_array = response.cumulativeplayerstats.playerstatsentry;
 
-    // Create an array of all players' first and last name called 'activePlayers'
+    //1.b) Create an array of all players' first and last names for search recommendations
     var activePlayers = [];
-    for (var i = 0; i < cumulative_stats_array.length; i++) {
-      activePlayers[i] = cumulative_stats_array[i].player.FirstName + " " + cumulative_stats_array[i].player.LastName;
+    for (var i = 0; i < stats_array.length; i++) {
+      activePlayers[i] = stats_array[i].player.FirstName + " " + stats_array[i].player.LastName;
     }
-    //Pass this array to 'then'
     return activePlayers;
 
     //Throw error if request fails  
@@ -42,11 +45,11 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
 })
 .then( function(activePlayers) {
     
-    var input = document.getElementById("searchBox"),
-    ul = document.getElementById("searchResults"),
-    inputTerms, termsArray, prefix, terms, results, sortedResults;
+    var input = document.getElementById("searchBox")
+    var ul = document.getElementById("searchResults")
+    var inputTerms, termsArray, prefix, terms, results, sortedResults;
 
-    //1.b) Use 'activePlayers' array to recommend resuts from user's search input  
+    //1.c) Use array to recommend and display search results from user's search input    
     var search = function() {
       inputTerms = input.value.toLowerCase();
       results = [];
@@ -64,7 +67,6 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
        evaluateResults();
     };
     
-    //1.c) Display the results of recommendations if they exist
     var sortResults = function(a,b) {
       if (a.indexOf(terms) < b.indexOf(terms)) return -1;
       if (a.indexOf(terms) > b.indexOf(terms)) return 1;
@@ -87,6 +89,7 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
       }
     };
 
+    //display recommendations
     var appendResults = function () {
   
       clearResults();
@@ -97,29 +100,25 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
           var li = document.createElement("li");
           var a = document.createElement("a");
 
-          //This sets an attribute and event listener to recommendations that triggers another function
+          //Set an attribute and click event listener to each recommendation result 
           a.setAttribute('id', i.toString());
-          
           a.addEventListener("click", function(event) {
               
               //retrieve the name of the player clicked
               var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
               current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 
-              //pass player clicked into getCumulativeStats function
-              getCumulativeStats(player_clicked);
+              // display that player's data
+              playerClickedEvent(player_clicked);
           });
-
-          //set the result to display for recommendations    
+   
           var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
           li.innerHTML = result;
-
-          //create and append elemnets together
           ul.appendChild(a);
           a.appendChild(li);
       }
 
-          if ( ul.className !== "term-list") {
+          if (ul.className !== "term-list") {
             ul.className = "term-list";
           }
     };
@@ -132,25 +131,23 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
     input.addEventListener("keyup", search, false);
 });
 
-//1.d) When user selects player from search, display data on that player  
-var getCumulativeStats = function(player) {
+var playerClickedEvent = function(player) {
 
-  var index = findPlayerClickedIndex(cumulative_stats_array, player); 
-  console.log(cumulative_stats_array[index].team.City);
+  var index = findPlayerClickedIndex(stats_array, player); 
+  console.log(stats_array[index].team.City);
 
-
+  //1.d) GET Request for player's profile stats
   getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json')
   .then( function(response) {
 
-    active_players_array = response.activeplayers.playerentry;
+    profile_array = response.activeplayers.playerentry;
     
+    // 1.d) Display that players' relevant data from both GET requests 
     console.log(current_player_clicked);
-    var a_index = findPlayerClickedIndex(active_players_array, current_player_clicked);
+    var a_index = findPlayerClickedIndex(profile_array, current_player_clicked);
     
-    console.log(active_players_array[a_index].player.Height);
-
+    console.log(profile_array[a_index].player.Height);
   });
-
 };
 
 
