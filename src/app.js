@@ -152,9 +152,9 @@ var displayStats = function(player) {
     var index2 = findPlayerClickedIndex(profile_array, current_player_clicked);
 
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.FirstName, " ", profile_array[index2].player.LastName));
-    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Position));
+    document.getElementById("profile").appendChild(createElement("li", "Position: ", profile_array[index2].player.Position));
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].team.City, " ", profile_array[index2].team.Name));
-    document.getElementById("profile").appendChild(createElement("li", "# ", profile_array[index2].player.JerseyNumber));
+    document.getElementById("profile").appendChild(createElement("li", "Jersey#: ", profile_array[index2].player.JerseyNumber));
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Age, " yrs old"));
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Height, " ft"));
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Weight, " lbs"));
@@ -165,22 +165,21 @@ var displayStats = function(player) {
   //Display stats data
   var index1 = findPlayerClickedIndex(stats_array, current_player_clicked); 
   
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.GamesPlayed["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.PtsPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.AstPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.RebPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.BlkPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.FoulPersPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.FgPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.FtPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg2PtPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg3PtPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg2PtMadePerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.Fg3PtMadePerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.PlusMinus["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", stats_array[index1].stats.MinSecondsPerGame["#text"]));   
+    document.getElementById("stats").appendChild(createElement("li", "GP: ", stats_array[index1].stats.GamesPlayed["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "PTS/G: ", stats_array[index1].stats.PtsPerGame["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "AST/G: ", stats_array[index1].stats.AstPerGame["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "REB/G: ", stats_array[index1].stats.RebPerGame["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "BLK/G: ", stats_array[index1].stats.BlkPerGame["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "PF/G: ", stats_array[index1].stats.FoulPersPerGame["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "FG%: ", stats_array[index1].stats.FgPct["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "2P%: ", stats_array[index1].stats.FtPct["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "3P%: ", stats_array[index1].stats.Fg2PtPct["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "FT%: ", stats_array[index1].stats.Fg3PtPct["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "2PM/G: ", stats_array[index1].stats.Fg2PtMadePerGame["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "3PM/G: ", stats_array[index1].stats.Fg3PtMadePerGame["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "+/-: ", stats_array[index1].stats.PlusMinus["#text"]));
+    document.getElementById("stats").appendChild(createElement("li", "MPG: ", stats_array[index1].stats.MinSecondsPerGame["#text"]));   
 };
-
 
 
 /* -------------------------- Utility functions ---------------------------- */
@@ -240,8 +239,5 @@ function createElement(type){
 } 
 
 /* -------------------------- Test and Assertions -------------------------- */
-
-
-
 
 
