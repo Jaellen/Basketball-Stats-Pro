@@ -55,7 +55,7 @@
 
 	"use strict";
 
-	/* -------------------------- Module Dependencies -------------------------- */
+	/* ----------------------- Module Dependencies ----------------------------- */
 
 	var chai = __webpack_require__(2);
 	var assert = chai.assert;
@@ -63,106 +63,48 @@
 	var Promise = __webpack_require__(43);
 	var searchIndex = __webpack_require__(53);
 
-	/* -------------------------- Program Logic -------------------------- */
+	/* ------------------------------ Logic ------------------------------------ */
 
-	// Feature: Auto Complete Search and Recommendation 
+	/* Program Steps:
+	1. Retrieve player first and last name data 
+	  a) Make GET request and create sorted array of players first and last names
+	  b) Use 'activePlayers' array to recommend resuts from user's search input   
+	  c) Display the results of recommendations if they exist
+	  d) When user selects player from search, display data on that player  
+	*/
 
-	var input = document.getElementById("searchBox"),
-	    ul = document.getElementById("searchResults"),
-	    inputTerms,
-	    termsArray,
-	    prefix,
-	    terms,
-	    results,
-	    sortedResults;
+	var cumulative_stats_array;
+	var active_players_array;
+	var current_player_clicked;
 
-	var evaluateResults = function evaluateResults() {
-	  if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
-	    sortedResults = results.sort(sortResults);
-	    appendResults();
-	  } else if (inputTerms.length > 0 && terms.length !== 0) {
-	    ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
-	  } else if (inputTerms.length !== 0 && terms.length === 0) {
-	    return;
-	  } else {
-	    clearResults();
-	  }
-	};
+	// 1.a) Make GET request and create sorted array of players first and last names
+	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
 
-	var appendResults = function appendResults() {
+	  cumulative_stats_array = response.cumulativeplayerstats.playerstatsentry;
 
-	  clearResults();
-
-	  //Note: A maximum of 5 recommendations set here 
-	  for (var i = 0; i < sortedResults.length && i < 5; i++) {
-
-	    //create variables for new element tags 'li' and 'a' 
-	    var li = document.createElement("li");
-	    var a = document.createElement("a");
-
-	    //set a's id attribute to the string version of the i loop variable
-	    a.setAttribute('id', i.toString());
-
-	    //add an event listener to 'a' tag that if triggered...
-	    a.addEventListener("click", function (event) {
-
-	      //retrieves the name of the player clicked
-	      var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-
-	      //pass player clicked into getCumulativeStats function
-	      getCumulativeStats(player_clicked);
-	    });
-
-	    //set the result to the following:    
-	    var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>');
-
-	    //Attach the 'result' to the innerHTML
-	    li.innerHTML = result;
-
-	    //create and append an 'a' tag to 'ul' tag
-	    ul.appendChild(a);
-	    //create and append an 'li' tag to 'a' element
-	    a.appendChild(li);
-	  }
-
-	  if (ul.className !== "term-list") {
-	    ul.className = "term-list";
-	  }
-	};
-
-	var clearResults = function clearResults() {
-	  ul.className = "term-list hidden";
-	  ul.innerHTML = '';
-	};
-
-	var findPlayerClickedIndex = function findPlayerClickedIndex(array, player) {
-
-	  var index;
-
-	  for (var i = 0; i < array.length; i++) {
-	    if ((array[i].player.FirstName + " " + array[i].player.LastName).toLowerCase() == player) {
-	      index = i;
-	      return index;
-	    }
-	  }
-	};
-
-	// Make a GET Request and return a Promise 
-	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
-	  // Create an array of all players' first and last name
-	  var activePlayersJSON = response;
+	  // Create an array of all players' first and last name called 'activePlayers'
 	  var activePlayers = [];
-	  for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
-	    activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
+	  for (var i = 0; i < cumulative_stats_array.length; i++) {
+	    activePlayers[i] = cumulative_stats_array[i].player.FirstName + " " + cumulative_stats_array[i].player.LastName;
 	  }
+	  //Pass this array to 'then'
 	  return activePlayers;
 
-	  //throw error if request fails  
+	  //Throw error if request fails  
 	}, function (error) {
 	  console.error("GET Request Failed", console.error);
 	}).then(function (activePlayers) {
 
-	  // Create a new array for results, push the results from the search
+	  var input = document.getElementById("searchBox"),
+	      ul = document.getElementById("searchResults"),
+	      inputTerms,
+	      termsArray,
+	      prefix,
+	      terms,
+	      results,
+	      sortedResults;
+
+	  //1.b) Use 'activePlayers' array to recommend resuts from user's search input  
 	  var search = function search() {
 	    inputTerms = input.value.toLowerCase();
 	    results = [];
@@ -179,47 +121,93 @@
 	    }
 	    evaluateResults();
 	  };
-	  //listen for 'keyup' event and run search on value in text field
+
+	  //1.c) Display the results of recommendations if they exist
+	  var sortResults = function sortResults(a, b) {
+	    if (a.indexOf(terms) < b.indexOf(terms)) return -1;
+	    if (a.indexOf(terms) > b.indexOf(terms)) return 1;
+	    return 0;
+	  };
+
+	  var evaluateResults = function evaluateResults() {
+	    if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
+	      sortedResults = results.sort(sortResults);
+	      appendResults();
+	    } else if (inputTerms.length > 0 && terms.length !== 0) {
+	      ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
+	    } else if (inputTerms.length !== 0 && terms.length === 0) {
+	      return;
+	    } else {
+	      clearResults();
+	    }
+	  };
+
+	  var appendResults = function appendResults() {
+
+	    clearResults();
+
+	    //Note: A maximum of 5 recommendations set here 
+	    for (var i = 0; i < sortedResults.length && i < 5; i++) {
+
+	      var li = document.createElement("li");
+	      var a = document.createElement("a");
+
+	      //This sets an attribute and event listener to recommendations that triggers another function
+	      a.setAttribute('id', i.toString());
+
+	      a.addEventListener("click", function (event) {
+
+	        //retrieve the name of the player clicked
+	        var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+	        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+
+	        //pass player clicked into getCumulativeStats function
+	        getCumulativeStats(player_clicked);
+	      });
+
+	      //set the result to display for recommendations    
+	      var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>');
+	      li.innerHTML = result;
+
+	      //create and append elemnets together
+	      ul.appendChild(a);
+	      a.appendChild(li);
+	    }
+
+	    if (ul.className !== "term-list") {
+	      ul.className = "term-list";
+	    }
+	  };
+
+	  var clearResults = function clearResults() {
+	    ul.className = "term-list hidden";
+	    ul.innerHTML = '';
+	  };
+
 	  input.addEventListener("keyup", search, false);
 	});
 
+	//1.d) When user selects player from search, display data on that player  
 	var getCumulativeStats = function getCumulativeStats(player) {
 
-	  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
+	  var index = findPlayerClickedIndex(cumulative_stats_array, player);
+	  console.log(cumulative_stats_array[index].team.City);
 
-	    var data = response.cumulativeplayerstats.playerstatsentry;
+	  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json').then(function (response) {
 
-	    var index = findPlayerClickedIndex(data, player);
+	    active_players_array = response.activeplayers.playerentry;
 
-	    console.log(index);
+	    console.log(current_player_clicked);
+	    var a_index = findPlayerClickedIndex(active_players_array, current_player_clicked);
 
-	    /*
-	    console.log(player);
-	    console.log(x);          
-	       
-	       //if (x == player) {
-	     //console.log("TRUE!");
-	    //}
-	    //else {
-	     //console.log('false');
-	    //}
-	     //Find the player clicked within the JSON data
-	            //var response_array = response.cumulativeplayerstats.playerstatsentry;
-	            //console.log(response_array[0].player.FirstName + " " + response_array.player.FirstName);
-	          //console.log(player_clicked);
-	           //display the relevant stats of that player 
-	          //console.log(response_array[0].player.LastName);
-	          //console.log(response_array[0].team.Name);
-	          //console.log(response_array[0].stats.GamesPlayed["#text"]); */
+	    console.log(active_players_array[a_index].player.Height);
 	  });
 	};
 
-	/* -------------------------- Utility functions -------------------------- */
+	/* -------------------------- Utility functions ---------------------------- */
 
-	function showMessage(msg) {
-	  var elt = document.createElement("div");
-	  elt.textContent = msg;
-	  return document.body.appendChild(elt);
+	function getJSON(url) {
+	  return get(url).then(JSON.parse);
 	}
 
 	function get(url) {
@@ -248,15 +236,22 @@
 	  });
 	}
 
-	function getJSON(url) {
-	  return get(url).then(JSON.parse);
+	function findPlayerClickedIndex(array, player) {
+	  var index;
+
+	  for (var i = 0; i < array.length; i++) {
+	    if ((array[i].player.FirstName + " " + array[i].player.LastName).toLowerCase() == player) {
+	      index = i;
+	      return index;
+	    }
+	  }
 	}
 
-	var sortResults = function sortResults(a, b) {
-	  if (a.indexOf(terms) < b.indexOf(terms)) return -1;
-	  if (a.indexOf(terms) > b.indexOf(terms)) return 1;
-	  return 0;
-	};
+	function showMessage(msg) {
+	  var elt = document.createElement("div");
+	  elt.textContent = msg;
+	  return document.body.appendChild(elt);
+	}
 
 	/* -------------------------- Test and Assertions -------------------------- */
 
