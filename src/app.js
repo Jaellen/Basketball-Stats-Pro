@@ -4,6 +4,8 @@
 
 var Promise = require('promise');
 var searchIndex = require('./js/components/data-service.js');
+
+//For testing 
 var chai = require('chai');
 var assert = chai.assert;
 
@@ -29,106 +31,108 @@ var current_player_clicked;
 // 1.a) GET request for cumulative player stats data
 getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?')
 .then( function(response) {
-    
-    stats_array = response.cumulativeplayerstats.playerstatsentry;
 
-    //1.b) Create an array of all players' first and last names for search recommendations
-    var activePlayers = [];
+  //Set the global variable to the array needed from the JSON object   
+  stats_array = response.cumulativeplayerstats.playerstatsentry;
+
+  //1.b) Create an array of all players' first and last names for search recommendations 
+  var createFirstandLastNameArray = function () {
+    var array = [];
     for (var i = 0; i < stats_array.length; i++) {
-      activePlayers[i] = stats_array[i].player.FirstName + " " + stats_array[i].player.LastName;
+      array[i] = stats_array[i].player.FirstName + " " + stats_array[i].player.LastName;
     }
-    return activePlayers;
-
-    //Throw error if request fails  
-    }, function(error) {
-      console.error("GET Request Failed", console.error);
+    return array;
+  };
+  
+  var activePlayers = createFirstandLastNameArray();
+  return activePlayers;
 })
 .then( function(activePlayers) {
     
-    var input = document.getElementById("searchBox")
-    var ul = document.getElementById("searchResults")
-    var inputTerms, termsArray, prefix, terms, results, sortedResults;
+  var input = document.getElementById("searchBox")
+  var ul = document.getElementById("searchResults")
+  var inputTerms, termsArray, prefix, terms, results, sortedResults;
 
-    //1.c) Use array to recommend and display search results from user's search input    
-    var search = function() {
-      inputTerms = input.value.toLowerCase();
-      results = [];
-      termsArray = inputTerms.split(' ');
-      prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
-      terms = termsArray[termsArray.length -1].toLowerCase();
+  //1.c) Use array to recommend and display search results from user's search input    
+  var search = function() {
+    inputTerms = input.value.toLowerCase();
+    results = [];
+    termsArray = inputTerms.split(' ');
+    prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
+    terms = termsArray[termsArray.length -1].toLowerCase();
 
-      for (var i = 0; i < activePlayers.length; i++) {
-        var a = activePlayers[i].toLowerCase(),
-            t = a.indexOf(terms);
-        if (t > -1) {
-          results.push(a);
-        }
+    for (var i = 0; i < activePlayers.length; i++) {
+      var a = activePlayers[i].toLowerCase(),
+          t = a.indexOf(terms);
+      if (t > -1) {
+        results.push(a);
       }
-       evaluateResults();
-    };
+    }
+     evaluateResults();
+  };
     
-    var sortResults = function(a,b) {
-      if (a.indexOf(terms) < b.indexOf(terms)) return -1;
-      if (a.indexOf(terms) > b.indexOf(terms)) return 1;
-      return 0;
+  var sortResults = function(a,b) {
+    if (a.indexOf(terms) < b.indexOf(terms)) return -1;
+    if (a.indexOf(terms) > b.indexOf(terms)) return 1;
+    return 0;
+  }
+
+  var evaluateResults = function() {
+    if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
+      sortedResults = results.sort(sortResults);
+      appendResults();
+    }
+    else if (inputTerms.length > 0 && terms.length !== 0) {
+      ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
+    }
+    else if (inputTerms.length !== 0 && terms.length === 0) {
+      return;
+    }
+    else {
+      clearResults();
+    }
+  };
+
+  //display recommendations
+  var appendResults = function () {
+  
+    clearResults();
+
+    //Note: A maximum of 5 recommendations set here 
+    for (var i = 0; i < sortedResults.length && i < 5; i++) {
+       
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+
+      //Set an attribute and click event listener to each recommendation result 
+      a.setAttribute('id', i.toString());
+      a.addEventListener("click", function(event) {
+              
+        //retrieve the name of the player clicked
+        var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+
+        // display that player's data
+        playerClickedEvent(player_clicked);
+      });
+   
+      var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
+      li.innerHTML = result;
+      ul.appendChild(a);
+      a.appendChild(li);
     }
 
-    var evaluateResults = function() {
-      if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
-        sortedResults = results.sort(sortResults);
-        appendResults();
-      }
-      else if (inputTerms.length > 0 && terms.length !== 0) {
-        ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
-      }
-      else if (inputTerms.length !== 0 && terms.length === 0) {
-        return;
-      }
-      else {
-        clearResults();
-      }
-    };
+    if (ul.className !== "term-list") {
+      ul.className = "term-list";
+    }
+  };
 
-    //display recommendations
-    var appendResults = function () {
-  
-      clearResults();
+  var clearResults = function() {
+    ul.className = "term-list hidden";
+    ul.innerHTML = '';
+  };
 
-      //Note: A maximum of 5 recommendations set here 
-      for (var i = 0; i < sortedResults.length && i < 5; i++) {
-       
-          var li = document.createElement("li");
-          var a = document.createElement("a");
-
-          //Set an attribute and click event listener to each recommendation result 
-          a.setAttribute('id', i.toString());
-          a.addEventListener("click", function(event) {
-              
-              //retrieve the name of the player clicked
-              var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-              current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-
-              // display that player's data
-              playerClickedEvent(player_clicked);
-          });
-   
-          var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
-          li.innerHTML = result;
-          ul.appendChild(a);
-          a.appendChild(li);
-      }
-
-          if (ul.className !== "term-list") {
-            ul.className = "term-list";
-          }
-    };
-
-    var clearResults = function() {
-      ul.className = "term-list hidden";
-      ul.innerHTML = '';
-    };
-
-    input.addEventListener("keyup", search, false);
+  input.addEventListener("keyup", search, false);
 });
 
 var playerClickedEvent = function(player) {
@@ -194,12 +198,5 @@ function findPlayerClickedIndex (array, player) {
         }  
       }  
 }
-
-function showMessage(msg) {
-  var elt = document.createElement("div");
-  elt.textContent = msg
-  return document.body.appendChild(elt);
-}
-
 
 /* -------------------------- Test and Assertions -------------------------- */

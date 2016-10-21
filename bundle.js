@@ -59,6 +59,8 @@
 
 	var Promise = __webpack_require__(2);
 	var searchIndex = __webpack_require__(12);
+
+	//For testing 
 	var chai = __webpack_require__(13);
 	var assert = chai.assert;
 
@@ -84,18 +86,20 @@
 	// 1.a) GET request for cumulative player stats data
 	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
 
+	  //Set the global variable to the array needed from the JSON object   
 	  stats_array = response.cumulativeplayerstats.playerstatsentry;
 
-	  //1.b) Create an array of all players' first and last names for search recommendations
-	  var activePlayers = [];
-	  for (var i = 0; i < stats_array.length; i++) {
-	    activePlayers[i] = stats_array[i].player.FirstName + " " + stats_array[i].player.LastName;
-	  }
-	  return activePlayers;
+	  //1.b) Create an array of all players' first and last names for search recommendations 
+	  var createFirstandLastNameArray = function createFirstandLastNameArray() {
+	    var array = [];
+	    for (var i = 0; i < stats_array.length; i++) {
+	      array[i] = stats_array[i].player.FirstName + " " + stats_array[i].player.LastName;
+	    }
+	    return array;
+	  };
 
-	  //Throw error if request fails  
-	}, function (error) {
-	  console.error("GET Request Failed", console.error);
+	  var activePlayers = createFirstandLastNameArray();
+	  return activePlayers;
 	}).then(function (activePlayers) {
 
 	  var input = document.getElementById("searchBox");
@@ -240,12 +244,6 @@
 	      return index;
 	    }
 	  }
-	}
-
-	function showMessage(msg) {
-	  var elt = document.createElement("div");
-	  elt.textContent = msg;
-	  return document.body.appendChild(elt);
 	}
 
 	/* -------------------------- Test and Assertions -------------------------- */
