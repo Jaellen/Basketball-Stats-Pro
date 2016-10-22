@@ -139,7 +139,8 @@ var displayStats = function(player) {
   //CLEAR THE RESULTS HERE!
   
   document.getElementById("profile").innerHTML = '';
-  document.getElementById("stats").innerHTML = '';
+  document.getElementById("stats-main").innerHTML = '';
+  document.getElementById("stats-secondary").innerHTML = '';
 
   //1.d) GET Request for player's profile stats
   getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json')
@@ -164,21 +165,42 @@ var displayStats = function(player) {
 
   //Display stats data
   var index1 = findPlayerClickedIndex(stats_array, current_player_clicked); 
-  
-    document.getElementById("stats").appendChild(createElement("li", "GP: ", stats_array[index1].stats.GamesPlayed["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "PTS/G: ", stats_array[index1].stats.PtsPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "AST/G: ", stats_array[index1].stats.AstPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "REB/G: ", stats_array[index1].stats.RebPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "BLK/G: ", stats_array[index1].stats.BlkPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "PF/G: ", stats_array[index1].stats.FoulPersPerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "FG%: ", stats_array[index1].stats.FgPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "2P%: ", stats_array[index1].stats.FtPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "3P%: ", stats_array[index1].stats.Fg2PtPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "FT%: ", stats_array[index1].stats.Fg3PtPct["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "2PM/G: ", stats_array[index1].stats.Fg2PtMadePerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "3PM/G: ", stats_array[index1].stats.Fg3PtMadePerGame["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "+/-: ", stats_array[index1].stats.PlusMinus["#text"]));
-    document.getElementById("stats").appendChild(createElement("li", "MPG: ", stats_array[index1].stats.MinSecondsPerGame["#text"]));   
+    
+    //Stats Main
+    document.getElementById("stats-main").appendChild(createElement("li", "PTS/G: ", stats_array[index1].stats.PtsPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "AST/G: ", stats_array[index1].stats.AstPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "REB/G: ", stats_array[index1].stats.RebPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "BLK/G: ", stats_array[index1].stats.BlkPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "PF/G: ", stats_array[index1].stats.FoulPersPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "FG%: ", stats_array[index1].stats.FgPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "2P%: ", stats_array[index1].stats.FtPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "3P%: ", stats_array[index1].stats.Fg2PtPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "FT%: ", stats_array[index1].stats.Fg3PtPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "2PM/G: ", stats_array[index1].stats.Fg2PtMadePerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "3PM/G: ", stats_array[index1].stats.Fg3PtMadePerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "+/-: ", stats_array[index1].stats.PlusMinus["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "MPG: ", stats_array[index1].stats.MinSecondsPerGame["#text"]));   
+
+    //Stats Secondary
+    document.getElementById("stats-secondary").appendChild(createElement("li", "GP: ", stats_array[index1].stats.GamesPlayed["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "MIN: ", stats_array[index1].stats.MinSeconds["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "PTS: ", stats_array[index1].stats.Pts["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FGA: ", stats_array[index1].stats.FgAtt["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FGM: ", stats_array[index1].stats.FgMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "2PM: ", stats_array[index1].stats.Fg2PtMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "3PM: ", stats_array[index1].stats.Fg3PtMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "3PA: ", stats_array[index1].stats.Fg3PtAtt["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FTA: ", stats_array[index1].stats.FtAtt["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FTM: ", stats_array[index1].stats.FtMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "OREB: ", stats_array[index1].stats.OffReb["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "DREB: ", stats_array[index1].stats.DefReb["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "REB: ", stats_array[index1].stats.Reb["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "AST: ", stats_array[index1].stats.Ast["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "BLK: ", stats_array[index1].stats.Blk["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "STL: ", stats_array[index1].stats.Stl["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "TOV: ", stats_array[index1].stats.Tov["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
+
 };
 
 

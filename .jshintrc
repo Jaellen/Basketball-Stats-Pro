@@ -7,5 +7,6 @@
   "devel": true,
   "jquery": true,
   "mocha": true,
-  "node": true  
+  "node": true,
+  "loopfunc": true  
 }
