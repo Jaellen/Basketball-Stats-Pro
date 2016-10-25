@@ -3,6 +3,12 @@
 /* ----------------------- Module Dependencies ----------------------------- */
 
 var Promise = require('promise');
+var Observable = require('rxjs/Observable').Observable;
+  require('rxjs/add/operator/map');
+  require('rxjs/add/operator/concatAll');
+  require('rxjs/add/operator/filter');
+  require('rxjs/add/operator/reduce');
+  require('rxjs/add/operator/zip');
 var searchIndex = require('./js/components/data-service.js');
 
 //For testing 
@@ -200,6 +206,8 @@ var displayStats = function(player) {
     document.getElementById("stats-secondary").appendChild(createElement("li", "STL: ", stats_array[index1].stats.Stl["#text"]));
     document.getElementById("stats-secondary").appendChild(createElement("li", "TOV: ", stats_array[index1].stats.Tov["#text"]));
     document.getElementById("stats-secondary").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
+
+
 
 };
 
