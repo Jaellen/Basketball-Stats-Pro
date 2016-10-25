@@ -267,29 +267,43 @@
 
 	var displayCarousel = function displayCarousel() {
 
-	  //clear any previous results 
+	  //Clear any previous results 
 	  document.getElementById("team").innerHTML = '';
 	  document.getElementById("team-list").innerHTML = '';
 
-	  //extract the city and team name from the current player clicked
+	  //Extract the city and team name from the current player clicked and display
 	  var team = stats_array.filter(function (entry) {
 	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked;
 	  }).map(function (entry) {
 	    return entry.team.City + " " + entry.team.Name;
 	  });
+	  document.getElementById("team").appendChild(createElement("h3", team.toString()));
 
-	  //Display the team name header 
-	  document.getElementById("team").appendChild(createElement("h4", team.toString()));
-
-	  //Display the other team players
+	  //Extract the team list from the data and display 
 	  var team_list = stats_array.filter(function (entry) {
 	    return entry.team.City + " " + entry.team.Name === team.toString();
 	  }).map(function (entry) {
-	    return entry.player.FirstName + " " + entry.player.LastName + ", " + entry.player.Position;
+	    return entry.player.FirstName + " " + entry.player.LastName;
+	  });
+	  var team_position = stats_array.filter(function (entry) {
+	    return entry.team.City + " " + entry.team.Name === team.toString();
+	  }).map(function (entry) {
+	    return entry.player.Position;
 	  });
 
+	  //Display the team players with their positions
 	  team_list.forEach(function (value, i) {
-	    document.getElementById("team-list").appendChild(createElement("li", team_list[i]));
+	    document.getElementById("team-list").appendChild(createElement("li", createElement("a", team_list[i], ", ", team_position[i]))).setAttribute('id', team_list[i]);
+
+	    //Add a click event listener for each player that will display the newly clicked player's stats    
+	    document.getElementById(team_list[i]).addEventListener("click", function (event) {
+	      //retrieve the name of the player clicked
+	      current_player_clicked = event.currentTarget.getAttribute('id');
+
+	      //display that player's data
+	      //displayNewStats();
+	      //displayCarousel();
+	    });
 	  });
 	};
 
