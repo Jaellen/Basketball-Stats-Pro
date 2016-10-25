@@ -217,24 +217,36 @@ var displayStats = function(player) {
 };
 
 var displayCarousel = function() {
+  
   //clear any previous results 
   document.getElementById("team").innerHTML = '';
-
-  console.log(current_player_clicked);
+  document.getElementById("team-list").innerHTML = '';
 
   //extract the city and team name from the current player clicked
   var team = stats_array.
-  filter(function(entry) { 
-    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked 
-  }).
-  map(function(entry) {
-    return entry.team.City + " " + entry.team.Name
-  });
+              filter(function(entry) { 
+                return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked 
+              }).
+              map(function(entry) {
+                return entry.team.City + " " + entry.team.Name
+              });
 
-  //Display the name 
-  //document.getElementById("team").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
-  document.getElementById("team").appendChild(createElement("h3", team[0]));
-}
+  //Display the team name header 
+  document.getElementById("team").appendChild(createElement( "h4", team.toString() ));
+
+  //Display the other team players
+  var team_list = stats_array.
+                    filter(function(entry) { 
+                      return (entry.team.City + " " + entry.team.Name) === team.toString() 
+                    }).
+                    map(function(entry) {
+                      return entry.player.FirstName + " " + entry.player.LastName + ", " + entry.player.Position
+                    });
+
+  team_list.forEach(function(value, i) {
+    document.getElementById("team-list").appendChild(createElement( "li", team_list[i] ));
+  }) 
+};
 
 
   
