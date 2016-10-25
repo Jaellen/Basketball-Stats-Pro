@@ -2,140 +2,222 @@
 
 /* ----------------------- Module Dependencies ----------------------------- */
 
+var Promise = require('promise');
+var Observable = require('rxjs/Observable').Observable;
+  require('rxjs/add/operator/map');
+  require('rxjs/add/operator/concatAll');
+  require('rxjs/add/operator/filter');
+  require('rxjs/add/operator/reduce');
+  require('rxjs/add/operator/zip');
+var searchIndex = require('./js/components/data-service.js');
+
+//For testing 
 var chai = require('chai');
 var assert = chai.assert;
-var $ = require('jquery');
-var Promise = require('promise');
-var searchIndex = require('./js/components/data-service.js');
 
 /* ------------------------------ Logic ------------------------------------ */
 
 /* Program Steps:
-1. Retrieve player first and last name data 
-  a) Make GET request and create sorted array of players first and last names
-  b) Use 'activePlayers' array to recommend resuts from user's search input   
-  c) Display the results of recommendations if they exist
-  d) When user selects player from search, display data on that player  
+1. XMLHttpRequest for Stats Data and AutoComplete Search Functionality  
+  a) GET request for cumulative player stats data 
+  b) Create an array of all players' first and last names for search recommendations
+  c) Use array to recommend and display search results from user's search input   
+  d) When user selects from search results, 
+    - GET Request for player's profile stats
+    - Display that players' relevant data from both GET requests    
 */
 
-// 1.a) Make GET request and create sorted array of players first and last names
-getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json')
-.then( function(response) {
-    // Create an array of all players' first and last name called 'activePlayers'
-    var activePlayersJSON = response;
-    var activePlayers = [];
-    for (var i = 0; i < response.activeplayers.playerentry.length; i++) {
-      activePlayers[i] = response.activeplayers.playerentry[i].player.FirstName + " " + response.activeplayers.playerentry[i].player.LastName;
-    }
-    //Pass this array to 'then'
-    return activePlayers;
+//1. XMLHttpRequest for Stats Data and AutoComplete Search Functionality
 
-    //Throw error if request fails  
-    }, function(error) {
-      console.error("GET Request Failed", console.error);
+//Declare global variables
+var stats_array;
+var profile_array;
+var current_player_clicked; 
+
+// 1.a) GET request for cumulative player stats data
+getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?')
+.then( function(response) {
+
+  //Set the global variable to the array needed from the JSON object   
+  stats_array = response.cumulativeplayerstats.playerstatsentry;
+
+  //1.b) Create an array of all players' first and last names for search recommendations 
+  var createFirstandLastNameArray = function () {
+    var array = [];
+    for (var i = 0; i < stats_array.length; i++) {
+      array[i] = stats_array[i].player.FirstName + " " + stats_array[i].player.LastName;
+    }
+    return array;
+  };
+  
+  var createFirstandLastNameArray = function() { 
+    return stats_array.map(function(entry) {
+      return entry.player.FirstName + " " + entry.player.LastName;
+    })
+  };
+
+  var activePlayers = createFirstandLastNameArray();
+  console.log(activePlayers);
+  
+
+  return activePlayers;
 })
 .then( function(activePlayers) {
     
-    var input = document.getElementById("searchBox"),
-    ul = document.getElementById("searchResults"),
-    inputTerms, termsArray, prefix, terms, results, sortedResults;
+  var input = document.getElementById("searchBox")
+  var ul = document.getElementById("searchResults")
+  var inputTerms, termsArray, prefix, terms, results, sortedResults;
 
-    //1.b) Use 'activePlayers' array to recommend resuts from user's search input  
-    var search = function() {
-      inputTerms = input.value.toLowerCase();
-      results = [];
-      termsArray = inputTerms.split(' ');
-      prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
-      terms = termsArray[termsArray.length -1].toLowerCase();
+  //1.c) Use array to recommend and display search results from user's search input    
+  var search = function() {
+    inputTerms = input.value.toLowerCase();
+    results = [];
+    termsArray = inputTerms.split(' ');
+    prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
+    terms = termsArray[termsArray.length -1].toLowerCase();
 
-      for (var i = 0; i < activePlayers.length; i++) {
-        var a = activePlayers[i].toLowerCase(),
-            t = a.indexOf(terms);
-        if (t > -1) {
-          results.push(a);
-        }
+    for (var i = 0; i < activePlayers.length; i++) {
+      var a = activePlayers[i].toLowerCase(),
+          t = a.indexOf(terms);
+      if (t > -1) {
+        results.push(a);
       }
-       evaluateResults();
-    };
+    }
+     evaluateResults();
+  };
     
-    //1.c) Display the results of recommendations if they exist
-    var sortResults = function(a,b) {
-      if (a.indexOf(terms) < b.indexOf(terms)) return -1;
-      if (a.indexOf(terms) > b.indexOf(terms)) return 1;
-      return 0;
+  var sortResults = function(a,b) {
+    if (a.indexOf(terms) < b.indexOf(terms)) return -1;
+    if (a.indexOf(terms) > b.indexOf(terms)) return 1;
+    return 0;
+  }
+
+  var evaluateResults = function() {
+    if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
+      sortedResults = results.sort(sortResults);
+      appendResults();
+    }
+    else if (inputTerms.length > 0 && terms.length !== 0) {
+      ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
+    }
+    else if (inputTerms.length !== 0 && terms.length === 0) {
+      return;
+    }
+    else {
+      clearResults();
+    }
+  };
+
+  //display recommendations
+  var appendResults = function () {
+  
+    clearResults();
+
+    //Note: A maximum of 5 recommendations set here 
+    for (var i = 0; i < sortedResults.length && i < 5; i++) {
+       
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+
+      //Set an attribute and click event listener to each recommendation result 
+      a.setAttribute('id', i.toString());
+      a.addEventListener("click", function(event) {
+              
+        //retrieve the name of the player clicked
+        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+
+        // display that player's data
+        displayStats();
+      });
+   
+      var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
+      li.innerHTML = result;
+      ul.appendChild(a);
+      a.appendChild(li);
     }
 
-    var evaluateResults = function() {
-      if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
-        sortedResults = results.sort(sortResults);
-        appendResults();
-      }
-      else if (inputTerms.length > 0 && terms.length !== 0) {
-        ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
-      }
-      else if (inputTerms.length !== 0 && terms.length === 0) {
-        return;
-      }
-      else {
-        clearResults();
-      }
-    };
+    if (ul.className !== "term-list") {
+      ul.className = "term-list";
+    }
+  };
 
-    var appendResults = function () {
-  
-      clearResults();
+  var clearResults = function() {
+    ul.className = "term-list hidden";
+    ul.innerHTML = '';
+  };
 
-      //Note: A maximum of 5 recommendations set here 
-      for (var i = 0; i < sortedResults.length && i < 5; i++) {
-       
-          var li = document.createElement("li");
-          var a = document.createElement("a");
-
-          //This seta an attribute and event listener to recommendations that triggers another function
-          a.setAttribute('id', i.toString());
-          a.addEventListener("click", function(event) {
-            
-            //retrieve the name of the player clicked
-            var player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-
-            //pass player clicked into getCumulativeStats function
-            getCumulativeStats(player_clicked);
-          });
-
-          //set the result to display for recommendations    
-          var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
-          li.innerHTML = result;
-
-          //create and append elemnets together
-          ul.appendChild(a);
-          a.appendChild(li);
-      }
-
-          if ( ul.className !== "term-list") {
-            ul.className = "term-list";
-          }
-    };
-
-    var clearResults = function() {
-      ul.className = "term-list hidden";
-      ul.innerHTML = '';
-    };
-
-    input.addEventListener("keyup", search, false);
+  input.addEventListener("keyup", search, false);
 });
 
-//1.d) When user selects player from search, display data on that player  
-var getCumulativeStats = function(player) {
+var displayStats = function(player) {
 
-  //Make a GET Request for cumulative player stats
-  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?')
+  //CLEAR THE RESULTS HERE!
+  
+  document.getElementById("profile").innerHTML = '';
+  document.getElementById("stats-main").innerHTML = '';
+  document.getElementById("stats-secondary").innerHTML = '';
+
+  //1.d) GET Request for player's profile stats
+  getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json')
   .then( function(response) {
 
-    var data = response.cumulativeplayerstats.playerstatsentry;  
-    var index = findPlayerClickedIndex(data, player); 
+    // 1.d) Display that players' relevant data from both GET requests 
+    //Display profile data
 
-    console.log(data[index].team.City);
-  })
+    profile_array = response.activeplayers.playerentry;    
+    var index2 = findPlayerClickedIndex(profile_array, current_player_clicked);
+
+    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.FirstName, " ", profile_array[index2].player.LastName));
+    document.getElementById("profile").appendChild(createElement("li", "Position: ", profile_array[index2].player.Position));
+    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].team.City, " ", profile_array[index2].team.Name));
+    document.getElementById("profile").appendChild(createElement("li", "Jersey#: ", profile_array[index2].player.JerseyNumber));
+    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Age, " yrs old"));
+    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Height, " ft"));
+    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Weight, " lbs"));
+    document.getElementById("profile").appendChild(createElement("li", "Rookie? ", profile_array[index2].player.IsRookie));
+    document.getElementById("profile").appendChild(createElement("li", "Injury Status: "));
+  });
+
+  //Display stats data
+  var index1 = findPlayerClickedIndex(stats_array, current_player_clicked); 
+    
+    //Stats Main
+    document.getElementById("stats-main").appendChild(createElement("li", "PTS/G: ", stats_array[index1].stats.PtsPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "AST/G: ", stats_array[index1].stats.AstPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "REB/G: ", stats_array[index1].stats.RebPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "BLK/G: ", stats_array[index1].stats.BlkPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "PF/G: ", stats_array[index1].stats.FoulPersPerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "FG%: ", stats_array[index1].stats.FgPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "2P%: ", stats_array[index1].stats.FtPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "3P%: ", stats_array[index1].stats.Fg2PtPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "FT%: ", stats_array[index1].stats.Fg3PtPct["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "2PM/G: ", stats_array[index1].stats.Fg2PtMadePerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "3PM/G: ", stats_array[index1].stats.Fg3PtMadePerGame["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "+/-: ", stats_array[index1].stats.PlusMinus["#text"]));
+    document.getElementById("stats-main").appendChild(createElement("li", "MPG: ", stats_array[index1].stats.MinSecondsPerGame["#text"]));   
+
+    //Stats Secondary
+    document.getElementById("stats-secondary").appendChild(createElement("li", "GP: ", stats_array[index1].stats.GamesPlayed["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "MIN: ", stats_array[index1].stats.MinSeconds["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "PTS: ", stats_array[index1].stats.Pts["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FGA: ", stats_array[index1].stats.FgAtt["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FGM: ", stats_array[index1].stats.FgMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "2PM: ", stats_array[index1].stats.Fg2PtMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "3PM: ", stats_array[index1].stats.Fg3PtMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "3PA: ", stats_array[index1].stats.Fg3PtAtt["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FTA: ", stats_array[index1].stats.FtAtt["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "FTM: ", stats_array[index1].stats.FtMade["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "OREB: ", stats_array[index1].stats.OffReb["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "DREB: ", stats_array[index1].stats.DefReb["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "REB: ", stats_array[index1].stats.Reb["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "AST: ", stats_array[index1].stats.Ast["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "BLK: ", stats_array[index1].stats.Blk["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "STL: ", stats_array[index1].stats.Stl["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "TOV: ", stats_array[index1].stats.Tov["#text"]));
+    document.getElementById("stats-secondary").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
+
+
+
 };
 
 
@@ -178,18 +260,23 @@ function findPlayerClickedIndex (array, player) {
       for (var i = 0; i < array.length; i++) {
         if (  (array[i].player.FirstName + " " + array[i].player.LastName).toLowerCase() == player ) {
           index = i;
-          console.log(index);
           return index;
         }  
       }  
 }
 
-function showMessage(msg) {
-  var elt = document.createElement("div");
-  elt.textContent = msg
-  return document.body.appendChild(elt);
-}
-
+function createElement(type){
+  var node = document.createElement(type);
+  for (var i = 1; i < arguments.length; i++) {
+    var child = arguments[i];
+    if (typeof child == "string") {
+      child = document.createTextNode(child);
+    }
+    node.appendChild(child);
+  }
+  return node;
+} 
 
 /* -------------------------- Test and Assertions -------------------------- */
+
 

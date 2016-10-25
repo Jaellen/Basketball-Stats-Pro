@@ -92,19 +92,18 @@
 	// 1.a) GET request for cumulative player stats data
 	getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?').then(function (response) {
 
-	  //Set the global variable to the array needed from the JSON object   
+	  //Set the global variable to the playerstatsentry array from the JSON object   
 	  stats_array = response.cumulativeplayerstats.playerstatsentry;
 
 	  //1.b) Create an array of all players' first and last names for search recommendations 
 	  var createFirstandLastNameArray = function createFirstandLastNameArray() {
-	    var array = [];
-	    for (var i = 0; i < stats_array.length; i++) {
-	      array[i] = stats_array[i].player.FirstName + " " + stats_array[i].player.LastName;
-	    }
-	    return array;
+	    return stats_array.map(function (entry) {
+	      return entry.player.FirstName + " " + entry.player.LastName;
+	    });
 	  };
-
 	  var activePlayers = createFirstandLastNameArray();
+
+	  //pass on this array to then
 	  return activePlayers;
 	}).then(function (activePlayers) {
 
