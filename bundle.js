@@ -201,62 +201,41 @@
 	    for (var prop in profile_array) {
 	      document.getElementById("profile").appendChild(createElement("li", profile_array[prop]));
 	    }
+	  }).then(function () {
 
-	    //createElementAppendChild("profile", "li", profile_array[0].name ));
-	    //document.getElementById("profile").appendChild(createElement("li", profile_array[0].name));
-	    /* document.getElementById("profile").appendChild(createElement("li", "Position: ", profile_array[index2].player.Position));
-	     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].team.City, " ", profile_array[index2].team.Name));
-	     document.getElementById("profile").appendChild(createElement("li", "Jersey#: ", profile_array[index2].player.JerseyNumber));
-	     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Age, " yrs old"));
-	     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Height, " ft"));
-	     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Weight, " lbs"));
-	     document.getElementById("profile").appendChild(createElement("li", "Rookie? ", profile_array[index2].player.IsRookie));
-	     document.getElementById("profile").appendChild(createElement("li", "Injury Status: "));
-	     */
+	    var main_stats_array = getPlayerMainStats(cumulative_player_data, current_player_clicked)[0];
+	    var secondary_stats_array = getPlayerSecondaryStats(cumulative_player_data, current_player_clicked)[0];
+
+	    for (var main_stat in main_stats_array) {
+	      document.getElementById("stats-main").appendChild(createElement("li", main_stats_array[main_stat]));
+	    }
+
+	    for (var secondary_stat in secondary_stats_array) {
+	      document.getElementById("stats-secondary").appendChild(createElement("li", secondary_stats_array[secondary_stat]));
+	    }
 	  });
 
 	  /*
-	   
-	  getPlayerMainStats(cumulative_player_data, current_player_clicked);
-	  getPlayerSecondaryStats(cumulative_player_data, current_player_clicked);
-	   //Display stats data
-	   //index1 is for stats_array
-	  index1 = findPlayerClickedIndex(stats_array, current_player_clicked); 
-	    
-	    //Stats Main
-	    document.getElementById("stats-main").appendChild(createElement("li", "PTS/G: ", stats_array[index1].stats.PtsPerGame["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "AST/G: ", stats_array[index1].stats.AstPerGame["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "REB/G: ", stats_array[index1].stats.RebPerGame["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "BLK/G: ", stats_array[index1].stats.BlkPerGame["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "PF/G: ", stats_array[index1].stats.FoulPersPerGame["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "FG%: ", stats_array[index1].stats.FgPct["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "2P%: ", stats_array[index1].stats.FtPct["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "3P%: ", stats_array[index1].stats.Fg2PtPct["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "FT%: ", stats_array[index1].stats.Fg3PtPct["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "2PM/G: ", stats_array[index1].stats.Fg2PtMadePerGame["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "3PM/G: ", stats_array[index1].stats.Fg3PtMadePerGame["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "+/-: ", stats_array[index1].stats.PlusMinus["#text"]));
-	    document.getElementById("stats-main").appendChild(createElement("li", "MPG: ", stats_array[index1].stats.MinSecondsPerGame["#text"]));   
-	     //Stats Secondary
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "GP: ", stats_array[index1].stats.GamesPlayed["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "MIN: ", stats_array[index1].stats.MinSeconds["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "PTS: ", stats_array[index1].stats.Pts["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "FGA: ", stats_array[index1].stats.FgAtt["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "FGM: ", stats_array[index1].stats.FgMade["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "2PM: ", stats_array[index1].stats.Fg2PtMade["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "3PM: ", stats_array[index1].stats.Fg3PtMade["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "3PA: ", stats_array[index1].stats.Fg3PtAtt["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "FTA: ", stats_array[index1].stats.FtAtt["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "FTM: ", stats_array[index1].stats.FtMade["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "OREB: ", stats_array[index1].stats.OffReb["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "DREB: ", stats_array[index1].stats.DefReb["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "REB: ", stats_array[index1].stats.Reb["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "AST: ", stats_array[index1].stats.Ast["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "BLK: ", stats_array[index1].stats.Blk["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "STL: ", stats_array[index1].stats.Stl["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "TOV: ", stats_array[index1].stats.Tov["#text"]));
-	    document.getElementById("stats-secondary").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
-	   */
+	   //Stats Secondary
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "GP: ", stats_array[index1].stats.GamesPlayed["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "MIN: ", stats_array[index1].stats.MinSeconds["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "PTS: ", stats_array[index1].stats.Pts["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "FGA: ", stats_array[index1].stats.FgAtt["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "FGM: ", stats_array[index1].stats.FgMade["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "2PM: ", stats_array[index1].stats.Fg2PtMade["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "3PM: ", stats_array[index1].stats.Fg3PtMade["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "3PA: ", stats_array[index1].stats.Fg3PtAtt["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "FTA: ", stats_array[index1].stats.FtAtt["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "FTM: ", stats_array[index1].stats.FtMade["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "OREB: ", stats_array[index1].stats.OffReb["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "DREB: ", stats_array[index1].stats.DefReb["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "REB: ", stats_array[index1].stats.Reb["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "AST: ", stats_array[index1].stats.Ast["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "BLK: ", stats_array[index1].stats.Blk["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "STL: ", stats_array[index1].stats.Stl["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "TOV: ", stats_array[index1].stats.Tov["#text"]));
+	  document.getElementById("stats-secondary").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
+	  */
 	};
 
 	/*var displayCarousel = function() {
@@ -327,15 +306,55 @@
 	  });
 	}
 
-	/*
-	function getPlayerMainStats (data, player) {
-	  return data.cumulativeplayerstats.playerstatsentry.
+	function getPlayerMainStats(data, player_clicked) {
+	  return data.cumulativeplayerstats.playerstatsentry.filter(function (entry) {
+	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
+	  }).map(function (entry) {
+	    return {
+	      PtsPerGame: "PTS/G: " + entry.stats.PtsPerGame["#text"],
+	      AstPerGame: "AST/G: " + entry.stats.AstPerGame["#text"],
+	      RebPerGame: "REB/G: " + entry.stats.RebPerGame["#text"],
+	      BlkPerGame: "BLK/G: " + entry.stats.BlkPerGame["#text"],
+	      FoulPersPerGame: "PF/G: " + entry.stats.FoulPersPerGame["#text"],
+	      FgPct: "FG%: " + entry.stats.FgPct["#text"],
+	      FtPct: "FT%: " + entry.stats.FtPct["#text"],
+	      Fg2PtPct: "2P%: " + entry.stats.Fg2PtPct["#text"],
+	      Fg3PtPct: "3P%: " + entry.stats.Fg3PtPct["#text"],
+	      Fg2PtMadePerGame: "2PM/G: " + entry.stats.Fg2PtMadePerGame["#text"],
+	      Fg3PtMadePerGame: "3PM/G: " + entry.stats.Fg3PtMadePerGame["#text"],
+	      PlusMinus: "+/-: " + entry.stats.PlusMinus["#text"],
+	      MinSecondsPerGame: "MPG: " + entry.stats.MinSecondsPerGame["#text"]
+	    };
+	  });
 	}
 
-	function getPlayerSecondaryStats(data, player) {
-	  return data.cumulativeplayerstats.playerstatsentry.
+	function getPlayerSecondaryStats(data, player_clicked) {
+	  return data.cumulativeplayerstats.playerstatsentry.filter(function (entry) {
+	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
+	  }).map(function (entry) {
+	    return {
+	      GamesPlayed: "GP: " + entry.stats.GamesPlayed["#text"],
+	      MinSeconds: "MIN: " + entry.stats.MinSeconds["#text"],
+	      Pts: "PTS: " + entry.stats.Pts["#text"],
+	      FgAtt: "FGA: " + entry.stats.FgAtt["#text"],
+	      FgMade: "FGM: " + entry.stats.FgMade["#text"],
+	      Fg2PtMade: "2PM: " + entry.stats.Fg2PtMade["#text"],
+	      Fg2PtAtt: "2PA: " + entry.stats.Fg2PtAtt["#text"],
+	      Fg3PtMade: "3PM: " + entry.stats.Fg3PtMade["#text"],
+	      Fg3PtAtt: "3PA: " + entry.stats.Fg3PtAtt["#text"],
+	      FtAtt: "FTA: " + entry.stats.FtAtt["#text"],
+	      FtMade: "FTM: " + entry.stats.FtMade["#text"],
+	      OffReb: "OREB: " + entry.stats.OffReb["#text"],
+	      DefReb: "DREB: " + entry.stats.DefReb["#text"],
+	      Reb: "REB: " + entry.stats.Reb["#text"],
+	      Ast: "AST: " + entry.stats.Ast["#text"],
+	      Blk: "BLK: " + entry.stats.Blk["#text"],
+	      Stl: "STL: " + entry.stats.Stl["#text"],
+	      Tov: "TOV: " + entry.stats.Tov["#text"],
+	      FoulPers: "PF: " + entry.stats.FoulPers["#text"]
+	    };
+	  });
 	}
-	*/
 
 	function createFirstandLastNameArray(data) {
 	  return data.cumulativeplayerstats.playerstatsentry.map(function (entry) {
