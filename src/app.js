@@ -30,32 +30,23 @@ var assert = chai.assert;
 //1. XMLHttpRequest for Stats Data and AutoComplete Search Functionality
 
 //Declare global variables
-var stats_array;
-var index1;
-
-var profile_array;
-var index2;
-
+var cumulative_player_data;
+var profile_data;
 var current_player_clicked; 
 
 // 1.a) GET request for cumulative player stats data
 getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?')
 .then( function(response) {
-
-  //Set the global variable to the playerstatsentry array from the JSON object   
-  stats_array = response.cumulativeplayerstats.playerstatsentry;
+  
+  cumulative_player_data = response;
 
   //1.b) Create an array of all players' first and last names for search recommendations 
-  var createFirstandLastNameArray = function() { 
-    return stats_array.
-      map(function(entry) { return entry.player.FirstName + " " + entry.player.LastName; })
-    };
-  var activePlayers = createFirstandLastNameArray();
-  
-  //pass on this array to then
-  return activePlayers;
+  var firstandLastNameArray = createFirstandLastNameArray(cumulative_player_data);
+
+  //pass on this array to .then
+  return firstandLastNameArray; 
 })
-.then( function(activePlayers) {
+.then( function(firstandLastNameArray) {
     
   var input = document.getElementById("searchBox")
   var ul = document.getElementById("searchResults")
@@ -69,8 +60,8 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
     prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
     terms = termsArray[termsArray.length -1].toLowerCase();
 
-    for (var i = 0; i < activePlayers.length; i++) {
-      var a = activePlayers[i].toLowerCase(),
+    for (var i = 0; i < firstandLastNameArray.length; i++) {
+      var a = firstandLastNameArray[i].toLowerCase(),
           t = a.indexOf(terms);
       if (t > -1) {
         results.push(a);
@@ -119,9 +110,9 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
         //retrieve the name of the player clicked
         current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 
-        // display that player's data
+        //display that player's data
         displayStats();
-        displayCarousel();
+        //displayCarousel();
       });
    
       var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
@@ -143,10 +134,9 @@ getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumul
   input.addEventListener("keyup", search, false);
 });
 
-var displayStats = function(player) {
+var displayStats = function() {
 
-  //CLEAR THE RESULTS HERE!
-  
+  //Clear any current results
   document.getElementById("profile").innerHTML = '';
   document.getElementById("stats-main").innerHTML = '';
   document.getElementById("stats-secondary").innerHTML = '';
@@ -155,16 +145,17 @@ var displayStats = function(player) {
   getJSON('https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json')
   .then( function(response) {
 
-    // 1.d) Display that players' relevant data from both GET requests 
-    //Display profile data
-
-    profile_array = response.activeplayers.playerentry;    
+    profile_data = response;    
     
-    //index2 is for profile_array
-    index2 = findPlayerClickedIndex(profile_array, current_player_clicked);
+    var profile_array = getPlayerProfile(profile_data, current_player_clicked)[0];
 
-    document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.FirstName, " ", profile_array[index2].player.LastName));
-    document.getElementById("profile").appendChild(createElement("li", "Position: ", profile_array[index2].player.Position));
+    for (var prop in profile_array) {
+      document.getElementById("profile").appendChild(createElement( "li", profile_array[prop] ));
+    }
+
+    //createElementAppendChild("profile", "li", profile_array[0].name ));
+    //document.getElementById("profile").appendChild(createElement("li", profile_array[0].name));
+   /* document.getElementById("profile").appendChild(createElement("li", "Position: ", profile_array[index2].player.Position));
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].team.City, " ", profile_array[index2].team.Name));
     document.getElementById("profile").appendChild(createElement("li", "Jersey#: ", profile_array[index2].player.JerseyNumber));
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Age, " yrs old"));
@@ -172,7 +163,14 @@ var displayStats = function(player) {
     document.getElementById("profile").appendChild(createElement("li", profile_array[index2].player.Weight, " lbs"));
     document.getElementById("profile").appendChild(createElement("li", "Rookie? ", profile_array[index2].player.IsRookie));
     document.getElementById("profile").appendChild(createElement("li", "Injury Status: "));
+    */
   });
+
+  /*
+
+  
+  getPlayerMainStats(cumulative_player_data, current_player_clicked);
+  getPlayerSecondaryStats(cumulative_player_data, current_player_clicked);
 
   //Display stats data
 
@@ -213,9 +211,12 @@ var displayStats = function(player) {
     document.getElementById("stats-secondary").appendChild(createElement("li", "STL: ", stats_array[index1].stats.Stl["#text"]));
     document.getElementById("stats-secondary").appendChild(createElement("li", "TOV: ", stats_array[index1].stats.Tov["#text"]));
     document.getElementById("stats-secondary").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
+
+  */
 };
 
-var displayCarousel = function() {
+
+/*var displayCarousel = function() {
   
   //Clear any previous results 
   document.getElementById("team").innerHTML = '';
@@ -263,9 +264,40 @@ var displayCarousel = function() {
       //displayCarousel();
     });
   })
-};
+};*/
 
 /* -------------------------- Utility functions ---------------------------- */
+
+function getPlayerProfile (data, player_clicked) {
+
+  return data.activeplayers.playerentry.
+    filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked }).
+    map(function(entry) { 
+      return  { 
+                name: (entry.player.FirstName + " " + entry.player.LastName),
+                team: (entry.team.City + " " + entry.team.Name),
+                jersey: ("Jersey #: " + entry.player.JerseyNumber),
+                age: ("age: " + entry.player.Age),
+                height: (entry.player.Height + " ft\'in\"" ),
+                weight: (entry.player.Weight + " lbs") 
+              } 
+    });
+}
+
+/*
+function getPlayerMainStats (data, player) {
+  return data.cumulativeplayerstats.playerstatsentry.
+}
+
+function getPlayerSecondaryStats(data, player) {
+  return data.cumulativeplayerstats.playerstatsentry.
+}
+*/
+
+function createFirstandLastNameArray(data) { 
+  return data.cumulativeplayerstats.playerstatsentry.
+    map(function(entry) { return entry.player.FirstName + " " + entry.player.LastName; });
+}
 
 function getJSON(url) {
   return get(url).then(JSON.parse);
@@ -296,17 +328,6 @@ function get(url) {
     //Make the request
     req.send();
   });
-}
-
-function findPlayerClickedIndex (array, player) {
-      var index;
-  
-      for (var i = 0; i < array.length; i++) {
-        if (  (array[i].player.FirstName + " " + array[i].player.LastName).toLowerCase() == player ) {
-          index = i;
-          return index;
-        }  
-      }  
 }
 
 function createElement(type){
