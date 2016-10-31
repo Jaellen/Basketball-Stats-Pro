@@ -213,80 +213,52 @@
 	    for (var secondary_stat in secondary_stats_array) {
 	      document.getElementById("stats-secondary").appendChild(createElement("li", secondary_stats_array[secondary_stat]));
 	    }
-	  });
 
-	  /*
-	   //Stats Secondary
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "GP: ", stats_array[index1].stats.GamesPlayed["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "MIN: ", stats_array[index1].stats.MinSeconds["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "PTS: ", stats_array[index1].stats.Pts["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "FGA: ", stats_array[index1].stats.FgAtt["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "FGM: ", stats_array[index1].stats.FgMade["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "2PM: ", stats_array[index1].stats.Fg2PtMade["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "3PM: ", stats_array[index1].stats.Fg3PtMade["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "3PA: ", stats_array[index1].stats.Fg3PtAtt["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "FTA: ", stats_array[index1].stats.FtAtt["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "FTM: ", stats_array[index1].stats.FtMade["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "OREB: ", stats_array[index1].stats.OffReb["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "DREB: ", stats_array[index1].stats.DefReb["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "REB: ", stats_array[index1].stats.Reb["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "AST: ", stats_array[index1].stats.Ast["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "BLK: ", stats_array[index1].stats.Blk["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "STL: ", stats_array[index1].stats.Stl["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "TOV: ", stats_array[index1].stats.Tov["#text"]));
-	  document.getElementById("stats-secondary").appendChild(createElement("li", "PF: ", stats_array[index1].stats.FoulPers["#text"]));
-	  */
+	    displayCarousel();
+	  });
 	};
 
-	/*var displayCarousel = function() {
-	  
+	var displayCarousel = function displayCarousel() {
+
 	  //Clear any previous results 
 	  document.getElementById("team").innerHTML = '';
 	  document.getElementById("team-list").innerHTML = '';
 
 	  //Extract the city and team name from the current player clicked and display
-	  var team = stats_array.
-	              filter(function(entry) { 
-	                return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked 
-	              }).
-	              map(function(entry) {
-	                return entry.team.City + " " + entry.team.Name
-	              });
-	  document.getElementById("team").appendChild(createElement( "h3", team.toString() ));
+	  var team = cumulative_player_data.cumulativeplayerstats.playerstatsentry.filter(function (entry) {
+	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked;
+	  }).map(function (entry) {
+	    return entry.team.City + " " + entry.team.Name;
+	  });
+	  document.getElementById("team").appendChild(createElement("h3", team.toString()));
 
 	  //Extract the team list from the data and display 
-	  var team_list = stats_array.
-	                    filter(function(entry) { 
-	                      return (entry.team.City + " " + entry.team.Name) === team.toString() 
-	                    }).
-	                    map(function(entry) {
-	                      return entry.player.FirstName + " " + entry.player.LastName 
-	                    });
-	  var team_position = stats_array.
-	                    filter(function(entry) { 
-	                      return (entry.team.City + " " + entry.team.Name) === team.toString() 
-	                    }).
-	                    map(function(entry) {
-	                      return entry.player.Position
-	                    });
-	  
+	  var team_list = cumulative_player_data.cumulativeplayerstats.playerstatsentry.filter(function (entry) {
+	    return entry.team.City + " " + entry.team.Name === team.toString();
+	  }).map(function (entry) {
+	    return entry.player.FirstName + " " + entry.player.LastName;
+	  });
+	  var team_position = cumulative_player_data.cumulativeplayerstats.playerstatsentry.filter(function (entry) {
+	    return entry.team.City + " " + entry.team.Name === team.toString();
+	  }).map(function (entry) {
+	    return entry.player.Position;
+	  });
+
 	  //Display the team players with their positions
-	  team_list.forEach(function(value, i) {
-	    document.getElementById("team-list").
-	      appendChild(createElement( "li", createElement("a", team_list[i], ", ", team_position[i])  )).
-	      setAttribute('id', team_list[i]);
-	    
+	  team_list.forEach(function (value, i) {
+	    document.getElementById("team-list").appendChild(createElement("li", createElement("a", team_list[i], ", ", team_position[i]))).setAttribute('id', team_list[i]);
+
 	    //Add a click event listener for each player that will display the newly clicked player's stats    
-	    document.getElementById(team_list[i]).addEventListener("click", function(event) {       
+	    document.getElementById(team_list[i]).addEventListener("click", function (event) {
 	      //retrieve the name of the player clicked
-	       current_player_clicked = event.currentTarget.getAttribute('id');
-	      
+	      current_player_clicked = event.currentTarget.getAttribute('id');
+
 	      //display that player's data
-	      //displayNewStats();
-	      //displayCarousel();
+	      displayStats();
+	      displayCarousel();
 	    });
-	  })
-	};*/
+	  });
+	};
 
 	/* -------------------------- Utility functions ---------------------------- */
 

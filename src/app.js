@@ -165,18 +165,21 @@ var displayStats = function() {
     for (var secondary_stat in secondary_stats_array) {
       document.getElementById("stats-secondary").appendChild(createElement( "li", secondary_stats_array[secondary_stat] ));
     }
+
+    displayCarousel();
+
   });
 };
 
 
-/*var displayCarousel = function() {
+var displayCarousel = function() {
   
   //Clear any previous results 
   document.getElementById("team").innerHTML = '';
   document.getElementById("team-list").innerHTML = '';
 
   //Extract the city and team name from the current player clicked and display
-  var team = stats_array.
+  var team = cumulative_player_data.cumulativeplayerstats.playerstatsentry.
               filter(function(entry) { 
                 return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked 
               }).
@@ -186,14 +189,14 @@ var displayStats = function() {
   document.getElementById("team").appendChild(createElement( "h3", team.toString() ));
 
   //Extract the team list from the data and display 
-  var team_list = stats_array.
+  var team_list = cumulative_player_data.cumulativeplayerstats.playerstatsentry.
                     filter(function(entry) { 
                       return (entry.team.City + " " + entry.team.Name) === team.toString() 
                     }).
                     map(function(entry) {
                       return entry.player.FirstName + " " + entry.player.LastName 
                     });
-  var team_position = stats_array.
+  var team_position = cumulative_player_data.cumulativeplayerstats.playerstatsentry.
                     filter(function(entry) { 
                       return (entry.team.City + " " + entry.team.Name) === team.toString() 
                     }).
@@ -213,11 +216,11 @@ var displayStats = function() {
        current_player_clicked = event.currentTarget.getAttribute('id');
       
       //display that player's data
-      //displayNewStats();
-      //displayCarousel();
+      displayStats();
+      displayCarousel();
     });
   })
-};*/
+};
 
 /* -------------------------- Utility functions ---------------------------- */
 
