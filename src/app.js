@@ -3,12 +3,12 @@
 /* ----------------------- Module Dependencies ----------------------------- */
 
 var Promise = require('promise');
-var Observable = require('rxjs/Observable').Observable;
-  require('rxjs/add/operator/map');
-  require('rxjs/add/operator/concatAll');
-  require('rxjs/add/operator/filter');
-  require('rxjs/add/operator/reduce');
-  require('rxjs/add/operator/zip');
+var Observable = require('rxjs/Rx');
+  //require('rxjs/add/operator/map');
+  //require('rxjs/add/operator/concatAll');
+  //require('rxjs/add/operator/filter');
+  //require('rxjs/add/operator/reduce');
+  //require('rxjs/add/operator/zip');
 var searchIndex = require('./js/components/data-service.js');
 
 //For testing 
