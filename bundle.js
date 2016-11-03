@@ -67,13 +67,24 @@
 	//to add another module:
 	//var x  = require('./js/components/...');
 
-	/* -------------------------- Program Logic -------------------------------- */
-
 	var cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
 	var profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
 	var cumulative_player_data = void 0,
 	    profile_data = void 0,
 	    current_player_clicked = void 0;
+
+	var getProfileData = Rx.Observable.create(function (observer) {
+	  xhrRequest.get(profile_data_url).auth('jaellen', 'adanaC4032').end(function (err, res) {
+	    if (err) {
+	      return observer.onError(err);
+	    }
+	    var data = JSON.parse(res.text);
+	    profile_data = data.activeplayers.playerentry;
+
+	    observer.onNext(profile_data);
+	  });
+	  return function () {};
+	});
 
 	var getCumulativePlayerData = Rx.Observable.create(function (observer) {
 	  xhrRequest.get(cumulative_player_data_url).auth('jaellen', 'adanaC4032').end(function (err, res) {
@@ -87,6 +98,8 @@
 	  });
 	  return function () {};
 	});
+
+	/* -------------------------- Program Logic -------------------------------- */
 
 	getCumulativePlayerData.take(1).subscribe({
 	  onNext: function onNext(cumulative_player_data) {
@@ -199,20 +212,6 @@
 	  document.getElementById("stats-main").innerHTML = '';
 	  document.getElementById("stats-secondary").innerHTML = '';
 
-	  //1.d) GET Request for player's profile stats
-	  var getProfileData = Rx.Observable.create(function (observer) {
-	    xhrRequest.get(profile_data_url).auth('jaellen', 'adanaC4032').end(function (err, res) {
-	      if (err) {
-	        return observer.onError(err);
-	      }
-	      var data = JSON.parse(res.text);
-	      profile_data = data.activeplayers.playerentry;
-
-	      observer.onNext(profile_data);
-	    });
-	    return function () {};
-	  });
-
 	  getProfileData.take(1).subscribe({
 	    onNext: function onNext(profile_data) {
 	      var profile_array = getPlayerProfile(profile_data, current_player_clicked)[0];
@@ -239,13 +238,13 @@
 
 	var displayCarousel = function displayCarousel() {
 
-	  var team = void 0,
-	      team_list = void 0,
-	      team_position = void 0;
-
 	  //Clear any previous results 
 	  document.getElementById("team").innerHTML = '';
 	  document.getElementById("team-list").innerHTML = '';
+
+	  var team = void 0,
+	      team_list = void 0,
+	      team_position = void 0;
 
 	  //Extract the city and team name from the current player clicked and display
 	  team = cumulative_player_data.filter(function (entry) {
@@ -274,14 +273,14 @@
 	    document.getElementById("team-list").appendChild(createElement("li", createElement("a", team_list[i], ", ", team_position[i]))).setAttribute('id', team_list[i]);
 
 	    //Add a click event listener for each player that will display the newly clicked player's stats    
-	    //document.getElementById(team_list[i]).addEventListener("click", function(event) {       
-	    //retrieve the name of the player clicked
-	    // current_player_clicked = event.currentTarget.getAttribute('id');
+	    document.getElementById(team_list[i]).addEventListener("click", function (event) {
+	      //retrieve the name of the player clicked
+	      current_player_clicked = event.currentTarget.getAttribute('id');
 
-	    //display that player's data
-	    //displayStats();
-	    //displayCarousel();
-	    //});
+	      //display that player's data
+	      //displayStats();
+	      //displayCarousel();
+	    });
 	  });
 	};
 

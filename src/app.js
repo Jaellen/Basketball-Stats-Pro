@@ -12,12 +12,25 @@ var xhrRequest = require('superagent');
 //to add another module:
 //var x  = require('./js/components/...');
 
-/* -------------------------- Program Logic -------------------------------- */
-
 const cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
 const profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
 let cumulative_player_data, profile_data, current_player_clicked;
 
+let getProfileData = Rx.Observable.create((observer) => {
+    xhrRequest
+     .get(profile_data_url)
+     .auth('jaellen', 'adanaC4032')
+     .end(function(err, res) {
+        if (err) {
+          return observer.onError(err);
+        }
+        let data = JSON.parse(res.text);
+        profile_data = data.activeplayers.playerentry;
+        
+        observer.onNext(profile_data);
+     });
+     return () => {};
+  });
 
 let getCumulativePlayerData = Rx.Observable.create((observer) => {
   xhrRequest
@@ -35,6 +48,8 @@ let getCumulativePlayerData = Rx.Observable.create((observer) => {
    return () => {
    };
 });
+
+/* -------------------------- Program Logic -------------------------------- */
 
 getCumulativePlayerData
 .take(1)
@@ -149,23 +164,6 @@ let displayStats = function() {
   document.getElementById("stats-main").innerHTML = '';
   document.getElementById("stats-secondary").innerHTML = '';
 
-  //1.d) GET Request for player's profile stats
-  let getProfileData = Rx.Observable.create((observer) => {
-    xhrRequest
-     .get(profile_data_url)
-     .auth('jaellen', 'adanaC4032')
-     .end(function(err, res) {
-        if (err) {
-          return observer.onError(err);
-        }
-        let data = JSON.parse(res.text);
-        profile_data = data.activeplayers.playerentry;
-        
-        observer.onNext(profile_data);
-     });
-     return () => {};
-  });
-
   getProfileData
   .take(1)
   .subscribe({
@@ -195,11 +193,11 @@ let displayStats = function() {
 
 var displayCarousel = function() {
   
-  let team, team_list, team_position;
-
   //Clear any previous results 
   document.getElementById("team").innerHTML = '';
   document.getElementById("team-list").innerHTML = '';
+
+  let team, team_list, team_position;
 
   //Extract the city and team name from the current player clicked and display
   team = cumulative_player_data
@@ -230,14 +228,14 @@ var displayCarousel = function() {
       .setAttribute('id', team_list[i]);
     
     //Add a click event listener for each player that will display the newly clicked player's stats    
-    //document.getElementById(team_list[i]).addEventListener("click", function(event) {       
+    document.getElementById(team_list[i]).addEventListener("click", function(event) {       
       //retrieve the name of the player clicked
-      // current_player_clicked = event.currentTarget.getAttribute('id');
+      current_player_clicked = event.currentTarget.getAttribute('id');
       
       //display that player's data
       //displayStats();
       //displayCarousel();
-    //});
+    });
   });
 };
 
