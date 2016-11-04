@@ -12,27 +12,29 @@ var xhrRequest = require('superagent');
 //to add another module:
 //var x  = require('./js/components/...');
 
-/* ------------------------------ Logic ------------------------------------ */
-
-/* Program Steps:
-1. XMLHttpRequest for Stats Data and AutoComplete Search Functionality  
-  a) GET request for cumulative player stats data 
-  b) Create an array of all players' first and last names for search recommendations
-  c) Use array to recommend and display search results from user's search input   
-  d) When user selects from search results, 
-    - GET Request for player's profile stats
-    - Display that players' relevant data from both GET requests    
-*/
-
-//1. XMLHttpRequest for Stats Data and AutoComplete Search Functionality
-
-//Declare global variables
-//let cumulative_player_data, profile_data, current_player_clicked;
 const cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
 const profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
+let all_stats_data, all_profile_data;
+let searchArray;
 let current_player_clicked;
+let player_profile, player_main_stats, player_secondary_stats;
+let player_team_name, player_team_list, player_team_positions;
 
-//New Version
+let getProfileData = Rx.Observable.create((observer) => {
+    xhrRequest
+     .get(profile_data_url)
+     .auth('jaellen', 'adanaC4032')
+     .end(function(err, res) {
+        if (err) {
+          return observer.onError(err);
+        }
+        let data = JSON.parse(res.text);
+        profile_data = data.activeplayers.playerentry;
+        
+        observer.onNext(profile_data);
+     });
+     return () => {};
+  });
 
 let getCumulativePlayerData = Rx.Observable.create((observer) => {
   xhrRequest
@@ -43,132 +45,277 @@ let getCumulativePlayerData = Rx.Observable.create((observer) => {
         return observer.onError(err);
       }
       let data = JSON.parse(res.text);
-      let cumulative_player_data = data.cumulativeplayerstats.playerstatsentry;
+      cumulative_player_data = data.cumulativeplayerstats.playerstatsentry;
       
       observer.onNext(cumulative_player_data);
    });
    return () => {
-    console.log("resources released");
-   };
-});
-
-let getProfileData = Rx.Observable.create((observer) => {
-  xhrRequest
-   .get(profile_data_url)
-   .auth('jaellen', 'adanaC4032')
-   .end(function(err, res) {
-      if (err) {
-        return observer.onError(err);
-      }
-      let data = JSON.parse(res.text);
-      let profile_data = data.activeplayers.playerentry;
-      
-      observer.onNext(profile_data);
-   });
-   return () => {
-    console.log("resources released");
    };
 });
 
 /* -------------------------- Program Logic -------------------------------- */
 
+//Make ajax call for all player stats data 
+let getPlayerStatsData = function() {
+  //set all_stats_data
+};
+
+//Make ajax call for all player profile data 
+let getPlayerProfileData = function() {
+  //set all_profile_data
+};
+
+//Implement search function with recommendations
+let searchBox = function(all_player_stats_data) {
+  //create recommendations array
+
+  //set click event listener that sets curent_player_clicked...
+  
+
+  //and updates the stats with that player 
+  updateStats(current_player_clicked);
+};
+
+let updateStats = function(current_player_clicked) {
+  //set player_profile, player_main_stats and player_secondary_stats
+
+  //set player_team_name, player_team_list, player_team_positions
+
+  //call display functions for player's profile, main stats, secondary stats, and team 
+  displayPlayerProfile(player_profile);
+  displayPlayerMainStats(player_main_stats);
+  displayPlayerSecondaryStats(player_secondary_stats);
+  displayPlayerTeamName(player_team_name);
+  displayPlayerTeamList(player_team_list, player_team_positions);
+};
+
+let displayPlayerProfile = function(player_profile) {
+  //clear any previous results
+
+  //display player profile
+};
+
+let displayPlayerMainStats = function(player_main_stats) {
+  //clear any previous results
+
+  //display player's main stats 
+};
+
+let displayPlayerSecondaryStats = function(player_secondary_stats) {
+  //clear any previous results
+
+  //display player's secondary stats 
+};
+
+let displayPlayerTeamName = function(player_team_name) {
+  //clear any previous results
+
+  //display player team name
+};
+
+let displayPlayerTeamList = function(player_team_list, team_position) {
+  //clear any previous results
+
+  //display player team list
+
+  //Add click event listener, when clicked:
+  updateStats(current_player_clicked);
+};
+
+//Initiate Program
+getPlayerStatsData();
+
+
+/*
 getCumulativePlayerData
 .take(1)
 .subscribe({
-  onNext: (cumulative_player_data) => {
-    
-  let firstandLastNameArray = createFirstandLastNameArray(cumulative_player_data);  
-  let input = document.getElementById("searchBox")
-  let ul = document.getElementById("searchResults")
-  let inputTerms, termsArray, prefix, terms, results, sortedResults;
+  onNext: (cumulative_player_data) => {   
+    let firstandLastNameArray = createFirstandLastNameArray(cumulative_player_data);  
+    let input = document.getElementById("searchBox")
+    let ul = document.getElementById("searchResults")
+    let sortedResults, prefix, inputTerms, termsArray, terms, results;
 
-  let search = function() {
-    inputTerms = input.value.toLowerCase();
-    results = [];
-    termsArray = inputTerms.split(' ');
-    prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
-    terms = termsArray[termsArray.length -1].toLowerCase();
+    let search = function() {
+      
+      inputTerms = input.value.toLowerCase();
+      results = [];
+      termsArray = inputTerms.split(' ');
+      prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
+      terms = termsArray[termsArray.length -1].toLowerCase();
 
-    for (var i = 0; i < firstandLastNameArray.length; i++) {
-      var a = firstandLastNameArray[i].toLowerCase(),
-          t = a.indexOf(terms);
-      if (t > -1) {
-        results.push(a);
+      for (var i = 0; i < firstandLastNameArray.length; i++) {
+        var a = firstandLastNameArray[i].toLowerCase(),
+            t = a.indexOf(terms);
+        if (t > -1) {
+          results.push(a);
+        }
       }
-    }
-     evaluateSearchResults();
-  };
+         
+      let sortResults = function(a,b) {
+        if (a.indexOf(terms) < b.indexOf(terms)) return -1;
+        if (a.indexOf(terms) > b.indexOf(terms)) return 1;
+        return 0;
+      };
+
+      let evaluateSearchResults = function() {
+        if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
+          sortedResults = results.sort(sortResults);
+          displaySearchResults();
+        }
+        else if (inputTerms.length > 0 && terms.length !== 0) {
+          ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
+        }
+        else if (inputTerms.length !== 0 && terms.length === 0) {
+          return;
+        }
+        else {
+          clearResults();
+        }
+      };
+
+      evaluateSearchResults();
+    };
+
+    let clearResults = function() {
+      ul.className = "term-list hidden";
+      ul.innerHTML = '';
+    };
+
+    let displaySearchResults = function () {
     
-  let sortResults = function(a,b) {
-    if (a.indexOf(terms) < b.indexOf(terms)) return -1;
-    if (a.indexOf(terms) > b.indexOf(terms)) return 1;
-    return 0;
-  }
-
-  let evaluateSearchResults = function() {
-    if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
-      sortedResults = results.sort(sortResults);
-      displaySearchResults();
-    }
-    else if (inputTerms.length > 0 && terms.length !== 0) {
-      ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
-    }
-    else if (inputTerms.length !== 0 && terms.length === 0) {
-      return;
-    }
-    else {
       clearResults();
-    }
-  };
 
-  let displaySearchResults = function () {
-  
-  clearResults();
+      //Note: A maximum of 5 recommendations set here 
+      for (let i = 0; i < sortedResults.length && i < 5; i++) {  
+        let li = document.createElement("li");
+        let a = document.createElement("a");
 
-  //Note: A maximum of 5 recommendations set here 
-  for (let i = 0; i < sortedResults.length && i < 5; i++) {  
-    let li = document.createElement("li");
-    let a = document.createElement("a");
+        //Set an attribute and click event listener to each recommendation result 
+        a.setAttribute('id', i.toString());
+        a.addEventListener("click", function(event) {
+          //retrieve the name of the player clicked
+          current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 
-      //Set an attribute and click event listener to each recommendation result 
-      a.setAttribute('id', i.toString());
-      a.addEventListener("click", function(event) {
-              
-        //retrieve the name of the player clicked
-        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
+          //display that player's data
+          displayStats();
+          //displayCarousel();
+        });
 
-        //display that player's data
-        //displayStats();
-        //displayCarousel();
-      });
-   
-      var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
-      li.innerHTML = result;
-      ul.appendChild(a);
-      a.appendChild(li);
-    }
 
-    if (ul.className !== "term-list") {
-      ul.className = "term-list";
-    }
-  };
+        //a.addEventListener("click", function(event) {
+                
+          //retrieve the name of the player clicked
+          //current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 
-  let clearResults = function() {
-    ul.className = "term-list hidden";
-    ul.innerHTML = '';
-  };
+          //display that player's data
+          //displayStats();
+          //displayCarousel();
+        //});
+     
+        var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
+        li.innerHTML = result;
+        ul.appendChild(a);
+        a.appendChild(li);
+      }
 
-  input.addEventListener("keyup", search, false);
+      if (ul.className !== "term-list") {
+        ul.className = "term-list";
+      }
+    };
 
+    input.addEventListener("keyup", search, false);
   },
   onError: (error) => {
     console.error("Error in XMLHttpRequest");
   },
   onCompleted: () => {
-    console.log("Completed");
   }, 
-})
+});
 
+let displayStats = function() {
+
+  //Clear any current results
+  document.getElementById("profile").innerHTML = '';
+  document.getElementById("stats-main").innerHTML = '';
+  document.getElementById("stats-secondary").innerHTML = '';
+
+  getProfileData
+  .take(1)
+  .subscribe({
+    onNext: (profile_data) => {
+      let profile_array = getPlayerProfile(profile_data, current_player_clicked)[0];
+      let main_stats_array = getPlayerMainStats(cumulative_player_data, current_player_clicked)[0];  
+      let secondary_stats_array = getPlayerSecondaryStats(cumulative_player_data, current_player_clicked)[0];
+
+      for (var prop in profile_array) {
+        document.getElementById("profile").appendChild(createElement( "li", profile_array[prop] ));
+      }
+      for (var main_stat in main_stats_array) {
+        document.getElementById("stats-main").appendChild(createElement( "li", main_stats_array[main_stat] ));
+      }
+      for (var secondary_stat in secondary_stats_array) {
+        document.getElementById("stats-secondary").appendChild(createElement( "li", secondary_stats_array[secondary_stat] ));
+      }
+      displayCarousel();
+    },
+    onError: (error) => {
+      console.error("Error in XMLHttpRequest");
+    },
+    onCompleted: () => {
+    },
+  });
+};
+
+var displayCarousel = function() {
+  
+  //Clear any previous results 
+  document.getElementById("team").innerHTML = '';
+  document.getElementById("team-list").innerHTML = '';
+
+  let team, team_list, team_position;
+
+  //Extract the city and team name from the current player clicked and display
+  team = cumulative_player_data
+            .filter(function(entry) { 
+              return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked })
+            .map(function(entry) { 
+              return entry.team.City + " " + entry.team.Name });
+  
+  document.getElementById("team").appendChild(createElement( "h3", team.toString() ));
+
+  //Extract the team list from the data and display 
+  team_list = cumulative_player_data
+                .filter(function(entry) { 
+                  return (entry.team.City + " " + entry.team.Name) === team.toString() })
+                .map(function(entry) {
+                  return entry.player.FirstName + " " + entry.player.LastName });
+
+  team_position = cumulative_player_data
+                    .filter(function(entry) { 
+                      return (entry.team.City + " " + entry.team.Name) === team.toString() })
+                    .map(function(entry) {
+                      return entry.player.Position });
+  
+  //Display the team players with their positions
+  team_list.forEach(function(value, i) {
+    document.getElementById("team-list")
+      .appendChild(createElement( "li", createElement("a", team_list[i], ", ", team_position[i])  ))
+      .setAttribute('id', team_list[i]);
+    
+    //Add a click event listener for each player that will display the newly clicked player's stats    
+    document.getElementById(team_list[i]).addEventListener("click", function(event) {       
+      //retrieve the name of the player clicked
+      current_player_clicked = event.currentTarget.getAttribute('id');
+      
+      //display that player's data
+      //displayStats();
+      //displayCarousel();
+    });
+  });
+};
+
+*/
 
 /* -------------------------- Utility functions ---------------------------- */
 
@@ -179,207 +326,11 @@ function createFirstandLastNameArray(data) {
     });
 }
 
-
-
-
-/*
-// 1.a) GET request for cumulative player stats data
-getJSON(cumulative_player_data_url)
-.then( function(response) {
-  
-  cumulative_player_data = response;
-
-  //1.b) Create an array of all players' first and last names for search recommendations 
-  var firstandLastNameArray = createFirstandLastNameArray(cumulative_player_data);
-
-  //pass on this array to .then
-  return firstandLastNameArray; 
-})
-.then( function(firstandLastNameArray) {
-    
-  var input = document.getElementById("searchBox")
-  var ul = document.getElementById("searchResults")
-  var inputTerms, termsArray, prefix, terms, results, sortedResults;
-
-  //1.c) Use array to recommend and display search results from user's search input    
-  var search = function() {
-    inputTerms = input.value.toLowerCase();
-    results = [];
-    termsArray = inputTerms.split(' ');
-    prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
-    terms = termsArray[termsArray.length -1].toLowerCase();
-
-    for (var i = 0; i < firstandLastNameArray.length; i++) {
-      var a = firstandLastNameArray[i].toLowerCase(),
-          t = a.indexOf(terms);
-      if (t > -1) {
-        results.push(a);
-      }
-    }
-     evaluateResults();
-  };
-    
-  var sortResults = function(a,b) {
-    if (a.indexOf(terms) < b.indexOf(terms)) return -1;
-    if (a.indexOf(terms) > b.indexOf(terms)) return 1;
-    return 0;
-  }
-
-  var evaluateResults = function() {
-    if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
-      sortedResults = results.sort(sortResults);
-      appendResults();
-    }
-    else if (inputTerms.length > 0 && terms.length !== 0) {
-      ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
-    }
-    else if (inputTerms.length !== 0 && terms.length === 0) {
-      return;
-    }
-    else {
-      clearResults();
-    }
-  };
-
-  //display recommendations
-  var appendResults = function () {
-  
-    clearResults();
-
-    //Note: A maximum of 5 recommendations set here 
-    for (var i = 0; i < sortedResults.length && i < 5; i++) {
-       
-      var li = document.createElement("li");
-      var a = document.createElement("a");
-
-      //Set an attribute and click event listener to each recommendation result 
-      a.setAttribute('id', i.toString());
-      a.addEventListener("click", function(event) {
-              
-        //retrieve the name of the player clicked
-        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-
-        //display that player's data
-        displayStats();
-        //displayCarousel();
-      });
-   
-      var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
-      li.innerHTML = result;
-      ul.appendChild(a);
-      a.appendChild(li);
-    }
-
-    if (ul.className !== "term-list") {
-      ul.className = "term-list";
-    }
-  };
-
-  var clearResults = function() {
-    ul.className = "term-list hidden";
-    ul.innerHTML = '';
-  };
-
-  input.addEventListener("keyup", search, false);
-});
-
-var displayStats = function() {
-
-  //Clear any current results
-  document.getElementById("profile").innerHTML = '';
-  document.getElementById("stats-main").innerHTML = '';
-  document.getElementById("stats-secondary").innerHTML = '';
-
-  //1.d) GET Request for player's profile stats
-  getJSON(profile_data_url)
-  .then( function(response) {
-
-    profile_data = response;    
-    
-    var profile_array = getPlayerProfile(profile_data, current_player_clicked)[0];
-
-    for (var prop in profile_array) {
-      document.getElementById("profile").appendChild(createElement( "li", profile_array[prop] ));
-    }
-  })
-  .then( function() {
-    
-    var main_stats_array = getPlayerMainStats(cumulative_player_data, current_player_clicked)[0];  
-    var secondary_stats_array = getPlayerSecondaryStats(cumulative_player_data, current_player_clicked)[0];
-
-    for (var main_stat in main_stats_array) {
-      document.getElementById("stats-main").appendChild(createElement( "li", main_stats_array[main_stat] ));
-    }
-
-    for (var secondary_stat in secondary_stats_array) {
-      document.getElementById("stats-secondary").appendChild(createElement( "li", secondary_stats_array[secondary_stat] ));
-    }
-
-    displayCarousel();
-
-  });
-};
-
-
-var displayCarousel = function() {
-  
-  //Clear any previous results 
-  document.getElementById("team").innerHTML = '';
-  document.getElementById("team-list").innerHTML = '';
-
-  //Extract the city and team name from the current player clicked and display
-  var team = cumulative_player_data.cumulativeplayerstats.playerstatsentry.
-              filter(function(entry) { 
-                return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked 
-              }).
-              map(function(entry) {
-                return entry.team.City + " " + entry.team.Name
-              });
-  document.getElementById("team").appendChild(createElement( "h3", team.toString() ));
-
-  //Extract the team list from the data and display 
-  var team_list = cumulative_player_data.cumulativeplayerstats.playerstatsentry.
-                    filter(function(entry) { 
-                      return (entry.team.City + " " + entry.team.Name) === team.toString() 
-                    }).
-                    map(function(entry) {
-                      return entry.player.FirstName + " " + entry.player.LastName 
-                    });
-  var team_position = cumulative_player_data.cumulativeplayerstats.playerstatsentry.
-                    filter(function(entry) { 
-                      return (entry.team.City + " " + entry.team.Name) === team.toString() 
-                    }).
-                    map(function(entry) {
-                      return entry.player.Position
-                    });
-  
-  //Display the team players with their positions
-  team_list.forEach(function(value, i) {
-    document.getElementById("team-list").
-      appendChild(createElement( "li", createElement("a", team_list[i], ", ", team_position[i])  )).
-      setAttribute('id', team_list[i]);
-    
-    //Add a click event listener for each player that will display the newly clicked player's stats    
-    document.getElementById(team_list[i]).addEventListener("click", function(event) {       
-      //retrieve the name of the player clicked
-       current_player_clicked = event.currentTarget.getAttribute('id');
-      
-      //display that player's data
-      displayStats();
-      displayCarousel();
-    });
-  })
-};
-*/
-/* -------------------------- Utility functions ---------------------------- */
-
-/*
-
 function getPlayerProfile (data, player_clicked) {
 
-  return data.activeplayers.playerentry.
-    filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked }).
-    map(function(entry) { 
+  return data
+    .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+    .map(function(entry) { 
       return  { 
                 name: (entry.player.FirstName + " " + entry.player.LastName),
                 team: (entry.team.City + " " + entry.team.Name),
@@ -392,9 +343,9 @@ function getPlayerProfile (data, player_clicked) {
 }
 
 function getPlayerMainStats (data, player_clicked) {
-  return data.cumulativeplayerstats.playerstatsentry.
-    filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked }).
-    map(function(entry) { 
+  return data
+    .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+    .map(function(entry) { 
       return  { 
                 PtsPerGame: ("PTS/G: " + entry.stats.PtsPerGame["#text"]),
                 AstPerGame: ("AST/G: " + entry.stats.AstPerGame["#text"]),
@@ -414,9 +365,9 @@ function getPlayerMainStats (data, player_clicked) {
 }
  
 function getPlayerSecondaryStats(data, player_clicked) {
-  return data.cumulativeplayerstats.playerstatsentry.
-    filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked }).
-    map(function(entry) { 
+  return data
+    .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+    .map(function(entry) { 
       return  { 
                 GamesPlayed: ("GP: " + entry.stats.GamesPlayed["#text"]),
                 MinSeconds: ("MIN: " + entry.stats.MinSeconds["#text"]),
@@ -441,13 +392,11 @@ function getPlayerSecondaryStats(data, player_clicked) {
     });
 }
 
-
-
 function getJSON(url) {
-  return get(url).then(JSON.parse);
+  return getRequest(url).then(JSON.parse);
 }
 
-function get(url) {
+function getRequest(url) {
   //Return a new promise
   return new Promise(function(resolve, reject) {
     var req = new XMLHttpRequest();
@@ -485,9 +434,3 @@ function createElement(type){
   }
   return node;
 } 
-
-*/
-
-/* -------------------------- Test and Assertions -------------------------- */
-
-

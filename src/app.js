@@ -12,27 +12,29 @@ var xhrRequest = require('superagent');
 //to add another module:
 //var x  = require('./js/components/...');
 
+/* ------------------------- Global Variables ------------------------------ */
+
 const cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
 const profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
-let cumulative_player_data, profile_data, current_player_clicked;
-
-let getProfileData = Rx.Observable.create((observer) => {
-    xhrRequest
-     .get(profile_data_url)
-     .auth('jaellen', 'adanaC4032')
-     .end(function(err, res) {
-        if (err) {
-          return observer.onError(err);
-        }
-        let data = JSON.parse(res.text);
-        profile_data = data.activeplayers.playerentry;
-        
-        observer.onNext(profile_data);
-     });
-     return () => {};
-  });
-
-let getCumulativePlayerData = Rx.Observable.create((observer) => {
+let all_stats_data, all_profile_data;
+let search_array;
+let current_player_clicked;
+let player_profile, player_main_stats, player_secondary_stats;
+let player_team_name, player_team_list, player_team_positions;
+let getAllProfileData = Rx.Observable.create((observer) => {
+  xhrRequest
+    .get(profile_data_url)
+    .auth('jaellen', 'adanaC4032')
+    .end(function(err, res) {
+      if (err) {
+        return observer.onError(err);
+      }
+      let data = JSON.parse(res.text);
+      observer.onNext(data);
+    });
+    return () => {};
+});
+let getAllStatsData = Rx.Observable.create((observer) => {
   xhrRequest
    .get(cumulative_player_data_url)
    .auth('jaellen', 'adanaC4032')
@@ -41,35 +43,59 @@ let getCumulativePlayerData = Rx.Observable.create((observer) => {
         return observer.onError(err);
       }
       let data = JSON.parse(res.text);
-      cumulative_player_data = data.cumulativeplayerstats.playerstatsentry;
-      
-      observer.onNext(cumulative_player_data);
+      observer.onNext(data);
    });
-   return () => {
-   };
+   return () => {};
 });
 
 /* -------------------------- Program Logic -------------------------------- */
 
-getCumulativePlayerData
-.take(1)
-.subscribe({
-  onNext: (cumulative_player_data) => {   
-    let firstandLastNameArray = createFirstandLastNameArray(cumulative_player_data);  
+let setAllStatsData = function() {
+  //set all_stats_data
+  getAllStatsData
+    .take(1)
+    .subscribe({
+    onNext: (data) => {
+      all_stats_data = data.cumulativeplayerstats.playerstatsentry;
+    },
+    onError: (error) => { console.error("Error in XMLHttpRequest") },
+    onCompleted: () => {
+      getSearchRecommendations();
+    },
+  });   
+};
+
+let setAllProfileData = function() {
+  //set all_profile_data
+  getAllProfileData
+    .take(1)
+    .subscribe({
+    onNext: (data) => {
+      all_profile_data = data.activeplayers.playerentry;
+    },
+    onError: (error) => { console.error("Error in XMLHttpRequest") },
+    onCompleted: () => {
+    },
+  });  
+};
+
+let getSearchRecommendations = function() {
+  
+    //set the search array
     let input = document.getElementById("searchBox")
     let ul = document.getElementById("searchResults")
     let sortedResults, prefix, inputTerms, termsArray, terms, results;
 
     let search = function() {
-      
+      search_array = createFirstandLastNameArray(all_stats_data);    
       inputTerms = input.value.toLowerCase();
       results = [];
       termsArray = inputTerms.split(' ');
       prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
       terms = termsArray[termsArray.length -1].toLowerCase();
 
-      for (var i = 0; i < firstandLastNameArray.length; i++) {
-        var a = firstandLastNameArray[i].toLowerCase(),
+      for (var i = 0; i < search_array.length; i++) {
+        var a = search_array[i].toLowerCase(),
             t = a.indexOf(terms);
         if (t > -1) {
           results.push(a);
@@ -97,7 +123,6 @@ getCumulativePlayerData
           clearResults();
         }
       };
-
       evaluateSearchResults();
     };
 
@@ -107,7 +132,6 @@ getCumulativePlayerData
     };
 
     let displaySearchResults = function () {
-    
       clearResults();
 
       //Note: A maximum of 5 recommendations set here 
@@ -115,129 +139,116 @@ getCumulativePlayerData
         let li = document.createElement("li");
         let a = document.createElement("a");
 
-        //Set an attribute and click event listener to each recommendation result 
+        //set click event listener that sets curent_player_clicked...
         a.setAttribute('id', i.toString());
-        a.addEventListener("click", function(event) {
-          //retrieve the name of the player clicked
-          current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-
-          //display that player's data
-          displayStats();
-          //displayCarousel();
+        a.addEventListener("click", function(event) {     
+          
+          current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];  
+          
+          //and update the stats with that player 
+          updatePlayerStats();  
         });
 
-
-        //a.addEventListener("click", function(event) {
-                
-          //retrieve the name of the player clicked
-          //current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
-
-          //display that player's data
-          //displayStats();
-          //displayCarousel();
-        //});
-     
         var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
         li.innerHTML = result;
         ul.appendChild(a);
         a.appendChild(li);
       }
-
       if (ul.className !== "term-list") {
         ul.className = "term-list";
       }
     };
 
     input.addEventListener("keyup", search, false);
-  },
-  onError: (error) => {
-    console.error("Error in XMLHttpRequest");
-  },
-  onCompleted: () => {
-  }, 
-});
-
-let displayStats = function() {
-
-  //Clear any current results
-  document.getElementById("profile").innerHTML = '';
-  document.getElementById("stats-main").innerHTML = '';
-  document.getElementById("stats-secondary").innerHTML = '';
-
-  getProfileData
-  .take(1)
-  .subscribe({
-    onNext: (profile_data) => {
-      let profile_array = getPlayerProfile(profile_data, current_player_clicked)[0];
-      let main_stats_array = getPlayerMainStats(cumulative_player_data, current_player_clicked)[0];  
-      let secondary_stats_array = getPlayerSecondaryStats(cumulative_player_data, current_player_clicked)[0];
-
-      for (var prop in profile_array) {
-        document.getElementById("profile").appendChild(createElement( "li", profile_array[prop] ));
-      }
-      for (var main_stat in main_stats_array) {
-        document.getElementById("stats-main").appendChild(createElement( "li", main_stats_array[main_stat] ));
-      }
-      for (var secondary_stat in secondary_stats_array) {
-        document.getElementById("stats-secondary").appendChild(createElement( "li", secondary_stats_array[secondary_stat] ));
-      }
-      displayCarousel();
-    },
-    onError: (error) => {
-      console.error("Error in XMLHttpRequest");
-    },
-    onCompleted: () => {
-    },
-  });
+    setAllProfileData();
 };
 
-var displayCarousel = function() {
-  
-  //Clear any previous results 
-  document.getElementById("team").innerHTML = '';
-  document.getElementById("team-list").innerHTML = '';
+let updatePlayerStats = function() {
+  //set player_profile, player_main_stats and player_secondary_stats
+  player_profile = getPlayerProfile(all_profile_data, current_player_clicked)[0];
+  player_main_stats = getPlayerMainStats(all_stats_data, current_player_clicked)[0];  
+  player_secondary_stats = getPlayerSecondaryStats(all_stats_data, current_player_clicked)[0];
 
-  let team, team_list, team_position;
+  //set player_team_name, player_team_list, player_team_positions
+  player_team_name = all_stats_data
+                      .filter(function(entry) { 
+                        return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked })
+                      .map(function(entry) { 
+                        return entry.team.City + " " + entry.team.Name });
 
-  //Extract the city and team name from the current player clicked and display
-  team = cumulative_player_data
-            .filter(function(entry) { 
-              return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked })
-            .map(function(entry) { 
-              return entry.team.City + " " + entry.team.Name });
-  
-  document.getElementById("team").appendChild(createElement( "h3", team.toString() ));
+  player_team_list = all_stats_data
+                      .filter(function(entry) { 
+                        return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
+                      .map(function(entry) {
+                        return entry.player.FirstName + " " + entry.player.LastName });
 
-  //Extract the team list from the data and display 
-  team_list = cumulative_player_data
-                .filter(function(entry) { 
-                  return (entry.team.City + " " + entry.team.Name) === team.toString() })
-                .map(function(entry) {
-                  return entry.player.FirstName + " " + entry.player.LastName });
-
-  team_position = cumulative_player_data
+  player_team_positions = all_stats_data
                     .filter(function(entry) { 
-                      return (entry.team.City + " " + entry.team.Name) === team.toString() })
+                      return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
                     .map(function(entry) {
                       return entry.player.Position });
-  
-  //Display the team players with their positions
-  team_list.forEach(function(value, i) {
-    document.getElementById("team-list")
-      .appendChild(createElement( "li", createElement("a", team_list[i], ", ", team_position[i])  ))
-      .setAttribute('id', team_list[i]);
-    
-    //Add a click event listener for each player that will display the newly clicked player's stats    
-    document.getElementById(team_list[i]).addEventListener("click", function(event) {       
-      //retrieve the name of the player clicked
-      current_player_clicked = event.currentTarget.getAttribute('id');
-      
-      //display that player's data
-      //displayStats();
-      //displayCarousel();
-    });
-  });
+
+  //call display functions for player's profile, main stats, secondary stats, and team 
+  displayPlayerProfile();
+  displayPlayerMainStats();
+  displayPlayerSecondaryStats();
+  displayPlayerTeamName();
+  displayPlayerTeamList();
 };
+
+let displayPlayerProfile = function() {
+  
+  //clear any previous results and display player profile
+  document.getElementById("profile").innerHTML = '';
+
+  for (var prop in player_profile) {
+        document.getElementById("profile").appendChild(createElement( "li", player_profile[prop] ));
+  }
+};
+
+let displayPlayerMainStats = function() {
+  
+  //clear any previous results and display player's main stats
+  document.getElementById("stats-main").innerHTML = '';
+
+  for (var stat in player_main_stats) {
+        document.getElementById("stats-main").appendChild(createElement( "li", player_main_stats[stat] ));
+  }
+};
+
+let displayPlayerSecondaryStats = function() {
+  
+  //clear any previous results and display player's secondary stats 
+  document.getElementById("stats-secondary").innerHTML = '';
+  
+  for (var stat in player_secondary_stats) {
+        document.getElementById("stats-secondary").appendChild(createElement( "li", player_secondary_stats[stat] ));
+  }
+};
+
+let displayPlayerTeamName = function() {
+  
+  //clear any previous results and display player team name
+  document.getElementById("team-name").innerHTML = '';
+  document.getElementById("team-name").appendChild(createElement( "h3", player_team_name.toString() ));
+};
+
+let displayPlayerTeamList = function() {
+  
+  //clear any previous results 
+  document.getElementById("team-list").innerHTML = '';
+  
+  //display player team list and add a click event listener
+  player_team_list.forEach(function(value, i) {
+    document.getElementById("team-list")
+      .appendChild(createElement( "li", createElement("a", player_team_list[i], ", ", player_team_positions[i])  ))
+      .setAttribute('id', player_team_list[i]);
+  });
+      //updateStats(current_player_clicked);
+};
+
+//Start the Application
+setAllStatsData();
 
 
 /* -------------------------- Utility functions ---------------------------- */
@@ -316,6 +327,7 @@ function getPlayerSecondaryStats(data, player_clicked) {
 }
 
 function getJSON(url) {
+  
   return getRequest(url).then(JSON.parse);
 }
 
