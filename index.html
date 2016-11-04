@@ -10,55 +10,105 @@
 </head>
 <body>
 
-  <!-- Autocomple Search bar-->
-  <section class="search">
-    <h1>Recommendations Search</h1>
-    <input type="text" id="searchBox" class="search-field" />
-    <ul id="searchResults" class="term-list hidden"></ul>
-  </section>
+<!-- STATS PAGE -->
+ <h1>Main Stats Page</h1>
 
-<!-- Stats Display Results --> 
+<!-- Autocomple Search bar-->
+<section class="search">
+  <h3>Recommendations Search</h3>
+  <input type="text" id="searchBox" class="search-field" />
+  <ul id="searchResults" class="term-list hidden"></ul>
+</section>
+
+<!-- Profile and Stats Data --> 
   <div class="container-fluid">
     <div class="row">
 
-      
         <div class="col-md-3"> 
           <h3>Profile Data</h3>
           <ul id="profile"></ul>
         </div>
-      
-
-      
+            
         <div class="col-md-3"> 
           <h3>Stats Main</h3>
           <ul id="stats-main"></ul>
         </div>
       
-
-     
         <div class="col-md-3">
           <h3>Stats Secondary</h3>
           <ul id="stats-secondary"></ul>
         </div>
       
-    
     </div>
   </div>
 
-  <br><br>
-  <!-- Carousel --> 
+  <!-- Team List --> 
   <div class="container">
     <div class="row">
-      <h3>Other Players from the:</h3>
+      <h4>Other Players from the</h4>
       <div id="team-name"></div>
       <ul id="team-list"></ul>
     </div>
   </div>
+<br><br>
 
 
+<!-- COMPARE PAGE --> 
+<h1>Compare Page</h1>
 
-  <!-- App Entry file -->
-  <script src="bundle.js" charset="utf-8"></script>
+<!-- Main Stats -->
+<div class="container-fluid">
+  <div class="row">
+
+      <!-- Player A -->
+      <div class="col-md-3"> 
+        <h4>Profile Data Player A</h4>
+        <ul id="profile-data-player-a"></ul>
+      </div>
+            
+      <div class="col-md-3"> 
+        <h4>Main Stats Player A</h4>
+        <ul id="stats-main-player-a"></ul>
+      </div>
+      
+      <!-- Player B -->
+      <div class="col-md-3">
+        <h4>Main Stats Player B</h4>
+        <ul id="stats-main-player-b"></ul>
+      </div>
+
+      <div class="col-md-3">
+        <h4>Profile Data Player B</h4>
+        <ul id="profile-data-player-b"></ul>
+      </div>
+      
+  </div>
+</div>
+
+<!-- Secondary Stats -->
+<div class="container-fluid">
+  <div class="row">
+
+      <!-- Player A -->
+      <div class="col-md-3 col-md-offset-2"> 
+        <h4>Secondary Stats Player A</h4>
+        <ul id="secondary-stats-player-a"></ul>
+      </div>
+      
+      <!-- Player B -->
+      <div class="col-md-3">
+        <h4>Secondary Stats Player B</h4>
+        <ul id="secondary-stats-player-b"></ul>
+      </div>
+      
+  </div>
+</div>
+
+
+<br><br>
+
+<!-- App Entry file -->
+<script src="bundle.js" charset="utf-8"></script>
 
 </body>
 </html>

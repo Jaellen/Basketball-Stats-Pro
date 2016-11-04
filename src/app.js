@@ -145,8 +145,7 @@ let getSearchRecommendations = function() {
           
           current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];  
           
-          //and update the stats with that player 
-          
+          //clear the search field & recommendations and update the stats with that player 
           document.getElementById('searchBox').value = '';
           clearResults(); 
           updatePlayerStats();
@@ -234,7 +233,7 @@ let displayPlayerTeamName = function() {
   
   //clear any previous results and display player team name
   document.getElementById("team-name").innerHTML = '';
-  document.getElementById("team-name").appendChild(createElement( "h3", player_team_name.toString() ));
+  document.getElementById("team-name").appendChild(createElement( "h4", player_team_name.toString() ));
 };
 
 let displayPlayerTeamList = function() { 
