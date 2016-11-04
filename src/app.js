@@ -146,7 +146,10 @@ let getSearchRecommendations = function() {
           current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];  
           
           //and update the stats with that player 
-          updatePlayerStats();  
+          
+          document.getElementById('searchBox').value = '';
+          clearResults(); 
+          updatePlayerStats();
         });
 
         var result = prefix + sortedResults[i].toLowerCase().replace(terms, '<strong>' + terms + '</strong>' );
@@ -164,6 +167,7 @@ let getSearchRecommendations = function() {
 };
 
 let updatePlayerStats = function() {
+
   //set player_profile, player_main_stats and player_secondary_stats
   player_profile = getPlayerProfile(all_profile_data, current_player_clicked)[0];
   player_main_stats = getPlayerMainStats(all_stats_data, current_player_clicked)[0];  
@@ -187,7 +191,7 @@ let updatePlayerStats = function() {
                       return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
                     .map(function(entry) {
                       return entry.player.Position });
-
+  
   //call display functions for player's profile, main stats, secondary stats, and team 
   displayPlayerProfile();
   displayPlayerMainStats();
@@ -233,18 +237,23 @@ let displayPlayerTeamName = function() {
   document.getElementById("team-name").appendChild(createElement( "h3", player_team_name.toString() ));
 };
 
-let displayPlayerTeamList = function() {
-  
+let displayPlayerTeamList = function() { 
   //clear any previous results 
   document.getElementById("team-list").innerHTML = '';
   
-  //display player team list and add a click event listener
+  //display player team list 
   player_team_list.forEach(function(value, i) {
     document.getElementById("team-list")
       .appendChild(createElement( "li", createElement("a", player_team_list[i], ", ", player_team_positions[i])  ))
       .setAttribute('id', player_team_list[i]);
+    
+    //add a click event listener  
+    document.getElementById(player_team_list[i]).addEventListener("click", function(event) {            
+      current_player_clicked = event.currentTarget.getAttribute('id').toLowerCase();
+      //display that player's data
+      updatePlayerStats();
+    });
   });
-      //updateStats(current_player_clicked);
 };
 
 //Start the Application
@@ -261,7 +270,6 @@ function createFirstandLastNameArray(data) {
 }
 
 function getPlayerProfile (data, player_clicked) {
-
   return data
     .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
     .map(function(entry) { 
