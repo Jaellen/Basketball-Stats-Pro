@@ -255,6 +255,9 @@ let displayPlayerTeamList = function() {
   });
 };
 
+
+
+
 //Start the Application
 setAllStatsData();
 
