@@ -14,13 +14,25 @@ var xhrRequest = require('superagent');
 
 /* ------------------------- Global Variables ------------------------------ */
 
+//urls 
 const cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
 const profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
+
+//main stats variables
 let all_stats_data, all_profile_data;
 let search_array;
 let current_player_clicked;
 let player_profile, player_main_stats, player_secondary_stats;
 let player_team_name, player_team_list, player_team_positions;
+
+//compare stats variables
+let compare_player_a, compare_player_b;
+let player_a_profile, player_b_profile;
+let player_a_main_stats, player_b_main_stats;
+let player_a_sec_stats, player_b_sec_stats;
+let compare_player_clicked;
+
+//async get requests 
 let getAllProfileData = Rx.Observable.create((observer) => {
   xhrRequest
     .get(profile_data_url)
@@ -255,8 +267,117 @@ let displayPlayerTeamList = function() {
   });
 };
 
+let setCompareButton = function() {
+  //add event listener for button
+  document.getElementById('button-compare').addEventListener('click', function(event) {
+    
+    compare_player_clicked = current_player_clicked;
+  
+    //if both slots empty, fill slot A
+    if ( (compare_player_a === undefined) && (compare_player_b === undefined) ) {
+      //update compare_player_a
+      compare_player_a = compare_player_clicked;
+      updateCompareStats("a");
+    }
+    
+    //if one slot empty, fill empty slot
+    else if ( (compare_player_a === undefined) || (compare_player_b === undefined) ) {
+      //update compare_player_b
+      compare_player_b = compare_player_clicked
+      updateCompareStats("b");
+    }
 
+    //if no slots empty, prompt
+    else {
+      let compare_choice = window.prompt("Options: replace a  |  replace b  |  cancel", "cancel");
 
+      if (compare_choice.toLowerCase() == "replace a" ) {
+        //update compare_player_a
+        compare_player_a = compare_player_clicked;
+        updateCompareStats("a");
+      }
+
+      if (compare_choice.toLowerCase() == "replace b" ) {
+        //update compare_player_a
+        compare_player_b = compare_player_clicked;
+        updateCompareStats("b");
+      }
+    }
+
+  });  
+};
+ 
+let updateCompareStats = function(slot) {
+  
+  if (slot == "a") {
+    //update player_a_profile, player_a_main_stats, player_a_sec_stats
+    player_a_profile = getPlayerProfile(all_profile_data, compare_player_a)[0];
+    player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0]; 
+    player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
+  }
+  
+  if (slot == "b") {
+    //update player_b_profile, player_b_main_stats, player_b_sec_stats
+    player_b_profile = getPlayerProfile(all_profile_data, compare_player_b)[0];
+    player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0]; 
+    player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
+  }
+  
+  displayCompareProfiles();
+  displayCompareMainStats();
+  displayCompareSecondaryStats();
+};
+
+let displayCompareProfiles = function() {
+
+  //clear any previous results and display player a profile
+  document.getElementById("profile-data-player-a").innerHTML = '';
+
+  for (let prop in player_a_profile) {
+        document.getElementById("profile-data-player-a").appendChild(createElement( "li", player_a_profile[prop] ));
+  }
+
+  //clear any previous results and display player b profile
+  document.getElementById("profile-data-player-b").innerHTML = '';
+
+  for (let prop in player_b_profile) {
+        document.getElementById("profile-data-player-b").appendChild(createElement( "li", player_b_profile[prop] ));
+  } 
+};
+
+let displayCompareMainStats = function() {
+  
+  //clear any previous results and display player a profile
+  document.getElementById("stats-main-player-a").innerHTML = '';
+
+  for (let stat in player_a_main_stats) {
+        document.getElementById("stats-main-player-a").appendChild(createElement( "li", player_a_main_stats[stat] ));
+  }
+
+  //clear any previous results and display player b profile
+  document.getElementById("stats-main-player-b").innerHTML = '';
+
+  for (let stat in player_b_main_stats) {
+        document.getElementById("stats-main-player-b").appendChild(createElement( "li", player_b_main_stats[stat] ));
+  }
+};
+
+let displayCompareSecondaryStats = function() {
+  
+  //clear any previous results and display secondary stats of player a
+  document.getElementById("secondary-stats-player-a").innerHTML = '';
+
+  for (let stat in player_a_sec_stats) {
+        document.getElementById("secondary-stats-player-a").appendChild(createElement( "li", player_a_sec_stats[stat] ));
+  }
+
+  //clear any previous results and display secondary stats of player b
+  document.getElementById("secondary-stats-player-b").innerHTML = '';
+
+  for (let stat in player_b_sec_stats) {
+        document.getElementById("secondary-stats-player-b").appendChild(createElement( "li", player_b_sec_stats[stat] ));
+  }
+};
 
 //Start the Application
 setAllStatsData();
