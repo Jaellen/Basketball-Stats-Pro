@@ -325,8 +325,20 @@
 	};
 
 	var setCompareButton = function setCompareButton() {
-	  //add event listener for button
-	  document.getElementById('button-compare').addEventListener('click', function (event) {
+
+	  var addComparePlayer = function addComparePlayer() {
+
+	    //if player clicked is already in compare slot a 
+	    if (current_player_clicked == compare_player_a) {
+	      alert("This player is already in compare slot a");
+	      return;
+	    }
+
+	    //if player clicked is already in compare slot b 
+	    if (current_player_clicked == compare_player_b) {
+	      alert("This player is already in compare slot b");
+	      return;
+	    }
 
 	    compare_player_clicked = current_player_clicked;
 
@@ -360,7 +372,10 @@
 	            updateCompareStats("b");
 	          }
 	        }
-	  });
+	  };
+
+	  //add event listener for button
+	  document.getElementById('button-compare').addEventListener('click', addComparePlayer, false);
 	};
 
 	var updateCompareStats = function updateCompareStats(slot) {
@@ -437,6 +452,7 @@
 
 	//Start the Application
 	setAllStatsData();
+	setCompareButton();
 
 	/* -------------------------- Utility functions ---------------------------- */
 

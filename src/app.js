@@ -216,7 +216,7 @@ let displayPlayerProfile = function() {
   //clear any previous results and display player profile
   document.getElementById("profile").innerHTML = '';
 
-  for (var prop in player_profile) {
+  for (let prop in player_profile) {
         document.getElementById("profile").appendChild(createElement( "li", player_profile[prop] ));
   }
 };
@@ -226,7 +226,7 @@ let displayPlayerMainStats = function() {
   //clear any previous results and display player's main stats
   document.getElementById("stats-main").innerHTML = '';
 
-  for (var stat in player_main_stats) {
+  for (let stat in player_main_stats) {
         document.getElementById("stats-main").appendChild(createElement( "li", player_main_stats[stat] ));
   }
 };
@@ -236,7 +236,7 @@ let displayPlayerSecondaryStats = function() {
   //clear any previous results and display player's secondary stats 
   document.getElementById("stats-secondary").innerHTML = '';
   
-  for (var stat in player_secondary_stats) {
+  for (let stat in player_secondary_stats) {
         document.getElementById("stats-secondary").appendChild(createElement( "li", player_secondary_stats[stat] ));
   }
 };
@@ -268,11 +268,23 @@ let displayPlayerTeamList = function() {
 };
 
 let setCompareButton = function() {
-  //add event listener for button
-  document.getElementById('button-compare').addEventListener('click', function(event) {
-    
+
+  let addComparePlayer = function() {
+
+    //if player clicked is already in compare slot a 
+    if (current_player_clicked == compare_player_a) {
+      alert("This player is already in compare slot a");
+      return;    
+    }
+
+    //if player clicked is already in compare slot b 
+    if (current_player_clicked == compare_player_b) {
+      alert("This player is already in compare slot b");
+      return;    
+    }
+
     compare_player_clicked = current_player_clicked;
-  
+      
     //if both slots empty, fill slot A
     if ( (compare_player_a === undefined) && (compare_player_b === undefined) ) {
       //update compare_player_a
@@ -303,8 +315,10 @@ let setCompareButton = function() {
         updateCompareStats("b");
       }
     }
+  };  
 
-  });  
+  //add event listener for button
+  document.getElementById('button-compare').addEventListener('click', addComparePlayer, false) 
 };
  
 let updateCompareStats = function(slot) {
@@ -381,7 +395,7 @@ let displayCompareSecondaryStats = function() {
 
 //Start the Application
 setAllStatsData();
-
+setCompareButton();
 
 /* -------------------------- Utility functions ---------------------------- */
 
