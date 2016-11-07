@@ -96,6 +96,11 @@
 	    player_b_sec_stats = void 0;
 	var compare_player_clicked = void 0;
 
+	//favourites variables
+	var save_player_list = [];
+	var save_player_profile = {};
+	var save_player_clicked = void 0;
+
 	//async get requests 
 	var getAllProfileData = Rx.Observable.create(function (observer) {
 	  xhrRequest.get(profile_data_url).auth('jaellen', 'adanaC4032').end(function (err, res) {
@@ -120,6 +125,7 @@
 
 	/* -------------------------- Program Logic -------------------------------- */
 
+	//Search recommendations and Select Player Functionality
 	var setAllStatsData = function setAllStatsData() {
 	  //set all_stats_data
 	  getAllStatsData.take(1).subscribe({
@@ -324,17 +330,18 @@
 	  });
 	};
 
-	var setCompareButton = function setCompareButton() {
+	//Compare Player Functionality
+	var setComparePlayer = function setComparePlayer() {
 
-	  var addComparePlayer = function addComparePlayer() {
+	  var setComparePlayerButton = function setComparePlayerButton() {
 
-	    //if player clicked is already in compare slot a 
+	    //case: if player clicked is already in compare slot a 
 	    if (current_player_clicked == compare_player_a) {
 	      alert("This player is already in compare slot a");
 	      return;
 	    }
 
-	    //if player clicked is already in compare slot b 
+	    //case: if player clicked is already in compare slot b 
 	    if (current_player_clicked == compare_player_b) {
 	      alert("This player is already in compare slot b");
 	      return;
@@ -342,21 +349,23 @@
 
 	    compare_player_clicked = current_player_clicked;
 
-	    //if both slots empty, fill slot A
+	    //case: if both slots empty, fill slot A
 	    if (compare_player_a === undefined && compare_player_b === undefined) {
 	      //update compare_player_a
 	      compare_player_a = compare_player_clicked;
 	      updateCompareStats("a");
+	      alert("Added player to slot A");
 	    }
 
-	    //if one slot empty, fill empty slot
+	    //case: if one slot empty, fill empty slot
 	    else if (compare_player_a === undefined || compare_player_b === undefined) {
 	        //update compare_player_b
 	        compare_player_b = compare_player_clicked;
 	        updateCompareStats("b");
+	        alert("Added player to slot B");
 	      }
 
-	      //if no slots empty, prompt
+	      //case: if no slots empty, ask user which slot to replace or neither
 	      else {
 	          var compare_choice = window.prompt("Options: replace a  |  replace b  |  cancel", "cancel");
 
@@ -375,7 +384,7 @@
 	  };
 
 	  //add event listener for button
-	  document.getElementById('button-compare').addEventListener('click', addComparePlayer, false);
+	  document.getElementById('button-compare').addEventListener('click', setComparePlayerButton, false);
 	};
 
 	var updateCompareStats = function updateCompareStats(slot) {
@@ -450,9 +459,54 @@
 	  }
 	};
 
+	//Save Player Functionality
+	var setSavePlayerList = function setSavePlayerList() {
+
+	  //set save player button (main page)
+	  var setAddPlayer = function setAddPlayer() {
+	    updateSavePlayerList("add");
+	    alert(current_player_clicked + " has been added to favourites list!");
+	  };
+
+	  //add event listener for button
+	  document.getElementById('button-save-player').addEventListener('click', setAddPlayer, false);
+
+	  //set remove player button (favourites page)
+	};
+
+	var updateSavePlayerList = function updateSavePlayerList(AddOrRemove) {
+
+	  //add player to list
+	  if (AddOrRemove == "add") {
+	    save_player_clicked = current_player_clicked;
+	    save_player_profile = getSavePlayerProfile(all_profile_data, save_player_clicked)[0];
+	    save_player_list.push(save_player_profile);
+	  }
+
+	  //remove player from list
+	  if (AddOrRemove == "remove") {}
+
+	  //update the save player list
+	  displaySavePlayerList();
+	};
+
+	var displaySavePlayerList = function displaySavePlayerList() {
+	  document.getElementById("favourites").innerHTML = '';
+
+	  //go through each player in the save player list and display their properties
+	  save_player_list.forEach(function (player) {
+	    for (var prop in player) {
+	      document.getElementById("favourites").appendChild(createElement("li", player[prop]));
+	    }
+	    //add a space between player profiles
+	    document.getElementById("favourites").appendChild(createElement("br"));
+	  });
+	};
+
 	//Start the Application
 	setAllStatsData();
-	setCompareButton();
+	setComparePlayer();
+	setSavePlayerList();
 
 	/* -------------------------- Utility functions ---------------------------- */
 
@@ -463,6 +517,21 @@
 	}
 
 	function getPlayerProfile(data, player_clicked) {
+	  return data.filter(function (entry) {
+	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
+	  }).map(function (entry) {
+	    return {
+	      name: entry.player.FirstName + " " + entry.player.LastName,
+	      team: entry.team.City + " " + entry.team.Name,
+	      jersey: "Jersey #: " + entry.player.JerseyNumber,
+	      age: "age: " + entry.player.Age,
+	      height: entry.player.Height + " ft\'in\"",
+	      weight: entry.player.Weight + " lbs"
+	    };
+	  });
+	}
+
+	function getSavePlayerProfile(data, player_clicked) {
 	  return data.filter(function (entry) {
 	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
 	  }).map(function (entry) {
