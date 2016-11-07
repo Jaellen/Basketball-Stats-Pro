@@ -407,8 +407,15 @@ let setSavePlayerList = function() {
   
   //set save player button (main page)
   let setAddPlayer = function() {
-    updateSavePlayerList("add");
-    alert(current_player_clicked + " has been added to favourites list!");
+    //test if player being saved is already saved
+    if ( isSavePlayerRepeated() === true ) {
+      alert("You already have this player saved"); 
+    }
+    
+    if ( isSavePlayerRepeated() === false ) {
+      updateSavePlayerList("add");
+      alert(current_player_clicked + " has been added to favourites list!");
+    } 
   };
 
   //add event listener for button
@@ -583,3 +590,16 @@ function createElement(type){
   }
   return node;
 } 
+
+function isSavePlayerRepeated(){
+  let test_array = save_player_list
+                     .map(function(element) {
+                       return element.name.toLowerCase();
+                     })
+                     .filter(function(element){
+                       return element == current_player_clicked.toLowerCase();
+                     });
+
+  if (test_array.length > 0) { return true }
+  else { return false }
+}
