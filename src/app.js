@@ -424,7 +424,7 @@ let setSavePlayerList = function() {
   //set remove player button (favourites page)
 };
 
-let updateSavePlayerList = function(AddOrRemove) {
+let updateSavePlayerList = function(AddOrRemove, index) {
   
   //add player to list
   if (AddOrRemove == "add") {
@@ -434,7 +434,9 @@ let updateSavePlayerList = function(AddOrRemove) {
   } 
 
   //remove player from list
-  if (AddOrRemove == "remove") {}
+  if (AddOrRemove == "remove") {
+    save_player_list.splice(index, 1);
+  }
 
   //update the save player list
   displaySavePlayerList();
@@ -444,11 +446,26 @@ let displaySavePlayerList = function() {
   document.getElementById("favourites").innerHTML = '';
 
   //go through each player in the save player list and display their properties
-  save_player_list.forEach( (player) => {   
+  save_player_list.forEach( (player, i) => {   
+    
     for (let prop in player) {
       document.getElementById("favourites").appendChild(createElement( "li", player[prop] ));
     }
+    //add a button to remove player from list
+    let button = document.getElementById("favourites").appendChild(createElement( "button", "remove" ));
+    
+    //add an id to identify each player in list 
+    let identifier = ("button" + i);
+    let attr = { id: identifier };
+    setAttributes(button, attr);
+
+    //add event listener for button
+    document.getElementById(identifier).addEventListener('click', function() {
+      updateSavePlayerList("remove", i);    
+    });
+    
     //add a space between player profiles
+    document.getElementById("favourites").appendChild(createElement( "br" ));
     document.getElementById("favourites").appendChild(createElement( "br" ));
   });
 };
@@ -590,6 +607,12 @@ function createElement(type){
   }
   return node;
 } 
+
+function setAttributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
 
 function isSavePlayerRepeated(){
   let test_array = save_player_list
