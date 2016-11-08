@@ -4,6 +4,7 @@
 
 var Rx = require('rx');
 var xhrRequest = require('superagent'); 
+require("./css/main.css");
 
 //For testing 
 //var chai = require('chai');

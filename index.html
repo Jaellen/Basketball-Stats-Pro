@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="src/css/main.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
@@ -113,8 +112,9 @@
 
 <br><br>
 
-<!-- Favourites --> 
-<h1>Favourites</h1>
+
+<!-- FAVOURITES PAGE --> 
+<h1>Favourites Page</h1>
 
 <!-- Favourites List -->
 <div class="container-fluid">
@@ -124,7 +124,161 @@
   
   </div>
 </div>
+
+<br><br>
+
+
+<!-- RANKINGS PAGE --> 
+<h1>Rankings Page</h1>
+
+<!-- Ranking Type Buttons -->
+<div class="row">
+    
+  <div class="col-md-3">
+    <button class="btn btn-warning" id="button-pts-g">PTS/G</button> 
+  </div>
+
+  <div class="col-md-3">
+    <button class="btn btn-warning" id="button-ast-g">AST/G</button> 
+  </div>
+
+  <div class="col-md-3">
+    <button class="btn btn-warning" id="button-reb-g">REB/G</button> 
+  </div>
+
+  <div class="col-md-3">
+    <button class="btn btn-warning" id="button-blk-g">BLK/G</button> 
+  </div>
+
+</div> 
+<br><br>
+
+<!-- Rangings Tables -->
+<div class="container-fluid">
   
+  <!-- Table A: PTS/G -->
+  <h4>Table A: PTS/G</h4>
+  <div class="row">
+    <table id="table-pts-g">
+      <tr>
+        <th>Rank</th>
+        <th>Player</th>
+        <th>GP</th>
+        <th>MIN</th>
+        <th>PTS</th>
+        <th>FGA</th>
+        <th>FGM</th>
+        <th>2PM</th>
+        <th>2PA</th>
+        <th>3PM</th>
+        <th>3PA</th>
+        <th>FTA</th>
+        <th>FTM</th>
+        <th>OREB</th>
+        <th>DREB</th>
+        <th>REB</th>
+        <th>AST</th>
+        <th>BLK</th>
+        <th>STL</th>
+        <th>TOV</th>
+        <th>PF</th>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Table B: AST/G -->
+  <h4>Table B: AST/G</h4>
+  <div class="row">
+    <table id="table-ast-g">
+      <tr>
+        <th>Rank</th>
+        <th>Player</th>
+        <th>GP</th>
+        <th>MIN</th>
+        <th>PTS</th>
+        <th>FGA</th>
+        <th>FGM</th>
+        <th>2PM</th>
+        <th>2PA</th>
+        <th>3PM</th>
+        <th>3PA</th>
+        <th>FTA</th>
+        <th>FTM</th>
+        <th>OREB</th>
+        <th>DREB</th>
+        <th>REB</th>
+        <th>AST</th>
+        <th>BLK</th>
+        <th>STL</th>
+        <th>TOV</th>
+        <th>PF</th>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Table C: REB/G -->
+  <h4>Table C: REB/G</h4>
+  <div class="row">
+    <table id="table-reb-g">
+      <tr>
+        <th>Rank</th>
+        <th>Player</th>
+        <th>GP</th>
+        <th>MIN</th>
+        <th>PTS</th>
+        <th>FGA</th>
+        <th>FGM</th>
+        <th>2PM</th>
+        <th>2PA</th>
+        <th>3PM</th>
+        <th>3PA</th>
+        <th>FTA</th>
+        <th>FTM</th>
+        <th>OREB</th>
+        <th>DREB</th>
+        <th>REB</th>
+        <th>AST</th>
+        <th>BLK</th>
+        <th>STL</th>
+        <th>TOV</th>
+        <th>PF</th>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Table D: BLK/G -->
+  <h4>Table D: BLK/G</h4>
+  <div class="row">
+    <table id="table-blk-g">
+      <tr>
+        <th>Rank</th>
+        <th>Player</th>
+        <th>GP</th>
+        <th>MIN</th>
+        <th>PTS</th>
+        <th>FGA</th>
+        <th>FGM</th>
+        <th>2PM</th>
+        <th>2PA</th>
+        <th>3PM</th>
+        <th>3PA</th>
+        <th>FTA</th>
+        <th>FTM</th>
+        <th>OREB</th>
+        <th>DREB</th>
+        <th>REB</th>
+        <th>AST</th>
+        <th>BLK</th>
+        <th>STL</th>
+        <th>TOV</th>
+        <th>PF</th>
+      </tr>
+    </table>
+  </div>
+  
+</div>
+<br><br>
+
 <!-- App Entry file -->
 <script src="bundle.js" charset="utf-8"></script>
 
