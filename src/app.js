@@ -38,6 +38,16 @@ let save_player_list = [];
 let save_player_profile = {}; 
 let save_player_clicked;
 
+//rankings variables
+let rankings_data_table_a;
+let rankings_data_table_b;
+let rankings_data_table_c;
+let rankings_data_table_d;
+let table_a;
+let table_b; 
+let table_c;
+let table_d;
+
 //async get requests 
 let getAllProfileData = Rx.Observable.create((observer) => {
   xhrRequest
@@ -80,6 +90,7 @@ let setAllStatsData = function() {
     onError: (error) => { console.error("Error in XMLHttpRequest") },
     onCompleted: () => {
       getSearchRecommendations();
+      setRankingsTableA();
     },
   });   
 };
@@ -193,23 +204,26 @@ let updatePlayerStats = function() {
 
   //set player_team_name, player_team_list, player_team_positions
   player_team_name = all_stats_data
+                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
                       .filter(function(entry) { 
                         return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked })
                       .map(function(entry) { 
                         return entry.team.City + " " + entry.team.Name });
 
   player_team_list = all_stats_data
+                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
                       .filter(function(entry) { 
                         return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
                       .map(function(entry) {
                         return entry.player.FirstName + " " + entry.player.LastName });
 
   player_team_positions = all_stats_data
+                    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
                     .filter(function(entry) { 
                       return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
                     .map(function(entry) {
                       return entry.player.Position });
-  
+
   //call display functions for player's profile, main stats, secondary stats, and team 
   displayPlayerProfile();
   displayPlayerMainStats();
@@ -332,7 +346,7 @@ let setComparePlayer = function() {
 };
  
 let updateCompareStats = function(slot) {
-  
+
   if (slot == "a") {
     //update player_a_profile, player_a_main_stats, player_a_sec_stats
     player_a_profile = getPlayerProfile(all_profile_data, compare_player_a)[0];
@@ -346,7 +360,7 @@ let updateCompareStats = function(slot) {
     player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0]; 
     player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
   }
-  
+
   displayCompareProfiles();
   displayCompareMainStats();
   displayCompareSecondaryStats();
@@ -471,6 +485,48 @@ let displaySavePlayerList = function() {
   });
 };
 
+let setRankingsButtons = function() {
+};
+
+//Rankings Page Functionality
+let setRankingsTableA = function() {
+  
+  //filter all_stats_data for all stats data to display in the rankings tables  
+  rankings_data_table_a = getAllRankingsDataTableA(all_stats_data);
+
+  //sort the data by each of the four factors using a sorting algorithm 
+  table_a = rankings_data_table_a.sort(function (a, b) {
+              if ( Number(a.PtsPerGame) > Number(b.PtsPerGame) ) {
+                return 1;
+              }
+              if ( Number(a.PtsPerGame) < Number(b.PtsPerGame) ) {
+                return -1;
+              }
+              //if a is equal to b
+              return 0;
+            });
+
+  //display the sorted table
+  displayRankings();
+};
+
+let displayRankings = function() {
+
+    //table A
+    table_a[0].forEach( function(player, i) {   
+      
+      let identifier = ("row" + i);
+      let attr = { id: identifier};
+      let table_a_el = document.getElementById("table-pts-g");    
+      
+      setAttributes(table_a_el, attr);
+
+      for (let stat in player) {
+        document.getElementById(identifier).appendChild(createElement( "td", player[stat] ));
+      }
+    });
+};
+
 //Start the Application
 setAllStatsData();
 setComparePlayer();
@@ -480,6 +536,7 @@ setSavePlayerList();
 
 function createFirstandLastNameArray(data) { 
   return data
+    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
     .map(function(entry) { 
       return entry.player.FirstName + " " + entry.player.LastName; 
     });
@@ -517,6 +574,7 @@ function getSavePlayerProfile(data, player_clicked) {
 
 function getPlayerMainStats(data, player_clicked) {
   return data
+    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
     .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
     .map(function(entry) { 
       return  { 
@@ -539,29 +597,30 @@ function getPlayerMainStats(data, player_clicked) {
  
 function getPlayerSecondaryStats(data, player_clicked) {
   return data
+    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
     .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
     .map(function(entry) { 
       return  { 
-                GamesPlayed: ("GP: " + entry.stats.GamesPlayed["#text"]),
-                MinSeconds: ("MIN: " + entry.stats.MinSeconds["#text"]),
-                Pts: ("PTS: " + entry.stats.Pts["#text"]),
-                FgAtt: ("FGA: " + entry.stats.FgAtt["#text"]),
-                FgMade: ("FGM: " + entry.stats.FgMade["#text"]),
-                Fg2PtMade: ("2PM: " + entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: ("2PA: " + entry.stats.Fg2PtAtt["#text"]),
-                Fg3PtMade: ("3PM: " + entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: ("3PA: " + entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: ("FTA: " + entry.stats.FtAtt["#text"]),
-                FtMade: ("FTM: " + entry.stats.FtMade["#text"]),
-                OffReb: ("OREB: " + entry.stats.OffReb["#text"]),
-                DefReb: ("DREB: " + entry.stats.DefReb["#text"]),
-                Reb: ("REB: " + entry.stats.Reb["#text"]),
-                Ast: ("AST: " + entry.stats.Ast["#text"]),
-                Blk: ("BLK: " + entry.stats.Blk["#text"]),
-                Stl: ("STL: " + entry.stats.Stl["#text"]),
-                Tov: ("TOV: " + entry.stats.Tov["#text"]),
-                FoulPers: ("PF: " + entry.stats.FoulPers["#text"])             
-              } 
+        GamesPlayed: ("GP: " + entry.stats.GamesPlayed["#text"]),
+          MinSeconds: ("MIN: " + entry.stats.MinSeconds["#text"]),
+          Pts: ("PTS: " + entry.stats.Pts["#text"]),
+          FgAtt: ("FGA: " + entry.stats.FgAtt["#text"]),
+          FgMade: ("FGM: " + entry.stats.FgMade["#text"]),
+          Fg2PtMade: ("2PM: " + entry.stats.Fg2PtMade["#text"]),
+          Fg2PtAtt: ("2PA: " + entry.stats.Fg2PtAtt["#text"]),
+          Fg3PtMade: ("3PM: " + entry.stats.Fg3PtMade["#text"]),
+          Fg3PtAtt: ("3PA: " + entry.stats.Fg3PtAtt["#text"]),
+          FtAtt: ("FTA: " + entry.stats.FtAtt["#text"]),
+          FtMade: ("FTM: " + entry.stats.FtMade["#text"]),
+          OffReb: ("OREB: " + entry.stats.OffReb["#text"]),
+          DefReb: ("DREB: " + entry.stats.DefReb["#text"]),
+          Reb: ("REB: " + entry.stats.Reb["#text"]),
+          Ast: ("AST: " + entry.stats.Ast["#text"]),
+          Blk: ("BLK: " + entry.stats.Blk["#text"]),
+          Stl: ("STL: " + entry.stats.Stl["#text"]),
+          Tov: ("TOV: " + entry.stats.Tov["#text"]),
+          FoulPers: ("PF: " + entry.stats.FoulPers["#text"])             
+      } 
     });
 }
 
@@ -597,7 +656,7 @@ function getRequest(url) {
   });
 }
 
-function createElement(type){
+function createElement(type) {
   var node = document.createElement(type);
   for (var i = 1; i < arguments.length; i++) {
     var child = arguments[i];
@@ -615,7 +674,7 @@ function setAttributes(el, attrs) {
   }
 }
 
-function isSavePlayerRepeated(){
+function isSavePlayerRepeated() {
   let test_array = save_player_list
                      .map(function(element) {
                        return element.name.toLowerCase();
@@ -627,3 +686,123 @@ function isSavePlayerRepeated(){
   if (test_array.length > 0) { return true }
   else { return false }
 }
+
+function getAllRankingsDataTableA(data) {
+  
+  return data
+          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
+          .map(function(entry)  { 
+            return  { 
+              Player: (entry.player.FirstName + " " + entry.player.LastName),
+              PtsPerGame: (entry.stats.PtsPerGame["#text"]),
+              GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+              MinSeconds: (entry.stats.MinSeconds["#text"]),
+              Pts: (entry.stats.Pts["#text"]),
+              FgAtt: (entry.stats.FgAtt["#text"]),
+              FgMade: (entry.stats.FgMade["#text"]),
+              Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+              Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+              Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+              Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+              FtAtt: (entry.stats.FtAtt["#text"]),
+              FtMade: (entry.stats.FtMade["#text"]),
+              OffReb: (entry.stats.OffReb["#text"]),
+              DefReb: (entry.stats.DefReb["#text"]),
+              Reb: (entry.stats.Reb["#text"]),
+              Ast: (entry.stats.Ast["#text"]),
+              Blk: (entry.stats.Blk["#text"]),
+              Stl: (entry.stats.Stl["#text"]),
+              Tov: (entry.stats.Tov["#text"]),
+              FoulPers: (entry.stats.FoulPers["#text"])             
+            } 
+          });
+}
+
+/*
+function getAllRankingsDataTableB() {
+  return all_stats_data
+          .map(function(entry) { 
+            return  { 
+                Player: (entry.player.FirstName + " " + entry.player.LastName),
+                AstPerGame: (entry.stats.AstPerGame["#text"]),
+                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+                MinSeconds: (entry.stats.MinSeconds["#text"]),
+                Pts: (entry.stats.Pts["#text"]),
+                FgAtt: (entry.stats.FgAtt["#text"]),
+                FgMade: (entry.stats.FgMade["#text"]),
+                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+                FtAtt: (entry.stats.FtAtt["#text"]),
+                FtMade: (entry.stats.FtMade["#text"]),
+                OffReb: (entry.stats.OffReb["#text"]),
+                DefReb: (entry.stats.DefReb["#text"]),
+                Reb: (entry.stats.Reb["#text"]),
+                Ast: (entry.stats.Ast["#text"]),
+                Blk: (entry.stats.Blk["#text"]),
+                Stl: (entry.stats.Stl["#text"]),
+                Tov: (entry.stats.Tov["#text"]),
+                FoulPers: (entry.stats.FoulPers["#text"])             
+              } 
+    });
+}
+
+function getAllRankingsDataTableC() {
+  return all_stats_data
+          .map(function(entry) { 
+            return  { 
+                Player: (entry.player.FirstName + " " + entry.player.LastName),
+                RebPerGame: (entry.stats.RebPerGame["#text"]),
+                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+                MinSeconds: (entry.stats.MinSeconds["#text"]),
+                Pts: (entry.stats.Pts["#text"]),
+                FgAtt: (entry.stats.FgAtt["#text"]),
+                FgMade: (entry.stats.FgMade["#text"]),
+                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+                FtAtt: (entry.stats.FtAtt["#text"]),
+                FtMade: (entry.stats.FtMade["#text"]),
+                OffReb: (entry.stats.OffReb["#text"]),
+                DefReb: (entry.stats.DefReb["#text"]),
+                Reb: (entry.stats.Reb["#text"]),
+                Ast: (entry.stats.Ast["#text"]),
+                Blk: (entry.stats.Blk["#text"]),
+                Stl: (entry.stats.Stl["#text"]),
+                Tov: (entry.stats.Tov["#text"]),
+                FoulPers: (entry.stats.FoulPers["#text"])             
+              } 
+    });
+}
+
+function getAllRankingsDataTableD() {
+  return all_stats_data
+          .map(function(entry) { 
+            return  { 
+                Player: (entry.player.FirstName + " " + entry.player.LastName),
+                BlkPerGame: (entry.stats.BlkPerGame["#text"]),
+                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+                MinSeconds: (entry.stats.MinSeconds["#text"]),
+                Pts: (entry.stats.Pts["#text"]),
+                FgAtt: (entry.stats.FgAtt["#text"]),
+                FgMade: (entry.stats.FgMade["#text"]),
+                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+                FtAtt: (entry.stats.FtAtt["#text"]),
+                FtMade: (entry.stats.FtMade["#text"]),
+                OffReb: (entry.stats.OffReb["#text"]),
+                DefReb: (entry.stats.DefReb["#text"]),
+                Reb: (entry.stats.Reb["#text"]),
+                Ast: (entry.stats.Ast["#text"]),
+                Blk: (entry.stats.Blk["#text"]),
+                Stl: (entry.stats.Stl["#text"]),
+                Tov: (entry.stats.Tov["#text"]),
+                FoulPers: (entry.stats.FoulPers["#text"])             
+              } 
+    });
+}
+*/

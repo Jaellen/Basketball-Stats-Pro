@@ -102,6 +102,16 @@
 	var save_player_profile = {};
 	var save_player_clicked = void 0;
 
+	//rankings variables
+	var rankings_data_table_a = void 0;
+	var rankings_data_table_b = void 0;
+	var rankings_data_table_c = void 0;
+	var rankings_data_table_d = void 0;
+	var table_a = void 0;
+	var table_b = void 0;
+	var table_c = void 0;
+	var table_d = void 0;
+
 	//async get requests 
 	var getAllProfileData = Rx.Observable.create(function (observer) {
 	  xhrRequest.get(profile_data_url).auth('jaellen', 'adanaC4032').end(function (err, res) {
@@ -138,6 +148,7 @@
 	    },
 	    onCompleted: function onCompleted() {
 	      getSearchRecommendations();
+	      setRankingsTableA();
 	    }
 	  });
 	};
@@ -252,18 +263,27 @@
 
 	  //set player_team_name, player_team_list, player_team_positions
 	  player_team_name = all_stats_data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //This is to filter out undefined stats in the data set
+	  .filter(function (entry) {
 	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked;
 	  }).map(function (entry) {
 	    return entry.team.City + " " + entry.team.Name;
 	  });
 
 	  player_team_list = all_stats_data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //This is to filter out undefined stats in the data set
+	  .filter(function (entry) {
 	    return entry.team.City + " " + entry.team.Name === player_team_name.toString();
 	  }).map(function (entry) {
 	    return entry.player.FirstName + " " + entry.player.LastName;
 	  });
 
 	  player_team_positions = all_stats_data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //This is to filter out undefined stats in the data set
+	  .filter(function (entry) {
 	    return entry.team.City + " " + entry.team.Name === player_team_name.toString();
 	  }).map(function (entry) {
 	    return entry.player.Position;
@@ -528,6 +548,47 @@
 	  });
 	};
 
+	var setRankingsButtons = function setRankingsButtons() {};
+
+	//Rankings Page Functionality
+	var setRankingsTableA = function setRankingsTableA() {
+
+	  //filter all_stats_data for all stats data to display in the rankings tables  
+	  rankings_data_table_a = getAllRankingsDataTableA(all_stats_data);
+
+	  //sort the data by each of the four factors using a sorting algorithm 
+	  table_a = rankings_data_table_a.sort(function (a, b) {
+	    if (Number(a.PtsPerGame) > Number(b.PtsPerGame)) {
+	      return 1;
+	    }
+	    if (Number(a.PtsPerGame) < Number(b.PtsPerGame)) {
+	      return -1;
+	    }
+	    //if a is equal to b
+	    return 0;
+	  });
+
+	  //display the sorted table
+	  displayRankings();
+	};
+
+	var displayRankings = function displayRankings() {
+
+	  //table A
+	  table_a[0].forEach(function (player, i) {
+
+	    var identifier = "row" + i;
+	    var attr = { id: identifier };
+	    var table_a_el = document.getElementById("table-pts-g");
+
+	    setAttributes(table_a_el, attr);
+
+	    for (var stat in player) {
+	      document.getElementById(identifier).appendChild(createElement("td", player[stat]));
+	    }
+	  });
+	};
+
 	//Start the Application
 	setAllStatsData();
 	setComparePlayer();
@@ -536,7 +597,10 @@
 	/* -------------------------- Utility functions ---------------------------- */
 
 	function createFirstandLastNameArray(data) {
-	  return data.map(function (entry) {
+	  return data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //This is to filter out undefined stats in the data set
+	  .map(function (entry) {
 	    return entry.player.FirstName + " " + entry.player.LastName;
 	  });
 	}
@@ -573,6 +637,9 @@
 
 	function getPlayerMainStats(data, player_clicked) {
 	  return data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //This is to filter out undefined stats in the data set
+	  .filter(function (entry) {
 	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
 	  }).map(function (entry) {
 	    return {
@@ -595,6 +662,9 @@
 
 	function getPlayerSecondaryStats(data, player_clicked) {
 	  return data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //This is to filter out undefined stats in the data set
+	  .filter(function (entry) {
 	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
 	  }).map(function (entry) {
 	    return {
@@ -683,6 +753,127 @@
 	    return false;
 	  }
 	}
+
+	function getAllRankingsDataTableA(data) {
+
+	  return data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //This is to filter out undefined stats in the data set
+	  .map(function (entry) {
+	    return {
+	      Player: entry.player.FirstName + " " + entry.player.LastName,
+	      PtsPerGame: entry.stats.PtsPerGame["#text"],
+	      GamesPlayed: entry.stats.GamesPlayed["#text"],
+	      MinSeconds: entry.stats.MinSeconds["#text"],
+	      Pts: entry.stats.Pts["#text"],
+	      FgAtt: entry.stats.FgAtt["#text"],
+	      FgMade: entry.stats.FgMade["#text"],
+	      Fg2PtMade: entry.stats.Fg2PtMade["#text"],
+	      Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
+	      Fg3PtMade: entry.stats.Fg3PtMade["#text"],
+	      Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
+	      FtAtt: entry.stats.FtAtt["#text"],
+	      FtMade: entry.stats.FtMade["#text"],
+	      OffReb: entry.stats.OffReb["#text"],
+	      DefReb: entry.stats.DefReb["#text"],
+	      Reb: entry.stats.Reb["#text"],
+	      Ast: entry.stats.Ast["#text"],
+	      Blk: entry.stats.Blk["#text"],
+	      Stl: entry.stats.Stl["#text"],
+	      Tov: entry.stats.Tov["#text"],
+	      FoulPers: entry.stats.FoulPers["#text"]
+	    };
+	  });
+	}
+
+	/*
+	function getAllRankingsDataTableB() {
+	  return all_stats_data
+	          .map(function(entry) { 
+	            return  { 
+	                Player: (entry.player.FirstName + " " + entry.player.LastName),
+	                AstPerGame: (entry.stats.AstPerGame["#text"]),
+	                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+	                MinSeconds: (entry.stats.MinSeconds["#text"]),
+	                Pts: (entry.stats.Pts["#text"]),
+	                FgAtt: (entry.stats.FgAtt["#text"]),
+	                FgMade: (entry.stats.FgMade["#text"]),
+	                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+	                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+	                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+	                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+	                FtAtt: (entry.stats.FtAtt["#text"]),
+	                FtMade: (entry.stats.FtMade["#text"]),
+	                OffReb: (entry.stats.OffReb["#text"]),
+	                DefReb: (entry.stats.DefReb["#text"]),
+	                Reb: (entry.stats.Reb["#text"]),
+	                Ast: (entry.stats.Ast["#text"]),
+	                Blk: (entry.stats.Blk["#text"]),
+	                Stl: (entry.stats.Stl["#text"]),
+	                Tov: (entry.stats.Tov["#text"]),
+	                FoulPers: (entry.stats.FoulPers["#text"])             
+	              } 
+	    });
+	}
+
+	function getAllRankingsDataTableC() {
+	  return all_stats_data
+	          .map(function(entry) { 
+	            return  { 
+	                Player: (entry.player.FirstName + " " + entry.player.LastName),
+	                RebPerGame: (entry.stats.RebPerGame["#text"]),
+	                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+	                MinSeconds: (entry.stats.MinSeconds["#text"]),
+	                Pts: (entry.stats.Pts["#text"]),
+	                FgAtt: (entry.stats.FgAtt["#text"]),
+	                FgMade: (entry.stats.FgMade["#text"]),
+	                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+	                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+	                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+	                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+	                FtAtt: (entry.stats.FtAtt["#text"]),
+	                FtMade: (entry.stats.FtMade["#text"]),
+	                OffReb: (entry.stats.OffReb["#text"]),
+	                DefReb: (entry.stats.DefReb["#text"]),
+	                Reb: (entry.stats.Reb["#text"]),
+	                Ast: (entry.stats.Ast["#text"]),
+	                Blk: (entry.stats.Blk["#text"]),
+	                Stl: (entry.stats.Stl["#text"]),
+	                Tov: (entry.stats.Tov["#text"]),
+	                FoulPers: (entry.stats.FoulPers["#text"])             
+	              } 
+	    });
+	}
+
+	function getAllRankingsDataTableD() {
+	  return all_stats_data
+	          .map(function(entry) { 
+	            return  { 
+	                Player: (entry.player.FirstName + " " + entry.player.LastName),
+	                BlkPerGame: (entry.stats.BlkPerGame["#text"]),
+	                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+	                MinSeconds: (entry.stats.MinSeconds["#text"]),
+	                Pts: (entry.stats.Pts["#text"]),
+	                FgAtt: (entry.stats.FgAtt["#text"]),
+	                FgMade: (entry.stats.FgMade["#text"]),
+	                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+	                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+	                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+	                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+	                FtAtt: (entry.stats.FtAtt["#text"]),
+	                FtMade: (entry.stats.FtMade["#text"]),
+	                OffReb: (entry.stats.OffReb["#text"]),
+	                DefReb: (entry.stats.DefReb["#text"]),
+	                Reb: (entry.stats.Reb["#text"]),
+	                Ast: (entry.stats.Ast["#text"]),
+	                Blk: (entry.stats.Blk["#text"]),
+	                Stl: (entry.stats.Stl["#text"]),
+	                Tov: (entry.stats.Tov["#text"]),
+	                FoulPers: (entry.stats.FoulPers["#text"])             
+	              } 
+	    });
+	}
+	*/
 
 /***/ },
 /* 2 */
@@ -14902,7 +15093,7 @@
 
 
 	// module
-	exports.push([module.id, "\ntable, tr, th, td {\n  border-style: solid;\n  border-color: black;\n  border-width: 1px;\n}\n", ""]);
+	exports.push([module.id, "\ntable, tr, th, td {\n  border-style: solid;\n  border-color: black;\n  border-width: 1px;\n  padding: 5px;\n}\n", ""]);
 
 	// exports
 
