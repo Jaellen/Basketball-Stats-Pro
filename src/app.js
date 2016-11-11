@@ -15,9 +15,10 @@ require("./css/main.css");
 
 /* ------------------------- Global Variables ------------------------------ */
 
+
 //urls 
-const cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
-const profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
+const cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/cumulative_player_stats.json?';
+const profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/active_players.json';
 
 //main stats variables
 let all_stats_data, all_profile_data;
@@ -90,7 +91,7 @@ let setAllStatsData = function() {
     onError: (error) => { console.error("Error in XMLHttpRequest") },
     onCompleted: () => {
       getSearchRecommendations();
-      setRankingsTableA();
+      setRankingsTables();
     },
   });   
 };
@@ -288,6 +289,7 @@ let displayPlayerTeamList = function() {
   });
 };
 
+
 //Compare Player Functionality
 let setComparePlayer = function() {
 
@@ -417,6 +419,7 @@ let displayCompareSecondaryStats = function() {
   }
 };
 
+
 //Save Player Functionality
 let setSavePlayerList = function() {
   
@@ -485,46 +488,38 @@ let displaySavePlayerList = function() {
   });
 };
 
-let setRankingsButtons = function() {
-};
 
 //Rankings Page Functionality
-let setRankingsTableA = function() {
-  
-  //filter all_stats_data for all stats data to display in the rankings tables  
-  rankings_data_table_a = getAllRankingsDataTableA(all_stats_data);
+let setRankingsTables = function() {
 
-  //sort the data by each of the four factors using a sorting algorithm 
-  table_a = rankings_data_table_a.sort(function (a, b) {
-              if ( Number(a.PtsPerGame) > Number(b.PtsPerGame) ) {
-                return 1;
-              }
-              if ( Number(a.PtsPerGame) < Number(b.PtsPerGame) ) {
-                return -1;
-              }
-              //if a is equal to b
-              return 0;
-            });
+  table_a = createRankingsTable(rankings_data_table_a, all_stats_data, "a");
+  table_b = createRankingsTable(rankings_data_table_b, all_stats_data, "b");
+  table_c = createRankingsTable(rankings_data_table_c, all_stats_data, "c");
+  table_d = createRankingsTable(rankings_data_table_d, all_stats_data, "d");
 
   //display the sorted table
   displayRankings();
 };
 
 let displayRankings = function() {
+    
+  //display tables
+  displayTable(table_a, "table-pts-g", "table-a");
+  displayTable(table_b, "table-ast-g", "table-b");
+  displayTable(table_c, "table-reb-g", "table-c");
+  displayTable(table_d, "table-blk-g", "table-d");
 
-    //table A
-    table_a[0].forEach( function(player, i) {   
-      
-      let identifier = ("row" + i);
-      let attr = { id: identifier};
-      let table_a_el = document.getElementById("table-pts-g");    
-      
-      setAttributes(table_a_el, attr);
+  //activate click event listeners
+  setRankingsButtons();
+};
 
-      for (let stat in player) {
-        document.getElementById(identifier).appendChild(createElement( "td", player[stat] ));
-      }
-    });
+let setRankingsButtons = function() {
+  
+  //when button is clicked, show the corresponding table
+  document.getElementById('button-pts-g').addEventListener('click', activateTableA, false);
+  document.getElementById('button-ast-g').addEventListener('click', activateTableB, false);
+  document.getElementById('button-reb-g').addEventListener('click', activateTableC, false);
+  document.getElementById('button-blk-g').addEventListener('click', activateTableD, false);
 };
 
 //Start the Application
@@ -532,8 +527,76 @@ setAllStatsData();
 setComparePlayer();
 setSavePlayerList();
 
-/* -------------------------- Utility functions ---------------------------- */
+/* -------------------- Utility and Helper functions ----------------------- */
 
+//DOM utilities
+function getJSON(url) {
+  
+  return getRequest(url).then(JSON.parse);
+}
+
+function getRequest(url) {
+  //Return a new promise
+  return new Promise(function(resolve, reject) {
+    var req = new XMLHttpRequest();
+    req.open("GET", url, true);
+    
+    //Authorization details go here 
+    req.setRequestHeader("Authorization", "Basic " + btoa("jaellen:adanaC4032"));
+
+    req.onload = function() {
+      //Check the status
+      if (req.status === 200) {
+        resolve(req.response);
+      }
+      else {
+        reject(Error(req.statusText));
+      }
+    };
+    //Handle network errors
+    req.onerror = function() {
+      reject(Error("Network Error"))
+    };
+    //Make the request
+    req.send();
+  });
+}
+
+function createElement(type) {
+  var node = document.createElement(type);
+  for (var i = 1; i < arguments.length; i++) {
+    var child = arguments[i];
+    if (typeof child == "string") {
+      child = document.createTextNode(child);
+    }
+    node.appendChild(child);
+  }
+  return node;
+} 
+
+function setAttributes(el, attrs) {
+  // for multiple attributes, send attrs in the form of { attr: value, attr: value... }
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
+function addClass(el, className) {
+    if (el.classList) el.classList.add(className);
+    else if (!hasClass(el, className)) el.className += ' ' + className;
+}
+
+function removeClass(el, className) {
+    if (el.classList) el.classList.remove(className);
+    else el.className = el.className.replace(new RegExp('\\b'+ className+'\\b', 'g'), '');
+}
+
+function hasClass(el, className) {
+    
+    return el.classList ? el.classList.contains(className) : new RegExp('\\b'+ className+'\\b').test(el.className);
+}
+
+//'stats' and 'compare' utilities
 function createFirstandLastNameArray(data) { 
   return data
     .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
@@ -624,56 +687,7 @@ function getPlayerSecondaryStats(data, player_clicked) {
     });
 }
 
-function getJSON(url) {
-  
-  return getRequest(url).then(JSON.parse);
-}
-
-function getRequest(url) {
-  //Return a new promise
-  return new Promise(function(resolve, reject) {
-    var req = new XMLHttpRequest();
-    req.open("GET", url, true);
-    
-    //Authorization details go here 
-    req.setRequestHeader("Authorization", "Basic " + btoa("jaellen:adanaC4032"));
-
-    req.onload = function() {
-      //Check the status
-      if (req.status === 200) {
-        resolve(req.response);
-      }
-      else {
-        reject(Error(req.statusText));
-      }
-    };
-    //Handle network errors
-    req.onerror = function() {
-      reject(Error("Network Error"))
-    };
-    //Make the request
-    req.send();
-  });
-}
-
-function createElement(type) {
-  var node = document.createElement(type);
-  for (var i = 1; i < arguments.length; i++) {
-    var child = arguments[i];
-    if (typeof child == "string") {
-      child = document.createTextNode(child);
-    }
-    node.appendChild(child);
-  }
-  return node;
-} 
-
-function setAttributes(el, attrs) {
-  for(var key in attrs) {
-    el.setAttribute(key, attrs[key]);
-  }
-}
-
+//'favourites' utilities
 function isSavePlayerRepeated() {
   let test_array = save_player_list
                      .map(function(element) {
@@ -685,6 +699,88 @@ function isSavePlayerRepeated() {
 
   if (test_array.length > 0) { return true }
   else { return false }
+}
+
+//'rankings' utilities
+
+function createRankingsTable(table, data, option) {
+  
+  //Table A: PTS/G 
+  if (option === "a") {
+    
+    //filter the data
+    table = getAllRankingsDataTableA(data);
+
+    //sort the data  
+    table.sort(function (a, b) {
+      if ( Number(a.PtsPerGame) > Number(b.PtsPerGame) ) {
+        return -1;
+      }
+      if ( Number(a.PtsPerGame) < Number(b.PtsPerGame) ) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  //Table B: AST/G 
+  if (option === "b") {
+    
+    //filter the data
+    table = getAllRankingsDataTableB(data);
+
+    //sort the data 
+    table.sort(function (a, b) {
+      if ( Number(a.AstPerGame) > Number(b.AstPerGame) ) {
+        return -1;
+      }
+      if ( Number(a.AstPerGame) < Number(b.AstPerGame) ) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  //Table C: REB/G 
+  if (option === "c") {
+    
+    //filter the data
+    table = getAllRankingsDataTableC(data);
+
+    //sort the data
+    table.sort(function (a, b) {
+      if ( Number(a.RebPerGame) > Number(b.RebPerGame) ) {
+        return -1;
+      }
+      if ( Number(a.RebPerGame) < Number(b.RebPerGame) ) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  //Table D: BLK/G 
+  if (option === "d") {
+    
+    //filter all the stats data for the rankings
+    table = getAllRankingsDataTableD(data);
+
+    //sort the data
+    table.sort(function (a, b) {
+      if ( Number(a.BlkPerGame) > Number(b.BlkPerGame) ) {
+        return -1;
+      }
+      if ( Number(a.BlkPerGame) < Number(b.BlkPerGame) ) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+ 
+  //cut the table down to top 20
+  table = table.slice(0, 20);
+
+  return table;
 }
 
 function getAllRankingsDataTableA(data) {
@@ -718,91 +814,162 @@ function getAllRankingsDataTableA(data) {
           });
 }
 
-/*
-function getAllRankingsDataTableB() {
-  return all_stats_data
+function getAllRankingsDataTableB(data) {
+  
+  return data
+          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
           .map(function(entry) { 
             return  { 
-                Player: (entry.player.FirstName + " " + entry.player.LastName),
-                AstPerGame: (entry.stats.AstPerGame["#text"]),
-                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
-                MinSeconds: (entry.stats.MinSeconds["#text"]),
-                Pts: (entry.stats.Pts["#text"]),
-                FgAtt: (entry.stats.FgAtt["#text"]),
-                FgMade: (entry.stats.FgMade["#text"]),
-                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
-                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: (entry.stats.FtAtt["#text"]),
-                FtMade: (entry.stats.FtMade["#text"]),
-                OffReb: (entry.stats.OffReb["#text"]),
-                DefReb: (entry.stats.DefReb["#text"]),
-                Reb: (entry.stats.Reb["#text"]),
-                Ast: (entry.stats.Ast["#text"]),
-                Blk: (entry.stats.Blk["#text"]),
-                Stl: (entry.stats.Stl["#text"]),
-                Tov: (entry.stats.Tov["#text"]),
-                FoulPers: (entry.stats.FoulPers["#text"])             
-              } 
-    });
+              Player: (entry.player.FirstName + " " + entry.player.LastName),
+              AstPerGame: (entry.stats.AstPerGame["#text"]),
+              GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+              MinSeconds: (entry.stats.MinSeconds["#text"]),
+              Pts: (entry.stats.Pts["#text"]),
+              FgAtt: (entry.stats.FgAtt["#text"]),
+              FgMade: (entry.stats.FgMade["#text"]),
+              Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+              Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+              Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+              Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+              FtAtt: (entry.stats.FtAtt["#text"]),
+              FtMade: (entry.stats.FtMade["#text"]),
+              OffReb: (entry.stats.OffReb["#text"]),
+              DefReb: (entry.stats.DefReb["#text"]),
+              Reb: (entry.stats.Reb["#text"]),
+              Ast: (entry.stats.Ast["#text"]),
+              Blk: (entry.stats.Blk["#text"]),
+              Stl: (entry.stats.Stl["#text"]),
+              Tov: (entry.stats.Tov["#text"]),
+              FoulPers: (entry.stats.FoulPers["#text"])             
+            } 
+          });
 }
 
-function getAllRankingsDataTableC() {
-  return all_stats_data
+function getAllRankingsDataTableC(data) {
+  
+  return data
+          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
           .map(function(entry) { 
             return  { 
-                Player: (entry.player.FirstName + " " + entry.player.LastName),
-                RebPerGame: (entry.stats.RebPerGame["#text"]),
-                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
-                MinSeconds: (entry.stats.MinSeconds["#text"]),
-                Pts: (entry.stats.Pts["#text"]),
-                FgAtt: (entry.stats.FgAtt["#text"]),
-                FgMade: (entry.stats.FgMade["#text"]),
-                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
-                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: (entry.stats.FtAtt["#text"]),
-                FtMade: (entry.stats.FtMade["#text"]),
-                OffReb: (entry.stats.OffReb["#text"]),
-                DefReb: (entry.stats.DefReb["#text"]),
-                Reb: (entry.stats.Reb["#text"]),
-                Ast: (entry.stats.Ast["#text"]),
-                Blk: (entry.stats.Blk["#text"]),
-                Stl: (entry.stats.Stl["#text"]),
-                Tov: (entry.stats.Tov["#text"]),
-                FoulPers: (entry.stats.FoulPers["#text"])             
-              } 
-    });
+              Player: (entry.player.FirstName + " " + entry.player.LastName),
+              RebPerGame: (entry.stats.RebPerGame["#text"]),
+              GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+              MinSeconds: (entry.stats.MinSeconds["#text"]),
+              Pts: (entry.stats.Pts["#text"]),
+              FgAtt: (entry.stats.FgAtt["#text"]),
+              FgMade: (entry.stats.FgMade["#text"]),
+              Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+              Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+              Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+              Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+              FtAtt: (entry.stats.FtAtt["#text"]),
+              FtMade: (entry.stats.FtMade["#text"]),
+              OffReb: (entry.stats.OffReb["#text"]),
+              DefReb: (entry.stats.DefReb["#text"]),
+              Reb: (entry.stats.Reb["#text"]),
+              Ast: (entry.stats.Ast["#text"]),
+              Blk: (entry.stats.Blk["#text"]),
+              Stl: (entry.stats.Stl["#text"]),
+              Tov: (entry.stats.Tov["#text"]),
+              FoulPers: (entry.stats.FoulPers["#text"])             
+            } 
+          });
 }
 
-function getAllRankingsDataTableD() {
-  return all_stats_data
+function getAllRankingsDataTableD(data) {
+  
+  return data
+          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
           .map(function(entry) { 
             return  { 
-                Player: (entry.player.FirstName + " " + entry.player.LastName),
-                BlkPerGame: (entry.stats.BlkPerGame["#text"]),
-                GamesPlayed: (entry.stats.GamesPlayed["#text"]),
-                MinSeconds: (entry.stats.MinSeconds["#text"]),
-                Pts: (entry.stats.Pts["#text"]),
-                FgAtt: (entry.stats.FgAtt["#text"]),
-                FgMade: (entry.stats.FgMade["#text"]),
-                Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
-                Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: (entry.stats.FtAtt["#text"]),
-                FtMade: (entry.stats.FtMade["#text"]),
-                OffReb: (entry.stats.OffReb["#text"]),
-                DefReb: (entry.stats.DefReb["#text"]),
-                Reb: (entry.stats.Reb["#text"]),
-                Ast: (entry.stats.Ast["#text"]),
-                Blk: (entry.stats.Blk["#text"]),
-                Stl: (entry.stats.Stl["#text"]),
-                Tov: (entry.stats.Tov["#text"]),
-                FoulPers: (entry.stats.FoulPers["#text"])             
-              } 
-    });
+              Player: (entry.player.FirstName + " " + entry.player.LastName),
+              BlkPerGame: (entry.stats.BlkPerGame["#text"]),
+              GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+              MinSeconds: (entry.stats.MinSeconds["#text"]),
+              Pts: (entry.stats.Pts["#text"]),
+              FgAtt: (entry.stats.FgAtt["#text"]),
+              FgMade: (entry.stats.FgMade["#text"]),
+              Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+              Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+              Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+              Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+              FtAtt: (entry.stats.FtAtt["#text"]),
+              FtMade: (entry.stats.FtMade["#text"]),
+              OffReb: (entry.stats.OffReb["#text"]),
+              DefReb: (entry.stats.DefReb["#text"]),
+              Reb: (entry.stats.Reb["#text"]),
+              Ast: (entry.stats.Ast["#text"]),
+              Blk: (entry.stats.Blk["#text"]),
+              Stl: (entry.stats.Stl["#text"]),
+              Tov: (entry.stats.Tov["#text"]),
+              FoulPers: (entry.stats.FoulPers["#text"])             
+            } 
+          });
 }
-*/
+
+function displayTable(table, tableId, rowId) {
+   
+  table.forEach( function(player, i) {   
+    //for each player, create a row and add it to the appropriate table
+    let row = document.getElementById(tableId).appendChild(createElement("tr"));
+      
+    //give each row an id of "row"+i where i is the index of the ranked list
+    setAttributes(row, { id: (rowId + i) });
+
+    //add the ranking position to that row
+    document.getElementById(rowId + i).appendChild(createElement( "td", (i + 1).toString() ));
+
+    //for each row, loop through all the properties and create a cell for each stat
+    for (let stat in player) {
+      document.getElementById(rowId + i).appendChild(createElement( "td", player[stat] ));
+    }
+  });
+}
+
+function activateTableA() {
+  let tableA = document.getElementById("section-table-a");
+  let tableB = document.getElementById("section-table-b");
+  let tableC = document.getElementById("section-table-c");
+  let tableD = document.getElementById("section-table-d");
+
+  removeClass(tableA, "hidden");
+  addClass(tableB, "hidden");
+  addClass(tableC, "hidden");
+  addClass(tableD, "hidden");
+}
+
+function activateTableB() {
+  let tableA = document.getElementById("section-table-a");
+  let tableB = document.getElementById("section-table-b");
+  let tableC = document.getElementById("section-table-c");
+  let tableD = document.getElementById("section-table-d");
+
+  addClass(tableA, "hidden");
+  removeClass(tableB, "hidden");
+  addClass(tableC, "hidden");
+  addClass(tableD, "hidden");
+}
+
+function activateTableC() {
+  let tableA = document.getElementById("section-table-a");
+  let tableB = document.getElementById("section-table-b");
+  let tableC = document.getElementById("section-table-c");
+  let tableD = document.getElementById("section-table-d");
+
+  addClass(tableA, "hidden");
+  addClass(tableB, "hidden");
+  removeClass(tableC, "hidden");
+  addClass(tableD, "hidden");
+}
+
+function activateTableD() {
+  let tableA = document.getElementById("section-table-a");
+  let tableB = document.getElementById("section-table-b");
+  let tableC = document.getElementById("section-table-c");
+  let tableD = document.getElementById("section-table-d");
+
+  addClass(tableA, "hidden");
+  addClass(tableB, "hidden");
+  addClass(tableC, "hidden");
+  removeClass(tableD, "hidden");
+}
