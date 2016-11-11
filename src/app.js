@@ -17,10 +17,14 @@ require("./css/main.css");
 
 
 //urls 
-let cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/cumulative_player_stats.json?';
-let profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/active_players.json';
+const STATS_2016_2017 = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/cumulative_player_stats.json?'
+const PROFILE_2016_2017 = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/active_players.json'; 
+const STATS_2015_2016 = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?'
+const PROFILE_2015_2016 = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json'; 
 
 //main stats variables
+let cumulative_player_data_url = STATS_2016_2017;
+let profile_data_url = PROFILE_2016_2017;
 let all_stats_data, all_profile_data;
 let search_array;
 let current_player_clicked;
@@ -289,6 +293,7 @@ let displayPlayerTeamList = function() {
   });
 };
 
+
 //Compare Player Functionality
 let setComparePlayer = function() {
 
@@ -553,12 +558,36 @@ let setRankingsButtons = function() {
 
 let setChangeSeason = function() {
 
+  //change season to 2015/2016
   document.getElementById('seasonA').addEventListener('click', function() {
+    
+    //case: clicked season is already selected
+    if (cumulative_player_data_url === STATS_2016_2017) {
+      return;
+    }
+
+    //change source data  
     setSeason("a");
+
+    //reset main page stats and ranking tables 
+    setAllStatsData();
+
   }, false);
 
+  //change season to 2016/2017
   document.getElementById('seasonB').addEventListener('click', function() {
-    setSeason("b");  
+
+    //case: clicked season is already selected
+    if (cumulative_player_data_url === STATS_2015_2016) {
+      return;
+    }
+    
+    //change source data  
+    setSeason("b");
+
+    //reset main page stats and ranking tables 
+    setAllStatsData();
+
   }, false);
 };
 
@@ -637,22 +666,6 @@ function hasClass(el, className) {
 }
 
 //'stats' and 'compare' utilities
-function setSeason(option) {
-  if (option == "a") {
-    cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
-    profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
-
-    alert("changed season to 2015/2016"); 
-  }
-
-  if (option == "b") {
-    cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/cumulative_player_stats.json?';
-    profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/active_players.json';
-
-    alert("changed season to 2016/2017"); 
-  }
-}
-
 function createFirstandLastNameArray(data) { 
   return data
     .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
@@ -758,7 +771,6 @@ function isSavePlayerRepeated() {
 }
 
 //'rankings' utilities
-
 function createRankingsTable(table, data, option) {
   
   //Table A: PTS/G 
@@ -1063,3 +1075,17 @@ function activateTable(option) {
     removeClass(tableD, "hidden");
   }
 }
+
+function setSeason(option) {
+  if (option == "a") {
+    cumulative_player_data_url = STATS_2016_2017;
+    profile_data_url = PROFILE_2016_2017;
+  }
+
+  if (option == "b") {
+    cumulative_player_data_url = STATS_2015_2016;
+    profile_data_url = PROFILE_2015_2016;
+  }
+}
+
+
