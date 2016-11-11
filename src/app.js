@@ -294,6 +294,11 @@ let setComparePlayer = function() {
 
   let setComparePlayerButton = function() {
 
+    //case: if no player is clicked as of yet
+    if (current_player_clicked === undefined) {
+      return;
+    }
+
     //case: if player clicked is already in compare slot a 
     if (current_player_clicked == compare_player_a) {
       alert("This player is already in compare slot a");
@@ -424,6 +429,12 @@ let setSavePlayerList = function() {
   
   //set save player button (main page)
   let setAddPlayer = function() {
+    
+    //case: if no player is clicked as of yet
+    if (current_player_clicked === undefined) {
+      return;
+    }
+
     //test if player being saved is already saved
     if ( isSavePlayerRepeated() === true ) {
       alert("You already have this player saved"); 
