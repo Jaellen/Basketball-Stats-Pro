@@ -17,8 +17,8 @@ require("./css/main.css");
 
 
 //urls 
-const cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/cumulative_player_stats.json?';
-const profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/active_players.json';
+let cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/cumulative_player_stats.json?';
+let profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/active_players.json';
 
 //main stats variables
 let all_stats_data, all_profile_data;
@@ -289,7 +289,6 @@ let displayPlayerTeamList = function() {
   });
 };
 
-
 //Compare Player Functionality
 let setComparePlayer = function() {
 
@@ -502,7 +501,13 @@ let setRankingsTables = function() {
 };
 
 let displayRankings = function() {
-    
+   
+  //clear any previous tables in the case of changing season option
+  document.getElementById("table-pts-g").innerHTML = '';
+  document.getElementById("table-ast-g").innerHTML = '';
+  document.getElementById("table-reb-g").innerHTML = '';
+  document.getElementById("table-blk-g").innerHTML = '';
+
   //display tables
   displayTable(table_a, "table-pts-g", "table-a");
   displayTable(table_b, "table-ast-g", "table-b");
@@ -516,10 +521,34 @@ let displayRankings = function() {
 let setRankingsButtons = function() {
   
   //when button is clicked, show the corresponding table
-  document.getElementById('button-pts-g').addEventListener('click', activateTableA, false);
-  document.getElementById('button-ast-g').addEventListener('click', activateTableB, false);
-  document.getElementById('button-reb-g').addEventListener('click', activateTableC, false);
-  document.getElementById('button-blk-g').addEventListener('click', activateTableD, false);
+  document.getElementById('button-pts-g').addEventListener('click', function() {
+    activateTable("a");
+  }, false);
+
+  document.getElementById('button-ast-g').addEventListener('click', function() {
+    activateTable("b");
+  }, false);
+  
+  document.getElementById('button-reb-g').addEventListener('click', function() {
+    activateTable("c");
+  }, false); 
+
+  document.getElementById('button-blk-g').addEventListener('click', function() {
+    activateTable("d");
+  }, false);
+
+  setChangeSeason();
+};
+
+let setChangeSeason = function() {
+
+  document.getElementById('seasonA').addEventListener('click', function() {
+    setSeason("a");
+  }, false);
+
+  document.getElementById('seasonB').addEventListener('click', function() {
+    setSeason("b");  
+  }, false);
 };
 
 //Start the Application
@@ -597,6 +626,22 @@ function hasClass(el, className) {
 }
 
 //'stats' and 'compare' utilities
+function setSeason(option) {
+  if (option == "a") {
+    cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/cumulative_player_stats.json?';
+    profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2015-2016-regular/active_players.json';
+
+    alert("changed season to 2015/2016"); 
+  }
+
+  if (option == "b") {
+    cumulative_player_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/cumulative_player_stats.json?';
+    profile_data_url = 'https://www.mysportsfeeds.com/api/feed/pull/nba/2016-2017-regular/active_players.json';
+
+    alert("changed season to 2016/2017"); 
+  }
+}
+
 function createFirstandLastNameArray(data) { 
   return data
     .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
@@ -908,8 +953,55 @@ function getAllRankingsDataTableD(data) {
 }
 
 function displayTable(table, tableId, rowId) {
-   
+  
+  //set the table header for column three  
+  let rank_header = "";
+
+  if (tableId === "table-pts-g") {
+    rank_header = "PTS/G";
+  }
+
+  if (tableId === "table-ast-g") {
+    rank_header = "AST/G";
+  }
+
+  if (tableId === "table-reb-g") {
+    rank_header = "REB/G";
+  }
+
+  if (tableId === "table-blk-g") {
+    rank_header = "BLK/G";
+  }
+
+  //add table headers 
+  document.getElementById(tableId).appendChild(
+    createElement("tr",
+      createElement("th", "Rank"),
+      createElement("th", "Player"),
+      createElement("th", rank_header),
+      createElement("th", "GP"),
+      createElement("th", "MIN"),
+      createElement("th", "PTS"),
+      createElement("th", "FGA"),
+      createElement("th", "FGM"),
+      createElement("th", "2PM"),
+      createElement("th", "2PA"),
+      createElement("th", "3PM"),
+      createElement("th", "3PA"),
+      createElement("th", "FTA"),
+      createElement("th", "FTM"),
+      createElement("th", "OREB"),
+      createElement("th", "DREB"),
+      createElement("th", "REB"),
+      createElement("th", "AST"),
+      createElement("th", "BLK"),
+      createElement("th", "STL"),
+      createElement("th", "TOV"),
+      createElement("th", "PF")
+    ));
+
   table.forEach( function(player, i) {   
+    
     //for each player, create a row and add it to the appropriate table
     let row = document.getElementById(tableId).appendChild(createElement("tr"));
       
@@ -926,50 +1018,37 @@ function displayTable(table, tableId, rowId) {
   });
 }
 
-function activateTableA() {
+function activateTable(option) {
   let tableA = document.getElementById("section-table-a");
   let tableB = document.getElementById("section-table-b");
   let tableC = document.getElementById("section-table-c");
   let tableD = document.getElementById("section-table-d");
 
-  removeClass(tableA, "hidden");
-  addClass(tableB, "hidden");
-  addClass(tableC, "hidden");
-  addClass(tableD, "hidden");
-}
+  if (option == "a") {
+    removeClass(tableA, "hidden");
+    addClass(tableB, "hidden");
+    addClass(tableC, "hidden");
+    addClass(tableD, "hidden");
+  }
 
-function activateTableB() {
-  let tableA = document.getElementById("section-table-a");
-  let tableB = document.getElementById("section-table-b");
-  let tableC = document.getElementById("section-table-c");
-  let tableD = document.getElementById("section-table-d");
+  if (option == "b") {
+    addClass(tableA, "hidden");
+    removeClass(tableB, "hidden");
+    addClass(tableC, "hidden");
+    addClass(tableD, "hidden");
+  } 
+  
+  if (option == "c") {
+    addClass(tableA, "hidden");
+    addClass(tableB, "hidden");
+    removeClass(tableC, "hidden");
+    addClass(tableD, "hidden");
+  }
 
-  addClass(tableA, "hidden");
-  removeClass(tableB, "hidden");
-  addClass(tableC, "hidden");
-  addClass(tableD, "hidden");
-}
-
-function activateTableC() {
-  let tableA = document.getElementById("section-table-a");
-  let tableB = document.getElementById("section-table-b");
-  let tableC = document.getElementById("section-table-c");
-  let tableD = document.getElementById("section-table-d");
-
-  addClass(tableA, "hidden");
-  addClass(tableB, "hidden");
-  removeClass(tableC, "hidden");
-  addClass(tableD, "hidden");
-}
-
-function activateTableD() {
-  let tableA = document.getElementById("section-table-a");
-  let tableB = document.getElementById("section-table-b");
-  let tableC = document.getElementById("section-table-c");
-  let tableD = document.getElementById("section-table-d");
-
-  addClass(tableA, "hidden");
-  addClass(tableB, "hidden");
-  addClass(tableC, "hidden");
-  removeClass(tableD, "hidden");
+  if (option == "d") {
+    addClass(tableA, "hidden");
+    addClass(tableB, "hidden");
+    addClass(tableC, "hidden");
+    removeClass(tableD, "hidden");
+  }
 }
