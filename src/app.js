@@ -571,6 +571,11 @@ let setChangeSeason = function() {
 
     //reset main page stats and ranking tables 
     setAllStatsData();
+    
+    //case: if stats already being displayed, reset those
+    if (current_player_clicked !== undefined) {
+      updatePlayerStats();
+    }
 
   }, false);
 
@@ -578,15 +583,20 @@ let setChangeSeason = function() {
   document.getElementById('seasonB').addEventListener('click', function() {
 
     //case: clicked season is already selected
-    if (cumulative_player_data_url === STATS_2015_2016) {
-      return;
-    }
+    // if (cumulative_player_data_url === STATS_2015_2016) {
+    //   return;
+    // }
     
     //change source data  
     setSeason("b");
 
     //reset main page stats and ranking tables 
     setAllStatsData();
+
+    //case: if stats already being displayed, reset those
+    // if (current_player_clicked !== undefined) {
+    //   updatePlayerStats();
+    // }
 
   }, false);
 };

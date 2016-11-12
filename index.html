@@ -9,43 +9,61 @@
 </head>
 <body>
 
-<!-- STATS PAGE -->
- <h1>Main Stats Page</h1>
+  <!-- NAV BAR -->
+  <section class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="row">
+        
+        <!-- Logo -->
+        <div class="col-md-2">
+          <img src="http://beaden.ca/wp-content/uploads/2015/08/Basketball.png" height="85px" width="85px"></img>
+        </div>
+      
+        <!-- Navigation -->
+        <div class="col-md-6" role="navigation">
+          <ul class="nav nav-pills">
+            <li role="presentation"><a href="#" id="nav-stats"><h3>Stats</h3></a></li>
+            <li role="presentation"><a href="#" id="nav-compare"><h3>Compare</h3></a></li>
+            <li role="presentation"><a href="#" id="nav-favorites"><h3>Favorites</h3></a></li>
+            <li role="presentation"><a href="#" id="nav-rankings"><h3>Rankings</h3></a></li>
+          </ul>
+        </div>
 
-<!-- Autocomple Search bar-->
-<section class="search">
-  <div class="container-fluid">
-    <div class="row">
+      </div>
+    </div>
+  </section>
 
-      <div class="col-md-5">
-        <h3>Recommendations Search</h3>
-        <input type="text" id="searchBox" class="search-field" />
-        <ul id="searchResults" class="term-list hidden"></ul>
+  <!-- STATS PAGE -->
+  <section class="stats-page">
+    <div class="container-fluid">
+      <h1>Main Page</h1>
+
+      <!-- Autocomple Search bar -->  
+      <div class="row">
+        <div class="col-md-5">
+          <h3>Recommendations Search</h3>
+          <input type="text" id="searchBox" class="search-field" />
+          <ul id="searchResults" class="term-list hidden"></ul>
+        </div>
+
+        <div class="col-md-4">
+          <button class="btn btn-warning" id="seasonA">2016/2017</button>
+          <button class="btn btn-warning" id="seasonB">2015/2016</button>
+        </div>
       </div>
 
-      <div class="col-md-4">
-        <button class="btn btn-warning" id="seasonA">2016/2017</button>
-        <button class="btn btn-warning" id="seasonB">2015/2016</button>
-      </div>
-
-    <div>
-  </div>
-</section>
-
-<!-- Profile and Stats Data --> 
-  <div class="container-fluid">
-    <div class="row">
-
+      <!-- Profile and Stats Data --> 
+      <div class="row">
         <div class="col-md-2"> 
           <h3>Profile Data</h3>
           <ul id="profile"></ul>
         </div>
-            
+              
         <div class="col-md-2"> 
           <h3>Stats Main</h3>
           <ul id="stats-main"></ul>
         </div>
-      
+        
         <div class="col-md-2">
           <h3>Stats Secondary</h3>
           <ul id="stats-secondary"></ul>
@@ -56,156 +74,158 @@
           <button class="btn btn-primary" id="button-compare">compare player</button>
           <br><br>
           <button class="btn btn-success" id="button-save-player">save player</button>
+        </div>    
+      </div>
+    
+      <!-- Team List --> 
+      <div class="row">
+        <h4>Other Players from the</h4>
+        <div id="team-name"></div>
+        <ul id="team-list"></ul>
+      </div>
+    
+    </div>
+  </section>
+  <br><br>
+
+  <!-- COMPARE PAGE --> 
+  <section class="compare-page">
+    <div class="container-fluid">
+      <h1>Compare Page</h1>
+
+      <!-- Compare Profile Main Stats -->
+      <div class="row">
+
+        <!-- Player A -->
+        <div class="col-md-3"> 
+          <h4>Profile Data Player A</h4>
+          <ul id="profile-data-player-a"></ul>
+        </div>
+                
+        <div class="col-md-3"> 
+          <h4>Main Stats Player A</h4>
+          <ul id="stats-main-player-a"></ul>
+        </div>
+          
+        <!-- Player B -->
+        <div class="col-md-3">
+          <h4>Main Stats Player B</h4>
+          <ul id="stats-main-player-b"></ul>
+        </div>
+
+        <div class="col-md-3">
+          <h4>Profile Data Player B</h4>
+          <ul id="profile-data-player-b"></ul>
         </div>
       
-    </div>
-  </div>
-
-  <!-- Team List --> 
-  <div class="container">
-    <div class="row">
-      <h4>Other Players from the</h4>
-      <div id="team-name"></div>
-      <ul id="team-list"></ul>
-    </div>
-  </div>
-<br><br>
-
-
-<!-- COMPARE PAGE --> 
-<h1>Compare Page</h1>
-
-<!-- Main Stats -->
-<div class="container-fluid">
-  <div class="row">
-
-      <!-- Player A -->
-      <div class="col-md-3"> 
-        <h4>Profile Data Player A</h4>
-        <ul id="profile-data-player-a"></ul>
       </div>
-            
-      <div class="col-md-3"> 
-        <h4>Main Stats Player A</h4>
-        <ul id="stats-main-player-a"></ul>
-      </div>
-      
-      <!-- Player B -->
-      <div class="col-md-3">
-        <h4>Main Stats Player B</h4>
-        <ul id="stats-main-player-b"></ul>
-      </div>
-
-      <div class="col-md-3">
-        <h4>Profile Data Player B</h4>
-        <ul id="profile-data-player-b"></ul>
-      </div>
-      
-  </div>
-</div>
-
-<!-- Secondary Stats -->
-<div class="container-fluid">
-  <div class="row">
-
-      <!-- Player A -->
-      <div class="col-md-3 col-md-offset-2"> 
-        <h4>Secondary Stats Player A</h4>
-        <ul id="secondary-stats-player-a"></ul>
-      </div>
-      
-      <!-- Player B -->
-      <div class="col-md-3">
-        <h4>Secondary Stats Player B</h4>
-        <ul id="secondary-stats-player-b"></ul>
-      </div>
-      
-  </div>
-</div>
-
-<br><br>
-
-
-<!-- FAVOURITES PAGE --> 
-<h1>Favourites Page</h1>
-
-<!-- Favourites List -->
-<div class="container-fluid">
-  <div class="row">
-
-    <ul id="favourites"></ul>
-  
-  </div>
-</div>
-
-<br><br>
-
-
-<!-- RANKINGS PAGE --> 
-<h1>Rankings Page</h1>
-
-<!-- Ranking Type Buttons -->
-<div class="row">
     
-  <div class="col-md-3">
-    <button class="btn btn-warning" id="button-pts-g">PTS/G</button> 
-  </div>
-
-  <div class="col-md-3">
-    <button class="btn btn-warning" id="button-ast-g">AST/G</button> 
-  </div>
-
-  <div class="col-md-3">
-    <button class="btn btn-warning" id="button-reb-g">REB/G</button> 
-  </div>
-
-  <div class="col-md-3">
-    <button class="btn btn-warning" id="button-blk-g">BLK/G</button> 
-  </div>
-
-</div> 
-<br><br>
-
-<!-- Rangings Tables -->
-<div class="container-fluid">
-  
-  <!-- Table A: PTS/G -->
-  <section class="" id="section-table-a" >
-    <h4>Table A: PTS/G</h4>
-    <div class="row">
-      <table id="table-pts-g"></table>
+      <!-- Secondary Stats -->
+      <div class="row">
+        <!-- Player A -->
+        <div class="col-md-3 col-md-offset-2"> 
+          <h4>Secondary Stats Player A</h4>
+          <ul id="secondary-stats-player-a"></ul>
+        </div>
+          
+        <!-- Player B -->
+        <div class="col-md-3">
+          <h4>Secondary Stats Player B</h4>
+          <ul id="secondary-stats-player-b"></ul>
+        </div>    
+      </div>
+    
     </div>
   </section>
+  <br><br>
 
-  <!-- Table B: AST/G -->
-  <section class="hidden" id="section-table-b">
-    <h4>Table B: AST/G</h4>
-    <div class="row">
-      <table id="table-ast-g"></table>
+  <!-- FAVOURITES PAGE --> 
+  <section class="favourites-page">
+    <div class="container-fluid">
+      <h1>Favourites Page</h1>
+
+      <!-- Favourites List -->    
+      <div class="row">  
+        <ul id="favourites"></ul>
+      </div>
+
     </div>
   </section>
+  <br><br>
 
-  <!-- Table C: REB/G -->
-  <section class="hidden" id="section-table-c">
-    <h4>Table C: REB/G</h4>
-    <div class="row">
-      <table id="table-reb-g"></table>
+
+  <!-- RANKINGS PAGE --> 
+  <section class="rankings-page">
+    <div class="container-fluid">
+      <h1>Rankings Page</h1>
+
+      <!-- Ranking Type Buttons -->
+      <div class="row">
+          
+        <div class="col-md-3">
+          <button class="btn btn-warning" id="button-pts-g">PTS/G</button> 
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-warning" id="button-ast-g">AST/G</button> 
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-warning" id="button-reb-g">REB/G</button> 
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-warning" id="button-blk-g">BLK/G</button> 
+        </div>
+
+      </div> 
+      <br>
+
+      <!-- Rangings Tables -->
+      <div class="container-fluid">
+        <div class="row"> 
+        
+          <!-- Table A: PTS/G -->
+          <section class="" id="section-table-a" >
+            <div class="row">
+              <h4>Table A: PTS/G</h4>
+              <table id="table-pts-g"></table>
+            </div>
+          </section>
+
+          <!-- Table B: AST/G -->
+          <section class="hidden" id="section-table-b">
+            <div class="row">
+              <h4>Table B: AST/G</h4>
+              <table id="table-ast-g"></table>
+            </div>
+          </section>
+
+          <!-- Table C: REB/G -->
+          <section class="hidden" id="section-table-c">
+            <div class="row">
+              <h4>Table C: REB/G</h4>
+              <table id="table-reb-g"></table>
+            </div>
+          </section>
+
+          <!-- Table D: BLK/G -->
+          <section class="hidden" id="section-table-d">
+            <div class="row">
+              <h4>Table D: BLK/G</h4>
+              <table id="table-blk-g"></table>
+            </div>
+          </section>
+
+        </div>
+      </div>  
+
     </div>
   </section>
+  <br><br>
 
-  <!-- Table D: BLK/G -->
-  <section class="hidden" id="section-table-d">
-    <h4>Table D: BLK/G</h4>
-    <div class="row">
-      <table id="table-blk-g"></table>
-    </div>
-  </section>
-
-</div>
-<br><br>
-
-<!-- App Entry file -->
-<script src="bundle.js" charset="utf-8"></script>
+  <!-- App Entry file -->
+  <script src="bundle.js" charset="utf-8"></script>
 
 </body>
 </html>
