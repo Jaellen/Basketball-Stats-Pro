@@ -24,7 +24,7 @@
           <ul class="nav nav-pills">
             <li role="presentation"><a href="#" id="nav-stats"><h3>Stats</h3></a></li>
             <li role="presentation"><a href="#" id="nav-compare"><h3>Compare</h3></a></li>
-            <li role="presentation"><a href="#" id="nav-favorites"><h3>Favorites</h3></a></li>
+            <li role="presentation"><a href="#" id="nav-favourites"><h3>Favourites</h3></a></li>
             <li role="presentation"><a href="#" id="nav-rankings"><h3>Rankings</h3></a></li>
           </ul>
         </div>
@@ -34,7 +34,7 @@
   </section>
 
   <!-- STATS PAGE -->
-  <section class="stats-page">
+  <section id="stats-page">
     <div class="container-fluid">
       <h1>Main Page</h1>
 
@@ -86,10 +86,10 @@
     
     </div>
   </section>
-  <br><br>
+  
 
   <!-- COMPARE PAGE --> 
-  <section class="compare-page">
+  <section id="compare-page" class="hidden">
     <div class="container-fluid">
       <h1>Compare Page</h1>
 
@@ -137,10 +137,10 @@
     
     </div>
   </section>
-  <br><br>
+  
 
   <!-- FAVOURITES PAGE --> 
-  <section class="favourites-page">
+  <section id="favourites-page" class="hidden">
     <div class="container-fluid">
       <h1>Favourites Page</h1>
 
@@ -151,11 +151,10 @@
 
     </div>
   </section>
-  <br><br>
-
+  
 
   <!-- RANKINGS PAGE --> 
-  <section class="rankings-page">
+  <section id="rankings-page" class="hidden">
     <div class="container-fluid">
       <h1>Rankings Page</h1>
 
@@ -186,7 +185,7 @@
         <div class="row"> 
         
           <!-- Table A: PTS/G -->
-          <section class="" id="section-table-a" >
+          <section id="section-table-a" >
             <div class="row">
               <h4>Table A: PTS/G</h4>
               <table id="table-pts-g"></table>
@@ -222,7 +221,7 @@
 
     </div>
   </section>
-  <br><br>
+  
 
   <!-- App Entry file -->
   <script src="bundle.js" charset="utf-8"></script>

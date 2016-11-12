@@ -83,6 +83,27 @@ let getAllStatsData = Rx.Observable.create((observer) => {
 
 /* -------------------------- Program Logic -------------------------------- */
 
+//Navbar 
+let setNavBar = function() {
+
+  //set navbar routing
+  document.getElementById('nav-stats').addEventListener('click', function() {
+    activateNav("a");
+  }, false);
+
+  document.getElementById('nav-compare').addEventListener('click', function() {
+    activateNav("b");
+  }, false);
+  
+  document.getElementById('nav-favourites').addEventListener('click', function() {
+    activateNav("c");
+  }, false); 
+
+  document.getElementById('nav-rankings').addEventListener('click', function() {
+    activateNav("d");
+  }, false);
+};
+
 //Search recommendations and Select Player Functionality
 let setAllStatsData = function() {
   //set all_stats_data
@@ -571,7 +592,7 @@ let setChangeSeason = function() {
 
     //reset main page stats and ranking tables 
     setAllStatsData();
-    
+
     //case: if stats already being displayed, reset those
     if (current_player_clicked !== undefined) {
       updatePlayerStats();
@@ -602,6 +623,7 @@ let setChangeSeason = function() {
 };
 
 //Start the Application
+setNavBar();
 setAllStatsData();
 setComparePlayer();
 setSavePlayerList();
@@ -673,6 +695,42 @@ function removeClass(el, className) {
 function hasClass(el, className) {
     
     return el.classList ? el.classList.contains(className) : new RegExp('\\b'+ className+'\\b').test(el.className);
+}
+
+//navbar utilities 
+function activateNav(option) {
+  let navA = document.getElementById("stats-page");
+  let navB = document.getElementById("compare-page");
+  let navC = document.getElementById("favourites-page");
+  let navD = document.getElementById("rankings-page");
+
+  if (option == "a") {
+    removeClass(navA, "hidden");
+    addClass(navB, "hidden");
+    addClass(navC, "hidden");
+    addClass(navD, "hidden");
+  }
+
+  if (option == "b") {
+    addClass(navA, "hidden");
+    removeClass(navB, "hidden");
+    addClass(navC, "hidden");
+    addClass(navD, "hidden");
+  } 
+  
+  if (option == "c") {
+    addClass(navA, "hidden");
+    addClass(navB, "hidden");
+    removeClass(navC, "hidden");
+    addClass(navD, "hidden");
+  }
+
+  if (option == "d") {
+    addClass(navA, "hidden");
+    addClass(navB, "hidden");
+    addClass(navC, "hidden");
+    removeClass(navD, "hidden");
+  }
 }
 
 //'stats' and 'compare' utilities

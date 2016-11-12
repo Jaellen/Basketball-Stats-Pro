@@ -140,6 +140,27 @@
 
 	/* -------------------------- Program Logic -------------------------------- */
 
+	//Navbar 
+	var setNavBar = function setNavBar() {
+
+	  //set navbar routing
+	  document.getElementById('nav-stats').addEventListener('click', function () {
+	    activateNav("a");
+	  }, false);
+
+	  document.getElementById('nav-compare').addEventListener('click', function () {
+	    activateNav("b");
+	  }, false);
+
+	  document.getElementById('nav-favourites').addEventListener('click', function () {
+	    activateNav("c");
+	  }, false);
+
+	  document.getElementById('nav-rankings').addEventListener('click', function () {
+	    activateNav("d");
+	  }, false);
+	};
+
 	//Search recommendations and Select Player Functionality
 	var setAllStatsData = function setAllStatsData() {
 	  //set all_stats_data
@@ -659,6 +680,7 @@
 	};
 
 	//Start the Application
+	setNavBar();
 	setAllStatsData();
 	setComparePlayer();
 	setSavePlayerList();
@@ -727,6 +749,42 @@
 	function hasClass(el, className) {
 
 	  return el.classList ? el.classList.contains(className) : new RegExp('\\b' + className + '\\b').test(el.className);
+	}
+
+	//navbar utilities 
+	function activateNav(option) {
+	  var navA = document.getElementById("stats-page");
+	  var navB = document.getElementById("compare-page");
+	  var navC = document.getElementById("favourites-page");
+	  var navD = document.getElementById("rankings-page");
+
+	  if (option == "a") {
+	    removeClass(navA, "hidden");
+	    addClass(navB, "hidden");
+	    addClass(navC, "hidden");
+	    addClass(navD, "hidden");
+	  }
+
+	  if (option == "b") {
+	    addClass(navA, "hidden");
+	    removeClass(navB, "hidden");
+	    addClass(navC, "hidden");
+	    addClass(navD, "hidden");
+	  }
+
+	  if (option == "c") {
+	    addClass(navA, "hidden");
+	    addClass(navB, "hidden");
+	    removeClass(navC, "hidden");
+	    addClass(navD, "hidden");
+	  }
+
+	  if (option == "d") {
+	    addClass(navA, "hidden");
+	    addClass(navB, "hidden");
+	    addClass(navC, "hidden");
+	    removeClass(navD, "hidden");
+	  }
 	}
 
 	//'stats' and 'compare' utilities
