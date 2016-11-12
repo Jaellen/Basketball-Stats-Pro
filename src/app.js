@@ -83,22 +83,26 @@ let getAllStatsData = Rx.Observable.create((observer) => {
 
 /* -------------------------- Program Logic -------------------------------- */
 
-//Navbar 
+//Navbar functionality
 let setNavBar = function() {
 
-  //set navbar routing
+  //set navbar
+  //stats
   document.getElementById('nav-stats').addEventListener('click', function() {
     activateNav("a");
   }, false);
 
+  //compare
   document.getElementById('nav-compare').addEventListener('click', function() {
     activateNav("b");
   }, false);
   
+  //favourites
   document.getElementById('nav-favourites').addEventListener('click', function() {
     activateNav("c");
   }, false); 
 
+  //rankings 
   document.getElementById('nav-rankings').addEventListener('click', function() {
     activateNav("d");
   }, false);
@@ -230,23 +234,27 @@ let updatePlayerStats = function() {
 
   //set player_team_name, player_team_list, player_team_positions
   player_team_name = all_stats_data
-                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
+                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
                       .filter(function(entry) { 
                         return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked })
                       .map(function(entry) { 
                         return entry.team.City + " " + entry.team.Name });
 
   player_team_list = all_stats_data
-                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
+                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
                       .filter(function(entry) { 
                         return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
+                      .filter(function(entry) {
+                        return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== current_player_clicked }) //remove repeat
                       .map(function(entry) {
                         return entry.player.FirstName + " " + entry.player.LastName });
 
   player_team_positions = all_stats_data
-                    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
+                    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
                     .filter(function(entry) { 
                       return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
+                    .filter(function(entry) {
+                      return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== current_player_clicked }) //remove repeat
                     .map(function(entry) {
                       return entry.player.Position });
 
