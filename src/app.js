@@ -114,9 +114,7 @@ let setAllStatsData = function() {
   getAllStatsData
     .take(1)
     .subscribe({
-    onNext: (data) => {
-      all_stats_data = data.cumulativeplayerstats.playerstatsentry;
-    },
+    onNext: (data) => { all_stats_data = data.cumulativeplayerstats.playerstatsentry; },
     onError: (error) => { console.error("Error in XMLHttpRequest") },
     onCompleted: () => {
       getSearchRecommendations();
@@ -130,80 +128,77 @@ let setAllProfileData = function() {
   getAllProfileData
     .take(1)
     .subscribe({
-    onNext: (data) => {
-      all_profile_data = data.activeplayers.playerentry;
-    },
+    onNext: (data) => { all_profile_data = data.activeplayers.playerentry; },
     onError: (error) => { console.error("Error in XMLHttpRequest") },
-    onCompleted: () => {
-    },
+    onCompleted: () => {},
   });  
 };
 
 let getSearchRecommendations = function() {
   
-    //set the search array
-    let input = document.getElementById("searchBox")
-    let ul = document.getElementById("searchResults")
-    let sortedResults, prefix, inputTerms, termsArray, terms, results;
+  //set the search array
+  let input = document.getElementById("searchBox")
+  let ul = document.getElementById("searchResults")
+  let sortedResults, prefix, inputTerms, termsArray, terms, results;
 
-    let search = function() {
-      search_array = createFirstandLastNameArray(all_stats_data);    
-      inputTerms = input.value.toLowerCase();
-      results = [];
-      termsArray = inputTerms.split(' ');
-      prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
-      terms = termsArray[termsArray.length -1].toLowerCase();
+  let search = () => {
+    search_array = createFirstandLastNameArray(all_stats_data);    
+    inputTerms = input.value.toLowerCase();
+    results = [];
+    termsArray = inputTerms.split(' ');
+    prefix = termsArray.length === 1 ? '' : termsArray.slice(0, -1).join(' ') + ' ';
+    terms = termsArray[termsArray.length -1].toLowerCase();
 
-      for (var i = 0; i < search_array.length; i++) {
-        var a = search_array[i].toLowerCase(),
-            t = a.indexOf(terms);
-        if (t > -1) {
-          results.push(a);
-        }
+    for (var i = 0; i < search_array.length; i++) {
+      var a = search_array[i].toLowerCase(),
+      t = a.indexOf(terms);
+      if (t > -1) {
+        results.push(a);
       }
+    }
          
-      let sortResults = function(a,b) {
-        if (a.indexOf(terms) < b.indexOf(terms)) return -1;
-        if (a.indexOf(terms) > b.indexOf(terms)) return 1;
-        return 0;
-      };
+  let sortResults = (a,b) => {
+    if (a.indexOf(terms) < b.indexOf(terms)) return -1;
+    if (a.indexOf(terms) > b.indexOf(terms)) return 1;
+    return 0;
+  };
 
-      let evaluateSearchResults = function() {
-        if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
-          sortedResults = results.sort(sortResults);
-          displaySearchResults();
-        }
-        else if (inputTerms.length > 0 && terms.length !== 0) {
-          ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
-        }
-        else if (inputTerms.length !== 0 && terms.length === 0) {
-          return;
-        }
-        else {
-          clearResults();
-        }
-      };
-      evaluateSearchResults();
-    };
-
-    let clearResults = function() {
-      ul.className = "term-list hidden";
-      ul.innerHTML = '';
-    };
-
-    let displaySearchResults = function () {
+  let evaluateSearchResults = () => {
+    if (results.length > 0 && inputTerms.length > 0 && terms.length !== 0) {
+      sortedResults = results.sort(sortResults);
+      displaySearchResults();
+    }
+    else if (inputTerms.length > 0 && terms.length !== 0) {
+      ul.innerHTML = '<li><strong>' + inputTerms + ' is not a current active player <br></strong></li>';
+    }
+    else if (inputTerms.length !== 0 && terms.length === 0) {
+      return;
+    }
+    else {
       clearResults();
+    }
+    };
+    evaluateSearchResults();
+  };
 
-      //Note: A maximum of 5 recommendations set here 
-      for (let i = 0; i < sortedResults.length && i < 5; i++) {  
-        let li = document.createElement("li");
-        let a = document.createElement("a");
+  let clearResults = () => {
+    ul.className = "term-list hidden";
+    ul.innerHTML = '';
+  };
 
-        //set click event listener that sets curent_player_clicked...
-        a.setAttribute('id', i.toString());
-        a.addEventListener("click", function(event) {     
+  let displaySearchResults = () => {
+    clearResults();
+
+    //Note: A maximum of 5 recommendations set here 
+    for (let i = 0; i < sortedResults.length && i < 5; i++) {  
+      let li = document.createElement("li");
+      let a = document.createElement("a");
+
+      //set click event listener that sets curent_player_clicked...
+      a.setAttribute('id', i.toString());
+      a.addEventListener("click", function(event) {     
           
-          current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];  
+        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];  
           
           //clear the search field & recommendations and update the stats with that player 
           document.getElementById('searchBox').value = '';
@@ -234,28 +229,28 @@ let updatePlayerStats = function() {
 
   //set player_team_name, player_team_list, player_team_positions
   player_team_name = all_stats_data
-                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-                      .filter(function(entry) { 
+                      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+                      .filter((entry) => { 
                         return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked })
-                      .map(function(entry) { 
+                      .map((entry) => { 
                         return entry.team.City + " " + entry.team.Name });
 
   player_team_list = all_stats_data
-                      .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-                      .filter(function(entry) { 
+                      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+                      .filter((entry) => { 
                         return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
-                      .filter(function(entry) {
+                      .filter((entry) => {
                         return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== current_player_clicked }) //remove repeat
-                      .map(function(entry) {
+                      .map((entry) => {
                         return entry.player.FirstName + " " + entry.player.LastName });
 
   player_team_positions = all_stats_data
-                    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-                    .filter(function(entry) { 
+                    .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+                    .filter((entry) => { 
                       return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
-                    .filter(function(entry) {
+                    .filter((entry) => {
                       return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== current_player_clicked }) //remove repeat
-                    .map(function(entry) {
+                    .map((entry) => {
                       return entry.player.Position });
 
   //call display functions for player's profile, main stats, secondary stats, and team 
@@ -308,7 +303,7 @@ let displayPlayerTeamList = function() {
   document.getElementById("team-list").innerHTML = '';
   
   //display player team list 
-  player_team_list.forEach(function(value, i) {
+  player_team_list.forEach((value, i) => {
     document.getElementById("team-list")
       .appendChild(createElement( "li", createElement("a", player_team_list[i], ", ", player_team_positions[i])  ))
       .setAttribute('id', player_team_list[i]);
@@ -462,7 +457,7 @@ let displayCompareSecondaryStats = function() {
 let setSavePlayerList = function() {
   
   //set save player button (main page)
-  let setAddPlayer = function() {
+  let setAddPlayer = () => {
     
     //case: if no player is clicked as of yet
     if (current_player_clicked === undefined) {
@@ -653,7 +648,7 @@ function getRequest(url) {
     //Authorization details go here 
     req.setRequestHeader("Authorization", "Basic " + btoa("jaellen:adanaC4032"));
 
-    req.onload = function() {
+    req.onload = () => {
       //Check the status
       if (req.status === 200) {
         resolve(req.response);
@@ -663,7 +658,7 @@ function getRequest(url) {
       }
     };
     //Handle network errors
-    req.onerror = function() {
+    req.onerror = () => {
       reject(Error("Network Error"))
     };
     //Make the request
@@ -744,90 +739,89 @@ function activateNav(option) {
 //'stats' and 'compare' utilities
 function createFirstandLastNameArray(data) { 
   return data
-    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
-    .map(function(entry) { 
-      return entry.player.FirstName + " " + entry.player.LastName; 
+    .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+    .map((entry) => { return entry.player.FirstName + " " + entry.player.LastName; 
     });
 }
 
 function getPlayerProfile(data, player_clicked) {
   return data
-    .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-    .map(function(entry) { 
+    .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+    .map((entry) => { 
       return  { 
-                name: (entry.player.FirstName + " " + entry.player.LastName),
-                team: (entry.team.City + " " + entry.team.Name),
-                jersey: ("Jersey #: " + entry.player.JerseyNumber),
-                age: ("age: " + entry.player.Age),
-                height: (entry.player.Height + " ft\'in\"" ),
-                weight: (entry.player.Weight + " lbs") 
-              } 
+        name: (entry.player.FirstName + " " + entry.player.LastName),
+        team: (entry.team.City + " " + entry.team.Name),
+        jersey: ("Jersey #: " + entry.player.JerseyNumber),
+        age: ("age: " + entry.player.Age),
+        height: (entry.player.Height + " ft\'in\"" ),
+        weight: (entry.player.Weight + " lbs") 
+      } 
     });
 }
 
 function getSavePlayerProfile(data, player_clicked) {
   return data
-    .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-    .map(function(entry) { 
+    .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+    .map((entry) => { 
       return  { 
-                name: (entry.player.FirstName + " " + entry.player.LastName),
-                team: (entry.team.City + " " + entry.team.Name),
-                jersey: ("Jersey #: " + entry.player.JerseyNumber),
-                age: ("age: " + entry.player.Age),
-                height: (entry.player.Height + " ft\'in\"" ),
-                weight: (entry.player.Weight + " lbs") 
-              } 
+        name: (entry.player.FirstName + " " + entry.player.LastName),
+        team: (entry.team.City + " " + entry.team.Name),
+        jersey: ("Jersey #: " + entry.player.JerseyNumber),
+        age: ("age: " + entry.player.Age),
+        height: (entry.player.Height + " ft\'in\"" ),
+        weight: (entry.player.Weight + " lbs") 
+      } 
     });
 }
 
 function getPlayerMainStats(data, player_clicked) {
   return data
-    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
-    .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-    .map(function(entry) { 
+    .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+    .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+    .map((entry) => { 
       return  { 
-                PtsPerGame: ("PTS/G: " + entry.stats.PtsPerGame["#text"]),
-                AstPerGame: ("AST/G: " + entry.stats.AstPerGame["#text"]),
-                RebPerGame: ("REB/G: " + entry.stats.RebPerGame["#text"]),
-                BlkPerGame: ("BLK/G: " + entry.stats.BlkPerGame["#text"]),
-                FoulPersPerGame: ("PF/G: " + entry.stats.FoulPersPerGame["#text"]),
-                FgPct: ("FG%: " + entry.stats.FgPct["#text"]),
-                FtPct: ("FT%: " + entry.stats.FtPct["#text"]),
-                Fg2PtPct: ("2P%: " + entry.stats.Fg2PtPct["#text"]),
-                Fg3PtPct: ("3P%: " + entry.stats.Fg3PtPct["#text"]),
-                Fg2PtMadePerGame: ("2PM/G: " + entry.stats.Fg2PtMadePerGame["#text"]),
-                Fg3PtMadePerGame: ("3PM/G: " + entry.stats.Fg3PtMadePerGame["#text"]),
-                PlusMinus: ("+/-: " + entry.stats.PlusMinus["#text"]),
-                MinSecondsPerGame: ("MPG: " + entry.stats.MinSecondsPerGame["#text"])
-              } 
+        PtsPerGame: ("PTS/G: " + entry.stats.PtsPerGame["#text"]),
+        AstPerGame: ("AST/G: " + entry.stats.AstPerGame["#text"]),
+        RebPerGame: ("REB/G: " + entry.stats.RebPerGame["#text"]),
+        BlkPerGame: ("BLK/G: " + entry.stats.BlkPerGame["#text"]),
+        FoulPersPerGame: ("PF/G: " + entry.stats.FoulPersPerGame["#text"]),
+        FgPct: ("FG%: " + entry.stats.FgPct["#text"]),
+        FtPct: ("FT%: " + entry.stats.FtPct["#text"]),
+        Fg2PtPct: ("2P%: " + entry.stats.Fg2PtPct["#text"]),
+        Fg3PtPct: ("3P%: " + entry.stats.Fg3PtPct["#text"]),
+        Fg2PtMadePerGame: ("2PM/G: " + entry.stats.Fg2PtMadePerGame["#text"]),
+        Fg3PtMadePerGame: ("3PM/G: " + entry.stats.Fg3PtMadePerGame["#text"]),
+        PlusMinus: ("+/-: " + entry.stats.PlusMinus["#text"]),
+        MinSecondsPerGame: ("MPG: " + entry.stats.MinSecondsPerGame["#text"])
+      } 
     });
 }
  
 function getPlayerSecondaryStats(data, player_clicked) {
   return data
-    .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
-    .filter(function(entry) { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-    .map(function(entry) { 
+    .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+    .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+    .map((entry) => { 
       return  { 
         GamesPlayed: ("GP: " + entry.stats.GamesPlayed["#text"]),
-          MinSeconds: ("MIN: " + entry.stats.MinSeconds["#text"]),
-          Pts: ("PTS: " + entry.stats.Pts["#text"]),
-          FgAtt: ("FGA: " + entry.stats.FgAtt["#text"]),
-          FgMade: ("FGM: " + entry.stats.FgMade["#text"]),
-          Fg2PtMade: ("2PM: " + entry.stats.Fg2PtMade["#text"]),
-          Fg2PtAtt: ("2PA: " + entry.stats.Fg2PtAtt["#text"]),
-          Fg3PtMade: ("3PM: " + entry.stats.Fg3PtMade["#text"]),
-          Fg3PtAtt: ("3PA: " + entry.stats.Fg3PtAtt["#text"]),
-          FtAtt: ("FTA: " + entry.stats.FtAtt["#text"]),
-          FtMade: ("FTM: " + entry.stats.FtMade["#text"]),
-          OffReb: ("OREB: " + entry.stats.OffReb["#text"]),
-          DefReb: ("DREB: " + entry.stats.DefReb["#text"]),
-          Reb: ("REB: " + entry.stats.Reb["#text"]),
-          Ast: ("AST: " + entry.stats.Ast["#text"]),
-          Blk: ("BLK: " + entry.stats.Blk["#text"]),
-          Stl: ("STL: " + entry.stats.Stl["#text"]),
-          Tov: ("TOV: " + entry.stats.Tov["#text"]),
-          FoulPers: ("PF: " + entry.stats.FoulPers["#text"])             
+        MinSeconds: ("MIN: " + entry.stats.MinSeconds["#text"]),
+        Pts: ("PTS: " + entry.stats.Pts["#text"]),
+        FgAtt: ("FGA: " + entry.stats.FgAtt["#text"]),
+        FgMade: ("FGM: " + entry.stats.FgMade["#text"]),
+        Fg2PtMade: ("2PM: " + entry.stats.Fg2PtMade["#text"]),
+        Fg2PtAtt: ("2PA: " + entry.stats.Fg2PtAtt["#text"]),
+        Fg3PtMade: ("3PM: " + entry.stats.Fg3PtMade["#text"]),
+        Fg3PtAtt: ("3PA: " + entry.stats.Fg3PtAtt["#text"]),
+        FtAtt: ("FTA: " + entry.stats.FtAtt["#text"]),
+        FtMade: ("FTM: " + entry.stats.FtMade["#text"]),
+        OffReb: ("OREB: " + entry.stats.OffReb["#text"]),
+        DefReb: ("DREB: " + entry.stats.DefReb["#text"]),
+        Reb: ("REB: " + entry.stats.Reb["#text"]),
+        Ast: ("AST: " + entry.stats.Ast["#text"]),
+        Blk: ("BLK: " + entry.stats.Blk["#text"]),
+        Stl: ("STL: " + entry.stats.Stl["#text"]),
+        Tov: ("TOV: " + entry.stats.Tov["#text"]),
+        FoulPers: ("PF: " + entry.stats.FoulPers["#text"])             
       } 
     });
 }
@@ -835,11 +829,8 @@ function getPlayerSecondaryStats(data, player_clicked) {
 //'favourites' utilities
 function isSavePlayerRepeated() {
   let test_array = save_player_list
-                     .map(function(element) {
-                       return element.name.toLowerCase();
-                     })
-                     .filter(function(element){
-                       return element == current_player_clicked.toLowerCase();
+                     .map((element) => { return element.name.toLowerCase(); })
+                     .filter((element) => { return element == current_player_clicked.toLowerCase();
                      });
 
   if (test_array.length > 0) { return true }
@@ -856,7 +847,7 @@ function createRankingsTable(table, data, option) {
     table = getAllRankingsDataTableA(data);
 
     //sort the data  
-    table.sort(function (a, b) {
+    table.sort((a, b) => {
       if ( Number(a.PtsPerGame) > Number(b.PtsPerGame) ) {
         return -1;
       }
@@ -930,8 +921,8 @@ function createRankingsTable(table, data, option) {
 function getAllRankingsDataTableA(data) {
   
   return data
-          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
-          .map(function(entry)  { 
+          .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+          .map((entry) =>  { 
             return  { 
               Player: (entry.player.FirstName + " " + entry.player.LastName),
               PtsPerGame: (entry.stats.PtsPerGame["#text"]),
@@ -961,8 +952,8 @@ function getAllRankingsDataTableA(data) {
 function getAllRankingsDataTableB(data) {
   
   return data
-          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
-          .map(function(entry) { 
+          .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+          .map((entry) => { 
             return  { 
               Player: (entry.player.FirstName + " " + entry.player.LastName),
               AstPerGame: (entry.stats.AstPerGame["#text"]),
@@ -992,8 +983,8 @@ function getAllRankingsDataTableB(data) {
 function getAllRankingsDataTableC(data) {
   
   return data
-          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
-          .map(function(entry) { 
+          .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+          .map((entry) => { 
             return  { 
               Player: (entry.player.FirstName + " " + entry.player.LastName),
               RebPerGame: (entry.stats.RebPerGame["#text"]),
@@ -1023,8 +1014,8 @@ function getAllRankingsDataTableC(data) {
 function getAllRankingsDataTableD(data) {
   
   return data
-          .filter(function(entry) { return (entry.stats.PtsPerGame !== undefined) }) //This is to filter out undefined stats in the data set
-          .map(function(entry) { 
+          .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+          .map((entry) => { 
             return  { 
               Player: (entry.player.FirstName + " " + entry.player.LastName),
               BlkPerGame: (entry.stats.BlkPerGame["#text"]),
@@ -1047,8 +1038,8 @@ function getAllRankingsDataTableD(data) {
               Stl: (entry.stats.Stl["#text"]),
               Tov: (entry.stats.Tov["#text"]),
               FoulPers: (entry.stats.FoulPers["#text"])             
-            } 
-          });
+          } 
+        });
 }
 
 function displayTable(table, tableId, rowId) {
@@ -1099,7 +1090,7 @@ function displayTable(table, tableId, rowId) {
       createElement("th", "PF")
     ));
 
-  table.forEach( function(player, i) {   
+  table.forEach((player, i) => {   
     
     //for each player, create a row and add it to the appropriate table
     let row = document.getElementById(tableId).appendChild(createElement("tr"));

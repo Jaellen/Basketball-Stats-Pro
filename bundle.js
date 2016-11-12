@@ -801,7 +801,7 @@
 	function createFirstandLastNameArray(data) {
 	  return data.filter(function (entry) {
 	    return entry.stats.PtsPerGame !== undefined;
-	  }) //This is to filter out undefined stats in the data set
+	  }) //filter out undefined stats in the data set
 	  .map(function (entry) {
 	    return entry.player.FirstName + " " + entry.player.LastName;
 	  });
@@ -840,7 +840,7 @@
 	function getPlayerMainStats(data, player_clicked) {
 	  return data.filter(function (entry) {
 	    return entry.stats.PtsPerGame !== undefined;
-	  }) //This is to filter out undefined stats in the data set
+	  }) //filter out undefined stats in the data set
 	  .filter(function (entry) {
 	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
 	  }).map(function (entry) {
@@ -865,7 +865,7 @@
 	function getPlayerSecondaryStats(data, player_clicked) {
 	  return data.filter(function (entry) {
 	    return entry.stats.PtsPerGame !== undefined;
-	  }) //This is to filter out undefined stats in the data set
+	  }) //filter out undefined stats in the data set
 	  .filter(function (entry) {
 	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
 	  }).map(function (entry) {
@@ -993,7 +993,7 @@
 
 	  return data.filter(function (entry) {
 	    return entry.stats.PtsPerGame !== undefined;
-	  }) //This is to filter out undefined stats in the data set
+	  }) //filter out undefined stats in the data set
 	  .map(function (entry) {
 	    return {
 	      Player: entry.player.FirstName + " " + entry.player.LastName,
@@ -1025,7 +1025,7 @@
 
 	  return data.filter(function (entry) {
 	    return entry.stats.PtsPerGame !== undefined;
-	  }) //This is to filter out undefined stats in the data set
+	  }) //filter out undefined stats in the data set
 	  .map(function (entry) {
 	    return {
 	      Player: entry.player.FirstName + " " + entry.player.LastName,
@@ -1057,7 +1057,7 @@
 
 	  return data.filter(function (entry) {
 	    return entry.stats.PtsPerGame !== undefined;
-	  }) //This is to filter out undefined stats in the data set
+	  }) //filter out undefined stats in the data set
 	  .map(function (entry) {
 	    return {
 	      Player: entry.player.FirstName + " " + entry.player.LastName,
@@ -1089,7 +1089,7 @@
 
 	  return data.filter(function (entry) {
 	    return entry.stats.PtsPerGame !== undefined;
-	  }) //This is to filter out undefined stats in the data set
+	  }) //filter out undefined stats in the data set
 	  .map(function (entry) {
 	    return {
 	      Player: entry.player.FirstName + " " + entry.player.LastName,
