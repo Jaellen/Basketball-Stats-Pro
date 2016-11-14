@@ -144,22 +144,18 @@
 	var setNavBar = function setNavBar() {
 
 	  //set navbar
-	  //stats
 	  document.getElementById('nav-stats').addEventListener('click', function () {
 	    activateNav("a");
 	  }, false);
 
-	  //compare
 	  document.getElementById('nav-compare').addEventListener('click', function () {
 	    activateNav("b");
 	  }, false);
 
-	  //favourites
 	  document.getElementById('nav-favourites').addEventListener('click', function () {
 	    activateNav("c");
 	  }, false);
 
-	  //rankings 
 	  document.getElementById('nav-rankings').addEventListener('click', function () {
 	    activateNav("d");
 	  }, false);
@@ -198,8 +194,8 @@
 	var getSearchRecommendations = function getSearchRecommendations() {
 
 	  //set the search array
-	  var input = document.getElementById("searchBox");
-	  var ul = document.getElementById("searchResults");
+	  var input = document.getElementById('searchBox');
+	  var ul = document.getElementById('searchResults');
 	  var sortedResults = void 0,
 	      prefix = void 0,
 	      inputTerms = void 0,
@@ -245,7 +241,7 @@
 	  };
 
 	  var clearResults = function clearResults() {
-	    ul.className = "term-list hidden";
+	    ul.className = 'term-list hidden';
 	    ul.innerHTML = '';
 	  };
 
@@ -254,12 +250,12 @@
 
 	    //Note: A maximum of 5 recommendations set here 
 	    for (var i = 0; i < sortedResults.length && i < 5; i++) {
-	      var li = document.createElement("li");
-	      var a = document.createElement("a");
+	      var li = document.createElement('li');
+	      var a = document.createElement('a');
 
 	      //set click event listener that sets curent_player_clicked...
 	      a.setAttribute('id', i.toString());
-	      a.addEventListener("click", function (event) {
+	      a.addEventListener('click', function (event) {
 
 	        current_player_clicked = sortedResults[event.currentTarget.getAttribute('id')];
 
@@ -274,12 +270,12 @@
 	      ul.appendChild(a);
 	      a.appendChild(li);
 	    }
-	    if (ul.className !== "term-list") {
-	      ul.className = "term-list";
+	    if (ul.className !== 'term-list') {
+	      ul.className = 'term-list';
 	    }
 	  };
 
-	  input.addEventListener("keyup", search, false);
+	  input.addEventListener('keyup', search, false);
 	  setAllProfileData();
 	};
 
@@ -291,40 +287,10 @@
 	  player_secondary_stats = getPlayerSecondaryStats(all_stats_data, current_player_clicked)[0];
 
 	  //set player_team_name, player_team_list, player_team_positions
-	  player_team_name = all_stats_data.filter(function (entry) {
-	    return entry.stats.PtsPerGame !== undefined;
-	  }) //filter out undefined stats in the data set
-	  .filter(function (entry) {
-	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === current_player_clicked;
-	  }).map(function (entry) {
-	    return entry.team.City + " " + entry.team.Name;
-	  });
+	  player_team_name = getTeamName(all_stats_data, current_player_clicked)[0];
+	  player_team_list = getTeamList(all_stats_data, current_player_clicked);
+	  player_team_positions = getTeamPositions(all_stats_data, current_player_clicked);
 
-	  player_team_list = all_stats_data.filter(function (entry) {
-	    return entry.stats.PtsPerGame !== undefined;
-	  }) //filter out undefined stats in the data set
-	  .filter(function (entry) {
-	    return entry.team.City + " " + entry.team.Name === player_team_name.toString();
-	  }).filter(function (entry) {
-	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== current_player_clicked;
-	  }) //remove repeat
-	  .map(function (entry) {
-	    return entry.player.FirstName + " " + entry.player.LastName;
-	  });
-
-	  player_team_positions = all_stats_data.filter(function (entry) {
-	    return entry.stats.PtsPerGame !== undefined;
-	  }) //filter out undefined stats in the data set
-	  .filter(function (entry) {
-	    return entry.team.City + " " + entry.team.Name === player_team_name.toString();
-	  }).filter(function (entry) {
-	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== current_player_clicked;
-	  }) //remove repeat
-	  .map(function (entry) {
-	    return entry.player.Position;
-	  });
-
-	  //call display functions for player's profile, main stats, secondary stats, and team 
 	  displayPlayerProfile();
 	  displayPlayerMainStats();
 	  displayPlayerSecondaryStats();
@@ -335,50 +301,50 @@
 	var displayPlayerProfile = function displayPlayerProfile() {
 
 	  //clear any previous results and display player profile
-	  document.getElementById("profile").innerHTML = '';
+	  document.getElementById('profile').innerHTML = '';
 
 	  for (var prop in player_profile) {
-	    document.getElementById("profile").appendChild(createElement("li", player_profile[prop]));
+	    document.getElementById('profile').appendChild(createElement('li', player_profile[prop]));
 	  }
 	};
 
 	var displayPlayerMainStats = function displayPlayerMainStats() {
 
 	  //clear any previous results and display player's main stats
-	  document.getElementById("stats-main").innerHTML = '';
+	  document.getElementById('stats-main').innerHTML = '';
 
 	  for (var stat in player_main_stats) {
-	    document.getElementById("stats-main").appendChild(createElement("li", player_main_stats[stat]));
+	    document.getElementById('stats-main').appendChild(createElement('li', player_main_stats[stat]));
 	  }
 	};
 
 	var displayPlayerSecondaryStats = function displayPlayerSecondaryStats() {
 
 	  //clear any previous results and display player's secondary stats 
-	  document.getElementById("stats-secondary").innerHTML = '';
+	  document.getElementById('stats-secondary').innerHTML = '';
 
 	  for (var stat in player_secondary_stats) {
-	    document.getElementById("stats-secondary").appendChild(createElement("li", player_secondary_stats[stat]));
+	    document.getElementById('stats-secondary').appendChild(createElement('li', player_secondary_stats[stat]));
 	  }
 	};
 
 	var displayPlayerTeamName = function displayPlayerTeamName() {
 
 	  //clear any previous results and display player team name
-	  document.getElementById("team-name").innerHTML = '';
-	  document.getElementById("team-name").appendChild(createElement("h4", player_team_name.toString()));
+	  document.getElementById('team-name').innerHTML = '';
+	  document.getElementById('team-name').appendChild(createElement('h4', player_team_name.toString()));
 	};
 
 	var displayPlayerTeamList = function displayPlayerTeamList() {
 	  //clear any previous results 
-	  document.getElementById("team-list").innerHTML = '';
+	  document.getElementById('team-list').innerHTML = '';
 
 	  //display player team list 
 	  player_team_list.forEach(function (value, i) {
-	    document.getElementById("team-list").appendChild(createElement("li", createElement("a", player_team_list[i], ", ", player_team_positions[i]))).setAttribute('id', player_team_list[i]);
+	    document.getElementById('team-list').appendChild(createElement('li', createElement('a', player_team_list[i], ", ", player_team_positions[i]))).setAttribute('id', player_team_list[i]);
 
 	    //add a click event listener  
-	    document.getElementById(player_team_list[i]).addEventListener("click", function (event) {
+	    document.getElementById(player_team_list[i]).addEventListener('click', function (event) {
 	      current_player_clicked = event.currentTarget.getAttribute('id').toLowerCase();
 	      //display that player's data
 	      updatePlayerStats();
@@ -397,13 +363,13 @@
 	    }
 
 	    //case: if player clicked is already in compare slot a 
-	    if (current_player_clicked == compare_player_a) {
+	    if (current_player_clicked === compare_player_a) {
 	      alert("This player is already in compare slot a");
 	      return;
 	    }
 
 	    //case: if player clicked is already in compare slot b 
-	    if (current_player_clicked == compare_player_b) {
+	    if (current_player_clicked === compare_player_b) {
 	      alert("This player is already in compare slot b");
 	      return;
 	    }
@@ -430,13 +396,13 @@
 	      else {
 	          var compare_choice = window.prompt("Options: replace a  |  replace b  |  cancel", "cancel");
 
-	          if (compare_choice.toLowerCase() == "replace a") {
+	          if (compare_choice.toLowerCase() === "replace a") {
 	            //update compare_player_a
 	            compare_player_a = compare_player_clicked;
 	            updateCompareStats("a");
 	          }
 
-	          if (compare_choice.toLowerCase() == "replace b") {
+	          if (compare_choice.toLowerCase() === "replace b") {
 	            //update compare_player_a
 	            compare_player_b = compare_player_clicked;
 	            updateCompareStats("b");
@@ -450,14 +416,14 @@
 
 	var updateCompareStats = function updateCompareStats(slot) {
 
-	  if (slot == "a") {
+	  if (slot === "a") {
 	    //update player_a_profile, player_a_main_stats, player_a_sec_stats
 	    player_a_profile = getPlayerProfile(all_profile_data, compare_player_a)[0];
 	    player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0];
 	    player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
 	  }
 
-	  if (slot == "b") {
+	  if (slot === "b") {
 	    //update player_b_profile, player_b_main_stats, player_b_sec_stats
 	    player_b_profile = getPlayerProfile(all_profile_data, compare_player_b)[0];
 	    player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0];
@@ -472,51 +438,51 @@
 	var displayCompareProfiles = function displayCompareProfiles() {
 
 	  //clear any previous results and display player a profile
-	  document.getElementById("profile-data-player-a").innerHTML = '';
+	  document.getElementById('profile-data-player-a').innerHTML = '';
 
 	  for (var prop in player_a_profile) {
-	    document.getElementById("profile-data-player-a").appendChild(createElement("li", player_a_profile[prop]));
+	    document.getElementById('profile-data-player-a').appendChild(createElement('li', player_a_profile[prop]));
 	  }
 
 	  //clear any previous results and display player b profile
-	  document.getElementById("profile-data-player-b").innerHTML = '';
+	  document.getElementById('profile-data-player-b').innerHTML = '';
 
 	  for (var _prop in player_b_profile) {
-	    document.getElementById("profile-data-player-b").appendChild(createElement("li", player_b_profile[_prop]));
+	    document.getElementById('profile-data-player-b').appendChild(createElement('li', player_b_profile[_prop]));
 	  }
 	};
 
 	var displayCompareMainStats = function displayCompareMainStats() {
 
 	  //clear any previous results and display player a profile
-	  document.getElementById("stats-main-player-a").innerHTML = '';
+	  document.getElementById('stats-main-player-a').innerHTML = '';
 
 	  for (var stat in player_a_main_stats) {
-	    document.getElementById("stats-main-player-a").appendChild(createElement("li", player_a_main_stats[stat]));
+	    document.getElementById('stats-main-player-a').appendChild(createElement('li', player_a_main_stats[stat]));
 	  }
 
 	  //clear any previous results and display player b profile
-	  document.getElementById("stats-main-player-b").innerHTML = '';
+	  document.getElementById('stats-main-player-b').innerHTML = '';
 
 	  for (var _stat in player_b_main_stats) {
-	    document.getElementById("stats-main-player-b").appendChild(createElement("li", player_b_main_stats[_stat]));
+	    document.getElementById('stats-main-player-b').appendChild(createElement('li', player_b_main_stats[_stat]));
 	  }
 	};
 
 	var displayCompareSecondaryStats = function displayCompareSecondaryStats() {
 
 	  //clear any previous results and display secondary stats of player a
-	  document.getElementById("secondary-stats-player-a").innerHTML = '';
+	  document.getElementById('secondary-stats-player-a').innerHTML = '';
 
 	  for (var stat in player_a_sec_stats) {
-	    document.getElementById("secondary-stats-player-a").appendChild(createElement("li", player_a_sec_stats[stat]));
+	    document.getElementById('secondary-stats-player-a').appendChild(createElement('li', player_a_sec_stats[stat]));
 	  }
 
 	  //clear any previous results and display secondary stats of player b
-	  document.getElementById("secondary-stats-player-b").innerHTML = '';
+	  document.getElementById('secondary-stats-player-b').innerHTML = '';
 
 	  for (var _stat2 in player_b_sec_stats) {
-	    document.getElementById("secondary-stats-player-b").appendChild(createElement("li", player_b_sec_stats[_stat2]));
+	    document.getElementById('secondary-stats-player-b').appendChild(createElement('li', player_b_sec_stats[_stat2]));
 	  }
 	};
 
@@ -532,11 +498,11 @@
 	    }
 
 	    //test if player being saved is already saved
-	    if (isSavePlayerRepeated() === true) {
+	    if (isSavePlayerRepeated(save_player_list) === true) {
 	      alert("You already have this player saved");
 	    }
 
-	    if (isSavePlayerRepeated() === false) {
+	    if (isSavePlayerRepeated(save_player_list) === false) {
 	      updateSavePlayerList("add");
 	      alert(current_player_clicked + " has been added to favourites list!");
 	    }
@@ -551,14 +517,14 @@
 	var updateSavePlayerList = function updateSavePlayerList(AddOrRemove, index) {
 
 	  //add player to list
-	  if (AddOrRemove == "add") {
+	  if (AddOrRemove === "add") {
 	    save_player_clicked = current_player_clicked;
 	    save_player_profile = getSavePlayerProfile(all_profile_data, save_player_clicked)[0];
 	    save_player_list.push(save_player_profile);
 	  }
 
 	  //remove player from list
-	  if (AddOrRemove == "remove") {
+	  if (AddOrRemove === "remove") {
 	    save_player_list.splice(index, 1);
 	  }
 
@@ -567,19 +533,19 @@
 	};
 
 	var displaySavePlayerList = function displaySavePlayerList() {
-	  document.getElementById("favourites").innerHTML = '';
+	  document.getElementById('favourites').innerHTML = '';
 
 	  //go through each player in the save player list and display their properties
 	  save_player_list.forEach(function (player, i) {
 
 	    for (var prop in player) {
-	      document.getElementById("favourites").appendChild(createElement("li", player[prop]));
+	      document.getElementById('favourites').appendChild(createElement('li', player[prop]));
 	    }
 	    //add a button to remove player from list
-	    var button = document.getElementById("favourites").appendChild(createElement("button", "remove"));
+	    var button = document.getElementById('favourites').appendChild(createElement('button', "remove"));
 
 	    //add an id to identify each player in list 
-	    var identifier = "button" + i;
+	    var identifier = 'button' + i;
 	    var attr = { id: identifier };
 	    setAttributes(button, attr);
 
@@ -589,8 +555,8 @@
 	    });
 
 	    //add a space between player profiles
-	    document.getElementById("favourites").appendChild(createElement("br"));
-	    document.getElementById("favourites").appendChild(createElement("br"));
+	    document.getElementById('favourites').appendChild(createElement('br'));
+	    document.getElementById('favourites').appendChild(createElement('br'));
 	  });
 	};
 
@@ -609,16 +575,16 @@
 	var displayRankings = function displayRankings() {
 
 	  //clear any previous tables in the case of changing season option
-	  document.getElementById("table-pts-g").innerHTML = '';
-	  document.getElementById("table-ast-g").innerHTML = '';
-	  document.getElementById("table-reb-g").innerHTML = '';
-	  document.getElementById("table-blk-g").innerHTML = '';
+	  document.getElementById('table-pts-g').innerHTML = '';
+	  document.getElementById('table-ast-g').innerHTML = '';
+	  document.getElementById('table-reb-g').innerHTML = '';
+	  document.getElementById('table-blk-g').innerHTML = '';
 
 	  //display tables
-	  displayTable(table_a, "table-pts-g", "table-a");
-	  displayTable(table_b, "table-ast-g", "table-b");
-	  displayTable(table_c, "table-reb-g", "table-c");
-	  displayTable(table_d, "table-blk-g", "table-d");
+	  displayTable(table_a, 'table-pts-g', 'table-a');
+	  displayTable(table_b, 'table-ast-g', 'table-b');
+	  displayTable(table_c, 'table-reb-g', 'table-c');
+	  displayTable(table_d, 'table-blk-g', 'table-d');
 
 	  //activate click event listeners
 	  setRankingsButtons();
@@ -707,10 +673,10 @@
 	  //Return a new promise
 	  return new Promise(function (resolve, reject) {
 	    var req = new XMLHttpRequest();
-	    req.open("GET", url, true);
+	    req.open('GET', url, true);
 
 	    //Authorization details go here 
-	    req.setRequestHeader("Authorization", "Basic " + btoa("jaellen:adanaC4032"));
+	    req.setRequestHeader('Authorization', 'Basic ' + btoa("jaellen:adanaC4032"));
 
 	    req.onload = function () {
 	      //Check the status
@@ -733,7 +699,7 @@
 	  var node = document.createElement(type);
 	  for (var i = 1; i < arguments.length; i++) {
 	    var child = arguments[i];
-	    if (typeof child == "string") {
+	    if (typeof child == 'string') {
 	      child = document.createTextNode(child);
 	    }
 	    node.appendChild(child);
@@ -763,37 +729,37 @@
 
 	//navbar utilities 
 	function activateNav(option) {
-	  var navA = document.getElementById("stats-page");
-	  var navB = document.getElementById("compare-page");
-	  var navC = document.getElementById("favourites-page");
-	  var navD = document.getElementById("rankings-page");
+	  var navA = document.getElementById('stats-page');
+	  var navB = document.getElementById('compare-page');
+	  var navC = document.getElementById('favourites-page');
+	  var navD = document.getElementById('rankings-page');
 
 	  if (option == "a") {
-	    removeClass(navA, "hidden");
-	    addClass(navB, "hidden");
-	    addClass(navC, "hidden");
-	    addClass(navD, "hidden");
+	    removeClass(navA, 'hidden');
+	    addClass(navB, 'hidden');
+	    addClass(navC, 'hidden');
+	    addClass(navD, 'hidden');
 	  }
 
 	  if (option == "b") {
-	    addClass(navA, "hidden");
-	    removeClass(navB, "hidden");
-	    addClass(navC, "hidden");
-	    addClass(navD, "hidden");
+	    addClass(navA, 'hidden');
+	    removeClass(navB, 'hidden');
+	    addClass(navC, 'hidden');
+	    addClass(navD, 'hidden');
 	  }
 
 	  if (option == "c") {
-	    addClass(navA, "hidden");
-	    addClass(navB, "hidden");
-	    removeClass(navC, "hidden");
-	    addClass(navD, "hidden");
+	    addClass(navA, 'hidden');
+	    addClass(navB, 'hidden');
+	    removeClass(navC, 'hidden');
+	    addClass(navD, 'hidden');
 	  }
 
 	  if (option == "d") {
-	    addClass(navA, "hidden");
-	    addClass(navB, "hidden");
-	    addClass(navC, "hidden");
-	    removeClass(navD, "hidden");
+	    addClass(navA, 'hidden');
+	    addClass(navB, 'hidden');
+	    addClass(navC, 'hidden');
+	    removeClass(navD, 'hidden');
 	  }
 	}
 
@@ -893,9 +859,48 @@
 	  });
 	}
 
+	function getTeamName(data, player_clicked) {
+	  return data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //filter out undefined stats in the data set
+	  .filter(function (entry) {
+	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
+	  }).map(function (entry) {
+	    return entry.team.City + " " + entry.team.Name;
+	  });
+	}
+
+	function getTeamList(data, player_clicked) {
+	  return data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //filter out undefined stats in the data set
+	  .filter(function (entry) {
+	    return entry.team.City + " " + entry.team.Name === player_team_name.toString();
+	  }).filter(function (entry) {
+	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked;
+	  }) //remove repeat
+	  .map(function (entry) {
+	    return entry.player.FirstName + " " + entry.player.LastName;
+	  });
+	}
+
+	function getTeamPositions(data, player_clicked) {
+	  return data.filter(function (entry) {
+	    return entry.stats.PtsPerGame !== undefined;
+	  }) //filter out undefined stats in the data set
+	  .filter(function (entry) {
+	    return entry.team.City + " " + entry.team.Name === player_team_name.toString();
+	  }).filter(function (entry) {
+	    return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked;
+	  }) //remove repeat
+	  .map(function (entry) {
+	    return entry.player.Position;
+	  });
+	}
+
 	//'favourites' utilities
-	function isSavePlayerRepeated() {
-	  var test_array = save_player_list.map(function (element) {
+	function isSavePlayerRepeated(list) {
+	  var test_array = list.map(function (element) {
 	    return element.name.toLowerCase();
 	  }).filter(function (element) {
 	    return element == current_player_clicked.toLowerCase();
@@ -915,7 +920,7 @@
 	  if (option === "a") {
 
 	    //filter the data
-	    table = getAllRankingsDataTableA(data);
+	    table = getAllRankingsDataTable(data, option);
 
 	    //sort the data  
 	    table.sort(function (a, b) {
@@ -933,7 +938,7 @@
 	  if (option === "b") {
 
 	    //filter the data
-	    table = getAllRankingsDataTableB(data);
+	    table = getAllRankingsDataTable(data, option);
 
 	    //sort the data 
 	    table.sort(function (a, b) {
@@ -951,7 +956,7 @@
 	  if (option === "c") {
 
 	    //filter the data
-	    table = getAllRankingsDataTableC(data);
+	    table = getAllRankingsDataTable(data, option);
 
 	    //sort the data
 	    table.sort(function (a, b) {
@@ -969,7 +974,7 @@
 	  if (option === "d") {
 
 	    //filter all the stats data for the rankings
-	    table = getAllRankingsDataTableD(data);
+	    table = getAllRankingsDataTable(data, option);
 
 	    //sort the data
 	    table.sort(function (a, b) {
@@ -989,132 +994,131 @@
 	  return table;
 	}
 
-	function getAllRankingsDataTableA(data) {
+	function getAllRankingsDataTable(data, option) {
 
-	  return data.filter(function (entry) {
-	    return entry.stats.PtsPerGame !== undefined;
-	  }) //filter out undefined stats in the data set
-	  .map(function (entry) {
-	    return {
-	      Player: entry.player.FirstName + " " + entry.player.LastName,
-	      PtsPerGame: entry.stats.PtsPerGame["#text"],
-	      GamesPlayed: entry.stats.GamesPlayed["#text"],
-	      MinSeconds: entry.stats.MinSeconds["#text"],
-	      Pts: entry.stats.Pts["#text"],
-	      FgAtt: entry.stats.FgAtt["#text"],
-	      FgMade: entry.stats.FgMade["#text"],
-	      Fg2PtMade: entry.stats.Fg2PtMade["#text"],
-	      Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
-	      Fg3PtMade: entry.stats.Fg3PtMade["#text"],
-	      Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
-	      FtAtt: entry.stats.FtAtt["#text"],
-	      FtMade: entry.stats.FtMade["#text"],
-	      OffReb: entry.stats.OffReb["#text"],
-	      DefReb: entry.stats.DefReb["#text"],
-	      Reb: entry.stats.Reb["#text"],
-	      Ast: entry.stats.Ast["#text"],
-	      Blk: entry.stats.Blk["#text"],
-	      Stl: entry.stats.Stl["#text"],
-	      Tov: entry.stats.Tov["#text"],
-	      FoulPers: entry.stats.FoulPers["#text"]
-	    };
-	  });
-	}
+	  if (option === "a") {
+	    return data.filter(function (entry) {
+	      return entry.stats.PtsPerGame !== undefined;
+	    }) //filter out undefined stats in the data set
+	    .map(function (entry) {
+	      return {
+	        Player: entry.player.FirstName + " " + entry.player.LastName,
+	        PtsPerGame: entry.stats.PtsPerGame["#text"],
+	        GamesPlayed: entry.stats.GamesPlayed["#text"],
+	        MinSeconds: entry.stats.MinSeconds["#text"],
+	        Pts: entry.stats.Pts["#text"],
+	        FgAtt: entry.stats.FgAtt["#text"],
+	        FgMade: entry.stats.FgMade["#text"],
+	        Fg2PtMade: entry.stats.Fg2PtMade["#text"],
+	        Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
+	        Fg3PtMade: entry.stats.Fg3PtMade["#text"],
+	        Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
+	        FtAtt: entry.stats.FtAtt["#text"],
+	        FtMade: entry.stats.FtMade["#text"],
+	        OffReb: entry.stats.OffReb["#text"],
+	        DefReb: entry.stats.DefReb["#text"],
+	        Reb: entry.stats.Reb["#text"],
+	        Ast: entry.stats.Ast["#text"],
+	        Blk: entry.stats.Blk["#text"],
+	        Stl: entry.stats.Stl["#text"],
+	        Tov: entry.stats.Tov["#text"],
+	        FoulPers: entry.stats.FoulPers["#text"]
+	      };
+	    });
+	  }
 
-	function getAllRankingsDataTableB(data) {
+	  if (option === "b") {
+	    return data.filter(function (entry) {
+	      return entry.stats.PtsPerGame !== undefined;
+	    }) //filter out undefined stats in the data set
+	    .map(function (entry) {
+	      return {
+	        Player: entry.player.FirstName + " " + entry.player.LastName,
+	        AstPerGame: entry.stats.AstPerGame["#text"],
+	        GamesPlayed: entry.stats.GamesPlayed["#text"],
+	        MinSeconds: entry.stats.MinSeconds["#text"],
+	        Pts: entry.stats.Pts["#text"],
+	        FgAtt: entry.stats.FgAtt["#text"],
+	        FgMade: entry.stats.FgMade["#text"],
+	        Fg2PtMade: entry.stats.Fg2PtMade["#text"],
+	        Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
+	        Fg3PtMade: entry.stats.Fg3PtMade["#text"],
+	        Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
+	        FtAtt: entry.stats.FtAtt["#text"],
+	        FtMade: entry.stats.FtMade["#text"],
+	        OffReb: entry.stats.OffReb["#text"],
+	        DefReb: entry.stats.DefReb["#text"],
+	        Reb: entry.stats.Reb["#text"],
+	        Ast: entry.stats.Ast["#text"],
+	        Blk: entry.stats.Blk["#text"],
+	        Stl: entry.stats.Stl["#text"],
+	        Tov: entry.stats.Tov["#text"],
+	        FoulPers: entry.stats.FoulPers["#text"]
+	      };
+	    });
+	  }
 
-	  return data.filter(function (entry) {
-	    return entry.stats.PtsPerGame !== undefined;
-	  }) //filter out undefined stats in the data set
-	  .map(function (entry) {
-	    return {
-	      Player: entry.player.FirstName + " " + entry.player.LastName,
-	      AstPerGame: entry.stats.AstPerGame["#text"],
-	      GamesPlayed: entry.stats.GamesPlayed["#text"],
-	      MinSeconds: entry.stats.MinSeconds["#text"],
-	      Pts: entry.stats.Pts["#text"],
-	      FgAtt: entry.stats.FgAtt["#text"],
-	      FgMade: entry.stats.FgMade["#text"],
-	      Fg2PtMade: entry.stats.Fg2PtMade["#text"],
-	      Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
-	      Fg3PtMade: entry.stats.Fg3PtMade["#text"],
-	      Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
-	      FtAtt: entry.stats.FtAtt["#text"],
-	      FtMade: entry.stats.FtMade["#text"],
-	      OffReb: entry.stats.OffReb["#text"],
-	      DefReb: entry.stats.DefReb["#text"],
-	      Reb: entry.stats.Reb["#text"],
-	      Ast: entry.stats.Ast["#text"],
-	      Blk: entry.stats.Blk["#text"],
-	      Stl: entry.stats.Stl["#text"],
-	      Tov: entry.stats.Tov["#text"],
-	      FoulPers: entry.stats.FoulPers["#text"]
-	    };
-	  });
-	}
+	  if (option === "c") {
+	    return data.filter(function (entry) {
+	      return entry.stats.PtsPerGame !== undefined;
+	    }) //filter out undefined stats in the data set
+	    .map(function (entry) {
+	      return {
+	        Player: entry.player.FirstName + " " + entry.player.LastName,
+	        RebPerGame: entry.stats.RebPerGame["#text"],
+	        GamesPlayed: entry.stats.GamesPlayed["#text"],
+	        MinSeconds: entry.stats.MinSeconds["#text"],
+	        Pts: entry.stats.Pts["#text"],
+	        FgAtt: entry.stats.FgAtt["#text"],
+	        FgMade: entry.stats.FgMade["#text"],
+	        Fg2PtMade: entry.stats.Fg2PtMade["#text"],
+	        Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
+	        Fg3PtMade: entry.stats.Fg3PtMade["#text"],
+	        Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
+	        FtAtt: entry.stats.FtAtt["#text"],
+	        FtMade: entry.stats.FtMade["#text"],
+	        OffReb: entry.stats.OffReb["#text"],
+	        DefReb: entry.stats.DefReb["#text"],
+	        Reb: entry.stats.Reb["#text"],
+	        Ast: entry.stats.Ast["#text"],
+	        Blk: entry.stats.Blk["#text"],
+	        Stl: entry.stats.Stl["#text"],
+	        Tov: entry.stats.Tov["#text"],
+	        FoulPers: entry.stats.FoulPers["#text"]
+	      };
+	    });
+	  }
 
-	function getAllRankingsDataTableC(data) {
-
-	  return data.filter(function (entry) {
-	    return entry.stats.PtsPerGame !== undefined;
-	  }) //filter out undefined stats in the data set
-	  .map(function (entry) {
-	    return {
-	      Player: entry.player.FirstName + " " + entry.player.LastName,
-	      RebPerGame: entry.stats.RebPerGame["#text"],
-	      GamesPlayed: entry.stats.GamesPlayed["#text"],
-	      MinSeconds: entry.stats.MinSeconds["#text"],
-	      Pts: entry.stats.Pts["#text"],
-	      FgAtt: entry.stats.FgAtt["#text"],
-	      FgMade: entry.stats.FgMade["#text"],
-	      Fg2PtMade: entry.stats.Fg2PtMade["#text"],
-	      Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
-	      Fg3PtMade: entry.stats.Fg3PtMade["#text"],
-	      Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
-	      FtAtt: entry.stats.FtAtt["#text"],
-	      FtMade: entry.stats.FtMade["#text"],
-	      OffReb: entry.stats.OffReb["#text"],
-	      DefReb: entry.stats.DefReb["#text"],
-	      Reb: entry.stats.Reb["#text"],
-	      Ast: entry.stats.Ast["#text"],
-	      Blk: entry.stats.Blk["#text"],
-	      Stl: entry.stats.Stl["#text"],
-	      Tov: entry.stats.Tov["#text"],
-	      FoulPers: entry.stats.FoulPers["#text"]
-	    };
-	  });
-	}
-
-	function getAllRankingsDataTableD(data) {
-
-	  return data.filter(function (entry) {
-	    return entry.stats.PtsPerGame !== undefined;
-	  }) //filter out undefined stats in the data set
-	  .map(function (entry) {
-	    return {
-	      Player: entry.player.FirstName + " " + entry.player.LastName,
-	      BlkPerGame: entry.stats.BlkPerGame["#text"],
-	      GamesPlayed: entry.stats.GamesPlayed["#text"],
-	      MinSeconds: entry.stats.MinSeconds["#text"],
-	      Pts: entry.stats.Pts["#text"],
-	      FgAtt: entry.stats.FgAtt["#text"],
-	      FgMade: entry.stats.FgMade["#text"],
-	      Fg2PtMade: entry.stats.Fg2PtMade["#text"],
-	      Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
-	      Fg3PtMade: entry.stats.Fg3PtMade["#text"],
-	      Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
-	      FtAtt: entry.stats.FtAtt["#text"],
-	      FtMade: entry.stats.FtMade["#text"],
-	      OffReb: entry.stats.OffReb["#text"],
-	      DefReb: entry.stats.DefReb["#text"],
-	      Reb: entry.stats.Reb["#text"],
-	      Ast: entry.stats.Ast["#text"],
-	      Blk: entry.stats.Blk["#text"],
-	      Stl: entry.stats.Stl["#text"],
-	      Tov: entry.stats.Tov["#text"],
-	      FoulPers: entry.stats.FoulPers["#text"]
-	    };
-	  });
+	  if (option === "d") {
+	    return data.filter(function (entry) {
+	      return entry.stats.PtsPerGame !== undefined;
+	    }) //filter out undefined stats in the data set
+	    .map(function (entry) {
+	      return {
+	        Player: entry.player.FirstName + " " + entry.player.LastName,
+	        BlkPerGame: entry.stats.BlkPerGame["#text"],
+	        GamesPlayed: entry.stats.GamesPlayed["#text"],
+	        MinSeconds: entry.stats.MinSeconds["#text"],
+	        Pts: entry.stats.Pts["#text"],
+	        FgAtt: entry.stats.FgAtt["#text"],
+	        FgMade: entry.stats.FgMade["#text"],
+	        Fg2PtMade: entry.stats.Fg2PtMade["#text"],
+	        Fg2PtAtt: entry.stats.Fg2PtAtt["#text"],
+	        Fg3PtMade: entry.stats.Fg3PtMade["#text"],
+	        Fg3PtAtt: entry.stats.Fg3PtAtt["#text"],
+	        FtAtt: entry.stats.FtAtt["#text"],
+	        FtMade: entry.stats.FtMade["#text"],
+	        OffReb: entry.stats.OffReb["#text"],
+	        DefReb: entry.stats.DefReb["#text"],
+	        Reb: entry.stats.Reb["#text"],
+	        Ast: entry.stats.Ast["#text"],
+	        Blk: entry.stats.Blk["#text"],
+	        Stl: entry.stats.Stl["#text"],
+	        Tov: entry.stats.Tov["#text"],
+	        FoulPers: entry.stats.FoulPers["#text"]
+	      };
+	    });
+	  }
 	}
 
 	function displayTable(table, tableId, rowId) {
@@ -1122,85 +1126,85 @@
 	  //set the table header for column three  
 	  var rank_header = "";
 
-	  if (tableId === "table-pts-g") {
-	    rank_header = "PTS/G";
+	  if (tableId === 'table-pts-g') {
+	    rank_header = 'PTS/G';
 	  }
 
-	  if (tableId === "table-ast-g") {
-	    rank_header = "AST/G";
+	  if (tableId === 'table-ast-g') {
+	    rank_header = 'AST/G';
 	  }
 
-	  if (tableId === "table-reb-g") {
-	    rank_header = "REB/G";
+	  if (tableId === 'table-reb-g') {
+	    rank_header = 'REB/G';
 	  }
 
-	  if (tableId === "table-blk-g") {
-	    rank_header = "BLK/G";
+	  if (tableId === 'table-blk-g') {
+	    rank_header = 'BLK/G';
 	  }
 
 	  //add table headers 
-	  document.getElementById(tableId).appendChild(createElement("tr", createElement("th", "Rank"), createElement("th", "Player"), createElement("th", rank_header), createElement("th", "GP"), createElement("th", "MIN"), createElement("th", "PTS"), createElement("th", "FGA"), createElement("th", "FGM"), createElement("th", "2PM"), createElement("th", "2PA"), createElement("th", "3PM"), createElement("th", "3PA"), createElement("th", "FTA"), createElement("th", "FTM"), createElement("th", "OREB"), createElement("th", "DREB"), createElement("th", "REB"), createElement("th", "AST"), createElement("th", "BLK"), createElement("th", "STL"), createElement("th", "TOV"), createElement("th", "PF")));
+	  document.getElementById(tableId).appendChild(createElement('tr', createElement('th', 'Rank'), createElement('th', 'Player'), createElement('th', rank_header), createElement('th', 'GP'), createElement('th', 'MIN'), createElement('th', 'PTS'), createElement('th', 'FGA'), createElement('th', 'FGM'), createElement('th', '2PM'), createElement('th', '2PA'), createElement('th', '3PM'), createElement('th', '3PA'), createElement('th', 'FTA'), createElement('th', 'FTM'), createElement('th', 'OREB'), createElement('th', 'DREB'), createElement('th', 'REB'), createElement('th', 'AST'), createElement('th', 'BLK'), createElement('th', 'STL'), createElement('th', 'TOV'), createElement('th', 'PF')));
 
 	  table.forEach(function (player, i) {
 
 	    //for each player, create a row and add it to the appropriate table
-	    var row = document.getElementById(tableId).appendChild(createElement("tr"));
+	    var row = document.getElementById(tableId).appendChild(createElement('tr'));
 
-	    //give each row an id of "row"+i where i is the index of the ranked list
+	    //give each row an id of 'row'+i where i is the index of the ranked list
 	    setAttributes(row, { id: rowId + i });
 
 	    //add the ranking position to that row
-	    document.getElementById(rowId + i).appendChild(createElement("td", (i + 1).toString()));
+	    document.getElementById(rowId + i).appendChild(createElement('td', (i + 1).toString()));
 
 	    //for each row, loop through all the properties and create a cell for each stat
 	    for (var stat in player) {
-	      document.getElementById(rowId + i).appendChild(createElement("td", player[stat]));
+	      document.getElementById(rowId + i).appendChild(createElement('td', player[stat]));
 	    }
 	  });
 	}
 
 	function activateTable(option) {
-	  var tableA = document.getElementById("section-table-a");
-	  var tableB = document.getElementById("section-table-b");
-	  var tableC = document.getElementById("section-table-c");
-	  var tableD = document.getElementById("section-table-d");
+	  var tableA = document.getElementById('section-table-a');
+	  var tableB = document.getElementById('section-table-b');
+	  var tableC = document.getElementById('section-table-c');
+	  var tableD = document.getElementById('section-table-d');
 
 	  if (option == "a") {
-	    removeClass(tableA, "hidden");
-	    addClass(tableB, "hidden");
-	    addClass(tableC, "hidden");
-	    addClass(tableD, "hidden");
+	    removeClass(tableA, 'hidden');
+	    addClass(tableB, 'hidden');
+	    addClass(tableC, 'hidden');
+	    addClass(tableD, 'hidden');
 	  }
 
 	  if (option == "b") {
-	    addClass(tableA, "hidden");
-	    removeClass(tableB, "hidden");
-	    addClass(tableC, "hidden");
-	    addClass(tableD, "hidden");
+	    addClass(tableA, 'hidden');
+	    removeClass(tableB, 'hidden');
+	    addClass(tableC, 'hidden');
+	    addClass(tableD, 'hidden');
 	  }
 
 	  if (option == "c") {
-	    addClass(tableA, "hidden");
-	    addClass(tableB, "hidden");
-	    removeClass(tableC, "hidden");
-	    addClass(tableD, "hidden");
+	    addClass(tableA, 'hidden');
+	    addClass(tableB, 'hidden');
+	    removeClass(tableC, 'hidden');
+	    addClass(tableD, 'hidden');
 	  }
 
 	  if (option == "d") {
-	    addClass(tableA, "hidden");
-	    addClass(tableB, "hidden");
-	    addClass(tableC, "hidden");
-	    removeClass(tableD, "hidden");
+	    addClass(tableA, 'hidden');
+	    addClass(tableB, 'hidden');
+	    addClass(tableC, 'hidden');
+	    removeClass(tableD, 'hidden');
 	  }
 	}
 
 	function setSeason(option) {
-	  if (option == "a") {
+	  if (option === "a") {
 	    cumulative_player_data_url = STATS_2016_2017;
 	    profile_data_url = PROFILE_2016_2017;
 	  }
 
-	  if (option == "b") {
+	  if (option === "b") {
 	    cumulative_player_data_url = STATS_2015_2016;
 	    profile_data_url = PROFILE_2015_2016;
 	  }
