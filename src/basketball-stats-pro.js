@@ -14,6 +14,14 @@ var Rx = require('rx');
 */
 var xhrRequest = require('superagent'); 
 
+/*!
+  chart.js v2.4.0
+  License: MIT
+  https://github.com/chartjs/Chart.js/releases/tag/v2.4.0
+*/
+var Chart = require('chart.js'); 
+
+
 //css styling
 require("./css/main.css");
 
@@ -613,6 +621,156 @@ let BasketballStatsPro = (function () {
     }, false);
   };
 
+  let setMainCharts = function() {
+    
+    let setRadarChart = function() { 
+      
+      var data = {
+        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+        datasets: [
+            {
+                label: "My First dataset",
+                backgroundColor: "rgba(179,181,198,0.2)",
+                borderColor: "rgba(179,181,198,1)",
+                pointBackgroundColor: "rgba(179,181,198,1)",
+                pointBorderColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(179,181,198,1)",
+                data: [65, 59, 90, 81, 56, 55, 40]
+            },
+            {
+                label: "My Second dataset",
+                backgroundColor: "rgba(255,99,132,0.2)",
+                borderColor: "rgba(255,99,132,1)",
+                pointBackgroundColor: "rgba(255,99,132,1)",
+                pointBorderColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(255,99,132,1)",
+                data: [28, 48, 40, 19, 96, 27, 100]
+            }
+        ]
+      };
+
+      var ctx = document.getElementById('radar-chart-main');
+        
+      var myRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: data,
+        options: {
+            responsive: false,
+            scale: {
+                reverse: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }
+        }
+      });
+    }
+
+    let setBarChart = function() { 
+      
+      var data = {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          datasets: [
+              {
+                  label: "My First dataset",
+                  backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 206, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(255,99,132,1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                  ],
+                  borderWidth: 1,
+                  data: [65, 59],
+              },
+              {
+                  label: "My Second dataset",
+                  backgroundColor: [
+                      'rgba(35, 255, 119, 0.2)',
+                      'rgba(35, 255, 119, 0.2)',
+                      'rgba(35, 255, 119, 0.2)',
+                      'rgba(35, 255, 119, 0.2)',
+                      'rgba(35, 255, 119, 0.2)',
+                      'rgba(35, 255, 119, 0.2)'
+                  ],
+                  borderColor: [
+                      'rgba(0, 35, 13, 1)',
+                      'rgba(0, 35, 13, 1)',
+                      'rgba(0, 35, 13, 1)',
+                      'rgba(0, 35, 13, 1)',
+                      'rgba(0, 35, 13, 1)',
+                      'rgba(0, 35, 13, 1)'
+                  ],
+                  borderWidth: 1,
+                  data: [55, 39],
+              }
+          ]
+      };
+
+      var ctx = document.getElementById('bar-chart-main');
+        
+      var myBarChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: data,
+        options: {
+          responsive: false
+          // scales: 
+          // {
+          //   xAxes: [{ stacked: true }],
+          //   yAxes: [{ stacked: true }]
+          // }
+        }
+      });
+    }
+
+    let setDoughnutChart = function() { 
+      
+      var data = {
+        labels: ["Red", "Blue", "Yellow"],
+        datasets: [
+        {
+            data: [300, 50, 100],
+            backgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ],
+            hoverBackgroundColor: [
+                "#FF6384",
+                "#36A2EB",
+                "#FFCE56"
+            ]
+        }]
+      };
+
+      var ctx = document.getElementById('doughnut-chart-main');
+        
+      var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+            responsive: false
+        }
+      });
+    }    
+
+    setRadarChart();
+    setBarChart();
+    setDoughnutChart();
+  };
+
 
   /* ------------------ Utility and Helper functions ----------------------- */
 
@@ -1169,8 +1327,8 @@ let BasketballStatsPro = (function () {
       setAllStatsData();
       getComparePlayer();
       setSavePlayerList();
+      setMainCharts();
     }
-
   }; 
 })();
 
