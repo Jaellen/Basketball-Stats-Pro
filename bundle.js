@@ -696,7 +696,7 @@
 	    var setRadarChart = function setRadarChart() {
 
 	      var data = {
-	        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+	        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling"],
 	        datasets: [{
 	          label: "My First dataset",
 	          backgroundColor: "rgba(179,181,198,0.2)",
@@ -705,7 +705,7 @@
 	          pointBorderColor: "#fff",
 	          pointHoverBackgroundColor: "#fff",
 	          pointHoverBorderColor: "rgba(179,181,198,1)",
-	          data: [65, 59, 90, 81, 56, 55, 40]
+	          data: [65, 59, 90, 81, 56, 55]
 	        }, {
 	          label: "My Second dataset",
 	          backgroundColor: "rgba(255,99,132,0.2)",
@@ -714,7 +714,7 @@
 	          pointBorderColor: "#fff",
 	          pointHoverBackgroundColor: "#fff",
 	          pointHoverBorderColor: "rgba(255,99,132,1)",
-	          data: [28, 48, 40, 19, 96, 27, 100]
+	          data: [28, 48, 40, 19, 96, 27]
 	        }]
 	      };
 
@@ -773,11 +773,15 @@
 	    var setDoughnutChart = function setDoughnutChart() {
 
 	      var data = {
-	        labels: ["Red", "Blue", "Yellow"],
+	        labels: ["Red", "Blue", "Yellow", "green", "Black", "pink"],
 	        datasets: [{
 	          data: [300, 50, 100],
 	          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
 	          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+	        }, {
+	          data: [200, 90, 80],
+	          backgroundColor: ["#fc774b", "#1f1617", "#756e91"],
+	          hoverBackgroundColor: ["#fc774b", "#1f1617", "#756e91"]
 	        }]
 	      };
 
@@ -959,6 +963,8 @@
 	        Fg3PtPct: "3P%: " + entry.stats.Fg3PtPct["#text"],
 	        Fg2PtMadePerGame: "2PM/G: " + entry.stats.Fg2PtMadePerGame["#text"],
 	        Fg3PtMadePerGame: "3PM/G: " + entry.stats.Fg3PtMadePerGame["#text"],
+	        EFgPct: "eFG%: " + getEfgPct(entry),
+	        TsPct: "TS%: " + getTsPct(entry),
 	        PlusMinus: "+/-: " + entry.stats.PlusMinus["#text"],
 	        MinSecondsPerGame: "MPG: " + entry.stats.MinSecondsPerGame["#text"]
 	      };
@@ -1033,6 +1039,30 @@
 	    .map(function (entry) {
 	      return entry.player.Position;
 	    });
+	  }
+
+	  function getEfgPct(entry) {
+
+	    var EfgPct = 0;
+	    EfgPct = (Number(entry.stats.FgMade["#text"]) + 0.5 * Number(entry.stats.Fg3PtMade["#text"])) / Number(entry.stats.FgAtt["#text"]) * 100;
+
+	    if (EfgPct === Infinity || isNaN(EfgPct)) {
+	      return "0";
+	    } else {
+	      return EfgPct.toPrecision(3);
+	    }
+	  }
+
+	  function getTsPct(entry) {
+
+	    var TsPct = 0;
+	    TsPct = Number(entry.stats.Pts["#text"]) / (2 * (Number(entry.stats.FgAtt["#text"]) + 0.44 * Number(entry.stats.FtAtt["#text"]))) * 100;
+
+	    if (TsPct === Infinity || isNaN(TsPct)) {
+	      return "0";
+	    } else {
+	      return TsPct.toPrecision(3);
+	    }
 	  }
 
 	  //favourites utilities
