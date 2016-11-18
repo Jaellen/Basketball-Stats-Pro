@@ -132,6 +132,10 @@
 	  var data_radar_main = void 0,
 	      data_doughnut1_main = void 0,
 	      data_doughnut2_main = void 0;
+	  var data_radar_compare_a = void 0,
+	      data_radar_compare_b = void 0;
+	  var data_bar_compare_a = void 0,
+	      data_bar_compare_b = void 0;
 
 	  //favourites variables
 	  var save_player_list = [];
@@ -397,6 +401,91 @@
 	    displayPlayerTeamList();
 	  };
 
+	  var displayMainCharts = function displayMainCharts() {
+
+	    var setRadarChart = function setRadarChart() {
+
+	      var ctx = document.getElementById('radar-chart-main');
+
+	      var data = {
+	        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
+	        datasets: [{
+	          label: toNameUpperCase(current_player_clicked),
+	          backgroundColor: "rgba(179,181,198,0.2)",
+	          borderColor: "rgba(179,181,198,1)",
+	          pointBackgroundColor: "rgba(179,181,198,1)",
+	          pointBorderColor: "#fff",
+	          pointHoverBackgroundColor: "#fff",
+	          pointHoverBorderColor: "rgba(179,181,198,1)",
+	          data: data_radar_main
+	        }]
+	      };
+
+	      var myRadarChart = new Chart(ctx, {
+	        type: 'radar',
+	        data: data,
+	        options: {
+	          responsive: false,
+	          scale: {
+	            ticks: {
+	              beginAtZero: true
+	            }
+	          }
+	        }
+	      });
+	    };
+
+	    var setDoughnutChart1 = function setDoughnutChart1() {
+
+	      var data = {
+	        labels: ["FGA", "FGM"],
+	        datasets: [{
+	          data: data_doughnut1_main,
+	          backgroundColor: ["#4BC0C0", "#FFCE56"],
+	          hoverBackgroundColor: ["#4BC0C0", "#FFCE56"]
+	        }]
+	      };
+
+	      var ctx = document.getElementById('doughnut-chart1-main');
+
+	      var myChart = new Chart(ctx, {
+	        type: 'doughnut',
+	        data: data,
+	        animation: { animateScale: true },
+	        options: {
+	          responsive: false
+	        }
+	      });
+	    };
+
+	    var setDoughnutChart2 = function setDoughnutChart2() {
+
+	      var data = {
+	        labels: ["FTA", "FTM"],
+	        datasets: [{
+	          data: data_doughnut2_main,
+	          backgroundColor: ["#4BC0C0", "#FFCE56"],
+	          hoverBackgroundColor: ["#4BC0C0", "#FFCE56"]
+	        }]
+	      };
+
+	      var ctx = document.getElementById('doughnut-chart2-main');
+
+	      var myChart = new Chart(ctx, {
+	        type: 'doughnut',
+	        data: data,
+	        animation: { animateScale: true },
+	        options: {
+	          responsive: false
+	        }
+	      });
+	    };
+
+	    setRadarChart();
+	    setDoughnutChart1();
+	    setDoughnutChart2();
+	  };
+
 	  //Compare player functionality
 	  var getComparePlayer = function getComparePlayer() {
 
@@ -466,6 +555,7 @@
 	      player_a_profile = getPlayerProfile(all_profile_data, compare_player_a)[0];
 	      player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0];
 	      player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
+	      data_bar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
 	    }
 
 	    if (slot === "b") {
@@ -473,9 +563,11 @@
 	      player_b_profile = getPlayerProfile(all_profile_data, compare_player_b)[0];
 	      player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0];
 	      player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
+	      data_bar_compare_b = getRadarChartData(all_stats_data, compare_player_b);
 	    }
 
 	    displayComparePlayerStats();
+	    displayCompareCharts();
 	  };
 
 	  var displayComparePlayerStats = function displayComparePlayerStats() {
@@ -534,6 +626,55 @@
 	    displayCompareProfiles();
 	    displayCompareMainStats();
 	    displayCompareSecondaryStats();
+	  };
+
+	  var displayCompareCharts = function displayCompareCharts() {
+
+	    var setRadarChart = function setRadarChart() {
+
+	      var ctx = document.getElementById('radar-chart-compare');
+
+	      var data = {
+	        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
+	        datasets: [{
+	          label: compare_player_a,
+	          backgroundColor: "rgba(179,181,198,0.2)",
+	          borderColor: "rgba(179,181,198,1)",
+	          pointBackgroundColor: "rgba(179,181,198,1)",
+	          pointBorderColor: "#fff",
+	          pointHoverBackgroundColor: "#fff",
+	          pointHoverBorderColor: "rgba(179,181,198,1)",
+	          data: data_bar_compare_a
+	        }, {
+	          label: compare_player_b,
+	          backgroundColor: "rgba(54,162,235,0.2)",
+	          borderColor: "rgba(54,162,235,1)",
+	          pointBackgroundColor: "rgba(54,162,235,1)",
+	          pointBorderColor: "#fff",
+	          pointHoverBackgroundColor: "#fff",
+	          pointHoverBorderColor: "rgba(54,162,235,1)",
+	          data: data_bar_compare_b
+	        }]
+	      };
+
+	      var myRadarChart = new Chart(ctx, {
+	        type: 'radar',
+	        data: data,
+	        options: {
+	          responsive: false,
+	          scale: {
+	            ticks: {
+	              beginAtZero: true
+	            }
+	          }
+	        }
+	      });
+	    };
+
+	    var setBarChart = function setBarChart() {};
+
+	    setRadarChart();
+	    //setBarChart();
 	  };
 
 	  //Save player functionality
@@ -700,92 +841,6 @@
 	      //   setPlayerStats();
 	      // }
 	    }, false);
-	  };
-
-	  var displayMainCharts = function displayMainCharts() {
-
-	    var setRadarChart = function setRadarChart() {
-
-	      var ctx = document.getElementById('radar-chart-main');
-
-	      var data = {
-	        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
-	        datasets: [{
-	          label: toNameUpperCase(current_player_clicked),
-	          backgroundColor: "rgba(179,181,198,0.2)",
-	          borderColor: "rgba(179,181,198,1)",
-	          pointBackgroundColor: "rgba(179,181,198,1)",
-	          pointBorderColor: "#fff",
-	          pointHoverBackgroundColor: "#fff",
-	          pointHoverBorderColor: "rgba(179,181,198,1)",
-	          data: data_radar_main
-	        }]
-	      };
-
-	      var myRadarChart = new Chart(ctx, {
-	        type: 'radar',
-	        data: data,
-	        options: {
-	          responsive: false,
-	          scale: {
-	            ticks: {
-	              beginAtZero: true
-	            }
-	          }
-	        }
-	      });
-	    };
-
-	    var setDoughnutChart1 = function setDoughnutChart1() {
-
-	      var data = {
-	        labels: ["FGA", "FGM"],
-	        datasets: [{
-	          data: data_doughnut1_main,
-	          backgroundColor: ["#4BC0C0", "#FFCE56"],
-	          hoverBackgroundColor: ["#4BC0C0", "#FFCE56"]
-	        }]
-	      };
-
-	      var ctx = document.getElementById('doughnut-chart1-main');
-
-	      var myChart = new Chart(ctx, {
-	        type: 'doughnut',
-	        data: data,
-	        animation: { animateScale: true },
-	        options: {
-	          responsive: false
-	        }
-	      });
-	    };
-
-	    var setDoughnutChart2 = function setDoughnutChart2() {
-
-	      var data = {
-	        labels: ["FTA", "FTM"],
-	        datasets: [{
-	          data: data_doughnut2_main,
-	          backgroundColor: ["#4BC0C0", "#FFCE56"],
-	          hoverBackgroundColor: ["#4BC0C0", "#FFCE56"]
-	        }]
-	      };
-
-	      var ctx = document.getElementById('doughnut-chart2-main');
-
-	      var myChart = new Chart(ctx, {
-	        type: 'doughnut',
-	        data: data,
-	        animation: { animateScale: true },
-	        options: {
-	          responsive: false
-	        }
-	      });
-	    };
-
-	    setRadarChart();
-	    //setBarChart();
-	    setDoughnutChart1();
-	    setDoughnutChart2();
 	  };
 
 	  /* ------------------ Utility and Helper functions ----------------------- */
