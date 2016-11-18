@@ -54,7 +54,7 @@ let BasketballStatsPro = (function () {
   let compare_player_clicked;
 
   //graphs and chart variables
-  let data_radar_main, data_bar_main, data_doughnut_main;
+  let data_radar_main, data_doughnut1_main, data_doughnut2_main;
 
   //favourites variables
   let save_player_list = [];
@@ -251,9 +251,11 @@ let BasketballStatsPro = (function () {
 
     //set chart and graph data
     data_radar_main = getRadarChartData(all_stats_data, current_player_clicked);
+    data_doughnut1_main = getDoughnutChart1Data(all_stats_data, current_player_clicked);
+    data_doughnut2_main = getDoughnutChart2Data(all_stats_data, current_player_clicked);
 
     displayPlayerStats();
-    setMainCharts();
+    displayMainCharts();
   };
 
   let displayPlayerStats = function() {
@@ -628,14 +630,8 @@ let BasketballStatsPro = (function () {
     }, false);
   };
 
-  let setMainCharts = function() {
+  let displayMainCharts = function() {
     
-    // Chart.scaleService.updateScaleDefaults('linear', {
-    //   ticks: {
-    //       min: 0
-    //   }
-    // });
-
     let setRadarChart = function() { 
       
       let ctx = document.getElementById('radar-chart-main');
@@ -670,108 +666,55 @@ let BasketballStatsPro = (function () {
       });
     }
 
-    let setBarChart = function() { 
+    let setDoughnutChart1 = function() { 
       
       let data = {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
-          datasets: [
-              {
-                  label: "My First dataset",
-                  backgroundColor: [
-                      'rgba(255, 99, 132, 0.2)',
-                      'rgba(54, 162, 235, 0.2)',
-                      'rgba(255, 206, 86, 0.2)',
-                      'rgba(75, 192, 192, 0.2)',
-                      'rgba(153, 102, 255, 0.2)',
-                      'rgba(255, 159, 64, 0.2)'
-                  ],
-                  borderColor: [
-                      'rgba(255,99,132,1)',
-                      'rgba(54, 162, 235, 1)',
-                      'rgba(255, 206, 86, 1)',
-                      'rgba(75, 192, 192, 1)',
-                      'rgba(153, 102, 255, 1)',
-                      'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1,
-                  data: [65, 59],
-              },
-              {
-                  label: "My Second dataset",
-                  backgroundColor: [
-                      'rgba(35, 255, 119, 0.2)',
-                      'rgba(35, 255, 119, 0.2)',
-                      'rgba(35, 255, 119, 0.2)',
-                      'rgba(35, 255, 119, 0.2)',
-                      'rgba(35, 255, 119, 0.2)',
-                      'rgba(35, 255, 119, 0.2)'
-                  ],
-                  borderColor: [
-                      'rgba(0, 35, 13, 1)',
-                      'rgba(0, 35, 13, 1)',
-                      'rgba(0, 35, 13, 1)',
-                      'rgba(0, 35, 13, 1)',
-                      'rgba(0, 35, 13, 1)',
-                      'rgba(0, 35, 13, 1)'
-                  ],
-                  borderWidth: 1,
-                  data: [55, 39],
-              }
-          ]
+        labels: ["FGA", "FGM"],
+        datasets: 
+        [{
+            data: data_doughnut1_main,
+            backgroundColor: [
+                "#4BC0C0",
+                "#FFCE56"
+            ],
+            hoverBackgroundColor: [
+                "#4BC0C0",
+                "#FFCE56"
+            ]
+        }]
       };
 
-      let ctx = document.getElementById('bar-chart-main');
+      let ctx = document.getElementById('doughnut-chart1-main');
         
-      let myBarChart = new Chart(ctx, {
-        type: 'horizontalBar',
+      let myChart = new Chart(ctx, {
+        type: 'doughnut',
         data: data,
+        animation: { animateScale: true },
         options: {
-          responsive: false
-          // scales: 
-          // {
-          //   xAxes: [{ stacked: true }],
-          //   yAxes: [{ stacked: true }]
-          // }
+            responsive: false
         }
       });
-    }
+    } 
 
-    let setDoughnutChart = function() { 
+    let setDoughnutChart2 = function() { 
       
       let data = {
-        labels: ["Red", "Blue", "Yellow", "green", "Black", "pink"],
+        labels: ["FTA", "FTM"],
         datasets: 
-        [
-        {
-            data: [300, 50, 100],
+        [{
+            data: data_doughnut2_main,
             backgroundColor: [
-                "#FF6384",
-                "#36A2EB",
+                "#4BC0C0",
                 "#FFCE56"
             ],
             hoverBackgroundColor: [
-                "#FF6384",
-                "#36A2EB",
+                "#4BC0C0",
                 "#FFCE56"
             ]
-        },
-        {
-            data: [200, 90, 80],
-            backgroundColor: [
-                "#fc774b",
-                "#1f1617",
-                "#756e91"
-            ],
-            hoverBackgroundColor: [
-                "#fc774b",
-                "#1f1617",
-                "#756e91"
-            ]
-        }
-        ]
+        }]
       };
 
-      let ctx = document.getElementById('doughnut-chart-main');
+      let ctx = document.getElementById('doughnut-chart2-main');
         
       let myChart = new Chart(ctx, {
         type: 'doughnut',
@@ -784,8 +727,9 @@ let BasketballStatsPro = (function () {
     }    
 
     setRadarChart();
-    setBarChart();
-    setDoughnutChart();
+    //setBarChart();
+    setDoughnutChart1();
+    setDoughnutChart2();
   };
 
 
@@ -1021,6 +965,34 @@ let BasketballStatsPro = (function () {
           Number(getTsPct(entry)),
           Number(entry.stats.Fg2PtPct["#text"]),
           Number(entry.stats.FgPct["#text"])
+        ]
+      });
+
+    return array[0];
+  }
+
+  function getDoughnutChart1Data(data, player_clicked) {
+    //return an array with numbers for the chart
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { return [ 
+          Number(entry.stats.FgAtt["#text"]), 
+          Number(entry.stats.FgMade["#text"])
+        ]
+      });
+
+    return array[0];
+  }
+
+  function getDoughnutChart2Data(data, player_clicked) {
+    //return an array with numbers for the chart
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { return [ 
+          Number(entry.stats.FtAtt["#text"]), 
+          Number(entry.stats.FtMade["#text"])
         ]
       });
 
@@ -1385,7 +1357,6 @@ let BasketballStatsPro = (function () {
       profile_data_url = PROFILE_2015_2016;
     }
   }
-
 
   return {
 
