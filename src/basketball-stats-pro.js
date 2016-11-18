@@ -53,6 +53,9 @@ let BasketballStatsPro = (function () {
   let player_a_sec_stats, player_b_sec_stats;
   let compare_player_clicked;
 
+  //graphs and chart variables
+  let data_radar_main, data_bar_main, data_doughnut_main;
+
   //favourites variables
   let save_player_list = [];
   let save_player_profile = {}; 
@@ -236,17 +239,21 @@ let BasketballStatsPro = (function () {
 
   let setPlayerStats = function() {
 
-    //set player_profile, player_main_stats and player_secondary_stats
+    //set player's profile data, main stats, and secondary stats
     player_profile = getPlayerProfile(all_profile_data, current_player_clicked)[0];
     player_main_stats = getPlayerMainStats(all_stats_data, current_player_clicked)[0];  
     player_secondary_stats = getPlayerSecondaryStats(all_stats_data, current_player_clicked)[0];
 
-    //set player_team_name, player_team_list, player_team_positions
+    //set player's team data
     player_team_name = getTeamName(all_stats_data, current_player_clicked)[0];
     player_team_list = getTeamList(all_stats_data, current_player_clicked);
     player_team_positions = getTeamPositions(all_stats_data, current_player_clicked);
 
+    //set chart and graph data
+    data_radar_main = getRadarChartData(all_stats_data, current_player_clicked);
+
     displayPlayerStats();
+    setMainCharts();
   };
 
   let displayPlayerStats = function() {
@@ -623,43 +630,38 @@ let BasketballStatsPro = (function () {
 
   let setMainCharts = function() {
     
+    // Chart.scaleService.updateScaleDefaults('linear', {
+    //   ticks: {
+    //       min: 0
+    //   }
+    // });
+
     let setRadarChart = function() { 
       
-      var data = {
-        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling"],
+      let ctx = document.getElementById('radar-chart-main');
+        
+      let data = {
+        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
         datasets: [
             {
-                label: "My First dataset",
+                label: toNameUpperCase(current_player_clicked),
                 backgroundColor: "rgba(179,181,198,0.2)",
                 borderColor: "rgba(179,181,198,1)",
                 pointBackgroundColor: "rgba(179,181,198,1)",
                 pointBorderColor: "#fff",
                 pointHoverBackgroundColor: "#fff",
                 pointHoverBorderColor: "rgba(179,181,198,1)",
-                data: [65, 59, 90, 81, 56, 55]
-            },
-            {
-                label: "My Second dataset",
-                backgroundColor: "rgba(255,99,132,0.2)",
-                borderColor: "rgba(255,99,132,1)",
-                pointBackgroundColor: "rgba(255,99,132,1)",
-                pointBorderColor: "#fff",
-                pointHoverBackgroundColor: "#fff",
-                pointHoverBorderColor: "rgba(255,99,132,1)",
-                data: [28, 48, 40, 19, 96, 27]
+                data: data_radar_main
             }
         ]
       };
-
-      var ctx = document.getElementById('radar-chart-main');
         
-      var myRadarChart = new Chart(ctx, {
+      let myRadarChart = new Chart(ctx, {
         type: 'radar',
         data: data,
         options: {
             responsive: false,
             scale: {
-                reverse: true,
                 ticks: {
                     beginAtZero: true
                 }
@@ -670,7 +672,7 @@ let BasketballStatsPro = (function () {
 
     let setBarChart = function() { 
       
-      var data = {
+      let data = {
           labels: ["January", "February", "March", "April", "May", "June", "July"],
           datasets: [
               {
@@ -718,9 +720,9 @@ let BasketballStatsPro = (function () {
           ]
       };
 
-      var ctx = document.getElementById('bar-chart-main');
+      let ctx = document.getElementById('bar-chart-main');
         
-      var myBarChart = new Chart(ctx, {
+      let myBarChart = new Chart(ctx, {
         type: 'horizontalBar',
         data: data,
         options: {
@@ -736,7 +738,7 @@ let BasketballStatsPro = (function () {
 
     let setDoughnutChart = function() { 
       
-      var data = {
+      let data = {
         labels: ["Red", "Blue", "Yellow", "green", "Black", "pink"],
         datasets: 
         [
@@ -769,9 +771,9 @@ let BasketballStatsPro = (function () {
         ]
       };
 
-      var ctx = document.getElementById('doughnut-chart-main');
+      let ctx = document.getElementById('doughnut-chart-main');
         
-      var myChart = new Chart(ctx, {
+      let myChart = new Chart(ctx, {
         type: 'doughnut',
         data: data,
         animation: { animateScale: true },
@@ -1007,6 +1009,24 @@ let BasketballStatsPro = (function () {
       .map((entry) => { return entry.player.Position });
   }
 
+  function getRadarChartData(data, player_clicked) {
+    //return an array with numbers for the chart
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { return [
+          Number(getEfgPct(entry)), 
+          Number(entry.stats.FtPct["#text"]), 
+          Number(entry.stats.Fg3PtPct["#text"]),  
+          Number(getTsPct(entry)),
+          Number(entry.stats.Fg2PtPct["#text"]),
+          Number(entry.stats.FgPct["#text"])
+        ]
+      });
+
+    return array[0];
+  }
+
   function getEfgPct(entry) {
   
     let EfgPct = 0;
@@ -1031,6 +1051,11 @@ let BasketballStatsPro = (function () {
     else {
       return TsPct.toPrecision(3);
     }
+  }
+
+  function toNameUpperCase(str) {
+
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }
 
   //favourites utilities
@@ -1370,7 +1395,6 @@ let BasketballStatsPro = (function () {
       setAllStatsData();
       getComparePlayer();
       setSavePlayerList();
-      setMainCharts();
     }
   }; 
 })();

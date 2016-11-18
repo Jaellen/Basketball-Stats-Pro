@@ -128,6 +128,11 @@
 	      player_b_sec_stats = void 0;
 	  var compare_player_clicked = void 0;
 
+	  //graphs and chart variables
+	  var data_radar_main = void 0,
+	      data_bar_main = void 0,
+	      data_doughnut_main = void 0;
+
 	  //favourites variables
 	  var save_player_list = [];
 	  var save_player_profile = {};
@@ -310,17 +315,21 @@
 
 	  var setPlayerStats = function setPlayerStats() {
 
-	    //set player_profile, player_main_stats and player_secondary_stats
+	    //set player's profile data, main stats, and secondary stats
 	    player_profile = getPlayerProfile(all_profile_data, current_player_clicked)[0];
 	    player_main_stats = getPlayerMainStats(all_stats_data, current_player_clicked)[0];
 	    player_secondary_stats = getPlayerSecondaryStats(all_stats_data, current_player_clicked)[0];
 
-	    //set player_team_name, player_team_list, player_team_positions
+	    //set player's team data
 	    player_team_name = getTeamName(all_stats_data, current_player_clicked)[0];
 	    player_team_list = getTeamList(all_stats_data, current_player_clicked);
 	    player_team_positions = getTeamPositions(all_stats_data, current_player_clicked);
 
+	    //set chart and graph data
+	    data_radar_main = getRadarChartData(all_stats_data, current_player_clicked);
+
 	    displayPlayerStats();
+	    setMainCharts();
 	  };
 
 	  var displayPlayerStats = function displayPlayerStats() {
@@ -693,32 +702,29 @@
 
 	  var setMainCharts = function setMainCharts() {
 
+	    // Chart.scaleService.updateScaleDefaults('linear', {
+	    //   ticks: {
+	    //       min: 0
+	    //   }
+	    // });
+
 	    var setRadarChart = function setRadarChart() {
 
+	      var ctx = document.getElementById('radar-chart-main');
+
 	      var data = {
-	        labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling"],
+	        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
 	        datasets: [{
-	          label: "My First dataset",
+	          label: toNameUpperCase(current_player_clicked),
 	          backgroundColor: "rgba(179,181,198,0.2)",
 	          borderColor: "rgba(179,181,198,1)",
 	          pointBackgroundColor: "rgba(179,181,198,1)",
 	          pointBorderColor: "#fff",
 	          pointHoverBackgroundColor: "#fff",
 	          pointHoverBorderColor: "rgba(179,181,198,1)",
-	          data: [65, 59, 90, 81, 56, 55]
-	        }, {
-	          label: "My Second dataset",
-	          backgroundColor: "rgba(255,99,132,0.2)",
-	          borderColor: "rgba(255,99,132,1)",
-	          pointBackgroundColor: "rgba(255,99,132,1)",
-	          pointBorderColor: "#fff",
-	          pointHoverBackgroundColor: "#fff",
-	          pointHoverBorderColor: "rgba(255,99,132,1)",
-	          data: [28, 48, 40, 19, 96, 27]
+	          data: data_radar_main
 	        }]
 	      };
-
-	      var ctx = document.getElementById('radar-chart-main');
 
 	      var myRadarChart = new Chart(ctx, {
 	        type: 'radar',
@@ -726,7 +732,6 @@
 	        options: {
 	          responsive: false,
 	          scale: {
-	            reverse: true,
 	            ticks: {
 	              beginAtZero: true
 	            }
@@ -1041,6 +1046,20 @@
 	    });
 	  }
 
+	  function getRadarChartData(data, player_clicked) {
+	    //return an array with numbers for the chart
+	    var array = data.filter(function (entry) {
+	      return entry.stats.PtsPerGame !== undefined;
+	    }) //filter out undefined stats in the data set
+	    .filter(function (entry) {
+	      return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
+	    }).map(function (entry) {
+	      return [Number(getEfgPct(entry)), Number(entry.stats.FtPct["#text"]), Number(entry.stats.Fg3PtPct["#text"]), Number(getTsPct(entry)), Number(entry.stats.Fg2PtPct["#text"]), Number(entry.stats.FgPct["#text"])];
+	    });
+
+	    return array[0];
+	  }
+
 	  function getEfgPct(entry) {
 
 	    var EfgPct = 0;
@@ -1063,6 +1082,13 @@
 	    } else {
 	      return TsPct.toPrecision(3);
 	    }
+	  }
+
+	  function toNameUpperCase(str) {
+
+	    return str.replace(/\w\S*/g, function (txt) {
+	      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+	    });
 	  }
 
 	  //favourites utilities
@@ -1385,7 +1411,6 @@
 	      setAllStatsData();
 	      getComparePlayer();
 	      setSavePlayerList();
-	      setMainCharts();
 	    }
 	  };
 	}();
