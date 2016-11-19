@@ -132,6 +132,8 @@
 	  var data_radar_main = void 0,
 	      data_doughnut1_main = void 0,
 	      data_doughnut2_main = void 0;
+	  var data_radar_compare_a = void 0,
+	      data_radar_compare_b = void 0;
 
 	  //favourites variables
 	  var save_player_list = [];
@@ -559,6 +561,7 @@
 	      player_a_profile = getPlayerProfile(all_profile_data, compare_player_a)[0];
 	      player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0];
 	      player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
+	      data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
 	    }
 
 	    if (slot === "b") {
@@ -566,9 +569,11 @@
 	      player_b_profile = getPlayerProfile(all_profile_data, compare_player_b)[0];
 	      player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0];
 	      player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
+	      data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b);
 	    }
 
 	    displayComparePlayerStats();
+	    displayCompareCharts();
 	  };
 
 	  var displayComparePlayerStats = function displayComparePlayerStats() {
@@ -627,6 +632,60 @@
 	    displayCompareProfiles();
 	    displayCompareMainStats();
 	    displayCompareSecondaryStats();
+	  };
+
+	  var displayCompareCharts = function displayCompareCharts() {
+
+	    Chart.scaleService.updateScaleDefaults('linear', {
+	      ticks: {
+	        min: 0
+	      }
+	    });
+
+	    var setRadarCompareChart = function setRadarCompareChart() {
+
+	      var ctx = document.getElementById('radar-chart-compare');
+
+	      var data = {
+	        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
+	        datasets: [{
+	          label: compare_player_a,
+	          backgroundColor: "rgba(75,192,192,0.2)",
+	          borderColor: "rgba(75,192,192,1)",
+	          pointBackgroundColor: "rgba(75,192,192,1)",
+	          pointBorderColor: "#fff",
+	          pointHoverBackgroundColor: "#fff",
+	          pointHoverBorderColor: "rgba(75,192,192,1)",
+	          data: data_radar_compare_a
+	        }, {
+	          label: compare_player_b,
+	          backgroundColor: "rgba(255,61,103,0.2)",
+	          borderColor: "rgba(255,61,103,1)",
+	          pointBackgroundColor: "rgba(255,61,103,1)",
+	          pointBorderColor: "#fff",
+	          pointHoverBackgroundColor: "#fff",
+	          pointHoverBorderColor: "rgba(255,61,103,1)",
+	          data: data_radar_compare_b
+	        }],
+	        yLabels: [0, 20, 40, 60, 80, 100]
+	      };
+
+	      var myRadarChart = new Chart(ctx, {
+	        type: 'radar',
+	        data: data,
+	        options: {
+	          responsive: false,
+	          scale: {
+	            ticks: {
+	              beginAtZero: true,
+	              max: 100
+	            }
+	          }
+	        }
+	      });
+	    };
+
+	    setRadarCompareChart();
 	  };
 
 	  //Save player functionality

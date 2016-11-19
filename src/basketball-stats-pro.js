@@ -55,6 +55,7 @@ let BasketballStatsPro = (function () {
 
   //graphs and chart variables
   let data_radar_main, data_doughnut1_main, data_doughnut2_main;
+  let data_radar_compare_a, data_radar_compare_b;
 
   //favourites variables
   let save_player_list = [];
@@ -327,10 +328,9 @@ let BasketballStatsPro = (function () {
     
     Chart.scaleService.updateScaleDefaults('linear', {
       ticks: {
-          min: 0
+        min: 0
       }
     })
-
 
     let setRadarChart = function() { 
       
@@ -339,16 +339,16 @@ let BasketballStatsPro = (function () {
       let data = {
         labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
         datasets: [
-            {
-                label: toNameUpperCase(current_player_clicked),
-                backgroundColor: "rgba(179,181,198,0.2)",
-                borderColor: "rgba(179,181,198,1)",
-                pointBackgroundColor: "rgba(179,181,198,1)",
-                pointBorderColor: "#fff",
-                pointHoverBackgroundColor: "#fff",
-                pointHoverBorderColor: "rgba(179,181,198,1)",
-                data: data_radar_main
-            }
+          {
+            label: toNameUpperCase(current_player_clicked),
+            backgroundColor: "rgba(179,181,198,0.2)",
+            borderColor: "rgba(179,181,198,1)",
+            pointBackgroundColor: "rgba(179,181,198,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgba(179,181,198,1)",
+            data: data_radar_main
+          }
         ],
         yLabels: [0, 20, 40, 60, 80, 100]
       };
@@ -357,13 +357,13 @@ let BasketballStatsPro = (function () {
         type: 'radar',
         data: data,
         options: {
-            responsive: false,
-            scale: {
-                ticks: {
-                    beginAtZero: true,
-                    max: 100
-                }
+          responsive: false,
+          scale: {
+            ticks: {
+              beginAtZero: true,
+              max: 100
             }
+          }
         }
       });
     }
@@ -376,15 +376,15 @@ let BasketballStatsPro = (function () {
         labels: ["FGA", "FGM"],
         datasets: 
         [{
-            data: data_doughnut1_main,
-            backgroundColor: [
-                "#4BC0C0",
-                "#FFCE56"
-            ],
-            hoverBackgroundColor: [
-                "#4BC0C0",
-                "#FFCE56"
-            ]
+          data: data_doughnut1_main,
+          backgroundColor: [
+            "#4BC0C0",
+            "#FFCE56"
+          ],
+          hoverBackgroundColor: [
+            "#4BC0C0",
+            "#FFCE56"
+          ]
         }]
       };
   
@@ -393,7 +393,7 @@ let BasketballStatsPro = (function () {
         data: data,
         animation: { animateScale: true },
         options: {
-            responsive: false
+          responsive: false
         }
       });
     } 
@@ -406,15 +406,15 @@ let BasketballStatsPro = (function () {
         labels: ["FTA", "FTM"],
         datasets: 
         [{
-            data: data_doughnut2_main,
-            backgroundColor: [
-                "#4BC0C0",
-                "#FFCE56"
-            ],
-            hoverBackgroundColor: [
-                "#4BC0C0",
-                "#FFCE56"
-            ]
+          data: data_doughnut2_main,
+          backgroundColor: [
+            "#4BC0C0",
+            "#FFCE56"
+          ],
+          hoverBackgroundColor: [
+            "#4BC0C0",
+            "#FFCE56"
+          ]
         }]
       };
         
@@ -502,6 +502,7 @@ let BasketballStatsPro = (function () {
       player_a_profile = getPlayerProfile(all_profile_data, compare_player_a)[0];
       player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0]; 
       player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
+      data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
     }
     
     if (slot === "b") {
@@ -509,9 +510,11 @@ let BasketballStatsPro = (function () {
       player_b_profile = getPlayerProfile(all_profile_data, compare_player_b)[0];
       player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0]; 
       player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
+      data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b); 
     }
 
     displayComparePlayerStats();
+    displayCompareCharts();
   };
 
   let displayComparePlayerStats = function() {
@@ -571,6 +574,63 @@ let BasketballStatsPro = (function () {
     displayCompareMainStats();
     displayCompareSecondaryStats();
   }
+
+  let displayCompareCharts = function() {
+    
+    Chart.scaleService.updateScaleDefaults('linear', {
+      ticks: {
+        min: 0
+      }
+    })
+
+    let setRadarCompareChart = function() { 
+      
+      let ctx = document.getElementById('radar-chart-compare');
+        
+      let data = {
+        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
+        datasets: [
+          {
+            label: compare_player_a,
+            backgroundColor: "rgba(75,192,192,0.2)",
+            borderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "rgba(75,192,192,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgba(75,192,192,1)",
+            data: data_radar_compare_a
+          },
+          {
+            label: compare_player_b,
+            backgroundColor: "rgba(255,61,103,0.2)",
+            borderColor: "rgba(255,61,103,1)",
+            pointBackgroundColor: "rgba(255,61,103,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "#fff",
+            pointHoverBorderColor: "rgba(255,61,103,1)",
+            data: data_radar_compare_b
+          }
+        ],
+        yLabels: [0, 20, 40, 60, 80, 100]
+      };
+        
+      let myRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: data,
+        options: {
+          responsive: false,
+          scale: {
+            ticks: {
+              beginAtZero: true,
+              max: 100
+            }
+          }
+        }
+      });
+    }
+
+    setRadarCompareChart();
+  };
 
   //Save player functionality
   let setSavePlayerList = function() {
