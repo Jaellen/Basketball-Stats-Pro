@@ -324,12 +324,12 @@
 	  var setPlayerStats = function setPlayerStats() {
 
 	    //set player's profile data, main stats, and secondary stats
-	    player_profile = getPlayerProfile(all_profile_data, current_player_clicked)[0];
-	    player_main_stats = getPlayerMainStats(all_stats_data, current_player_clicked)[0];
-	    player_secondary_stats = getPlayerSecondaryStats(all_stats_data, current_player_clicked)[0];
+	    player_profile = getPlayerProfile(all_profile_data, current_player_clicked);
+	    player_main_stats = getPlayerMainStats(all_stats_data, current_player_clicked);
+	    player_secondary_stats = getPlayerSecondaryStats(all_stats_data, current_player_clicked);
 
 	    //set player's team data
-	    player_team_name = getTeamName(all_stats_data, current_player_clicked)[0];
+	    player_team_name = getTeamName(all_stats_data, current_player_clicked);
 	    player_team_list = getTeamList(all_stats_data, current_player_clicked);
 	    player_team_positions = getTeamPositions(all_stats_data, current_player_clicked);
 
@@ -595,9 +595,9 @@
 
 	    if (slot === "a") {
 	      //update player_a_profile, player_a_main_stats, player_a_sec_stats
-	      player_a_profile = getPlayerProfile(all_profile_data, compare_player_a)[0];
-	      player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0];
-	      player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
+	      player_a_profile = getPlayerProfile(all_profile_data, compare_player_a);
+	      player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a);
+	      player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a);
 	      data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
 	      data_bar_compare_a = getBarChartData(all_stats_data, compare_player_a);
 	      data_doughnut1_compare_a = getDoughnutChart1Data(all_stats_data, compare_player_a);
@@ -606,9 +606,9 @@
 
 	    if (slot === "b") {
 	      //update player_b_profile, player_b_main_stats, player_b_sec_stats
-	      player_b_profile = getPlayerProfile(all_profile_data, compare_player_b)[0];
-	      player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0];
-	      player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
+	      player_b_profile = getPlayerProfile(all_profile_data, compare_player_b);
+	      player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b);
+	      player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b);
 	      data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b);
 	      data_bar_compare_b = getBarChartData(all_stats_data, compare_player_b);
 	      data_doughnut1_compare_b = getDoughnutChart1Data(all_stats_data, compare_player_b);
@@ -1135,7 +1135,7 @@
 	  }
 
 	  function getPlayerProfile(data, player_clicked) {
-	    return data.filter(function (entry) {
+	    var array = data.filter(function (entry) {
 	      return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
 	    }).map(function (entry) {
 	      return {
@@ -1147,6 +1147,7 @@
 	        weight: entry.player.Weight + " lbs"
 	      };
 	    });
+	    return array[0];
 	  }
 
 	  function getSavePlayerProfile(data, player_clicked) {
@@ -1165,7 +1166,7 @@
 	  }
 
 	  function getPlayerMainStats(data, player_clicked) {
-	    return data.filter(function (entry) {
+	    var array = data.filter(function (entry) {
 	      return entry.stats.PtsPerGame !== undefined;
 	    }) //filter out undefined stats in the data set
 	    .filter(function (entry) {
@@ -1189,10 +1190,11 @@
 	        MinSecondsPerGame: "MPG: " + entry.stats.MinSecondsPerGame["#text"]
 	      };
 	    });
+	    return array[0];
 	  }
 
 	  function getPlayerSecondaryStats(data, player_clicked) {
-	    return data.filter(function (entry) {
+	    var array = data.filter(function (entry) {
 	      return entry.stats.PtsPerGame !== undefined;
 	    }) //filter out undefined stats in the data set
 	    .filter(function (entry) {
@@ -1220,10 +1222,11 @@
 	        FoulPers: "PF: " + entry.stats.FoulPers["#text"]
 	      };
 	    });
+	    return array[0];
 	  }
 
 	  function getTeamName(data, player_clicked) {
-	    return data.filter(function (entry) {
+	    var array = data.filter(function (entry) {
 	      return entry.stats.PtsPerGame !== undefined;
 	    }) //filter out undefined stats in the data set
 	    .filter(function (entry) {
@@ -1231,6 +1234,7 @@
 	    }).map(function (entry) {
 	      return entry.team.City + " " + entry.team.Name;
 	    });
+	    return array[0];
 	  }
 
 	  function getTeamList(data, player_clicked) {
