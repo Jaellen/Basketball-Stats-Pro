@@ -57,6 +57,8 @@ let BasketballStatsPro = (function () {
   let data_radar_main, data_doughnut1_main, data_doughnut2_main;
   let data_radar_compare_a, data_radar_compare_b;
   let data_bar_compare_a, data_bar_compare_b;
+  let data_doughnut1_compare_a, data_doughnut1_compare_b;
+  let data_doughnut2_compare_a, data_doughnut2_compare_b;
 
   //favourites variables
   let save_player_list = [];
@@ -536,6 +538,8 @@ let BasketballStatsPro = (function () {
       player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
       data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
       data_bar_compare_a = getBarChartData(all_stats_data, compare_player_a);
+      data_doughnut1_compare_a = getDoughnutChart1Data(all_stats_data, compare_player_a);
+      data_doughnut2_compare_a = getDoughnutChart2Data(all_stats_data, compare_player_a);
     }
     
     if (slot === "b") {
@@ -545,6 +549,8 @@ let BasketballStatsPro = (function () {
       player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
       data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b); 
       data_bar_compare_b = getBarChartData(all_stats_data, compare_player_b);
+      data_doughnut1_compare_b = getDoughnutChart1Data(all_stats_data, compare_player_b);
+      data_doughnut2_compare_b = getDoughnutChart2Data(all_stats_data, compare_player_b);
     }
 
     displayComparePlayerStats();
@@ -683,7 +689,7 @@ let BasketballStatsPro = (function () {
 
       //add a new canvas 
       let canvas = canvas_section.appendChild(createElement('canvas'));
-      setAttributes(canvas, {id: 'bar-chart-compare', width: '300', height: '300'});
+      setAttributes(canvas, {id: 'bar-chart-compare', width: '400', height: '300'});
 
       //create the new chart
       let chart = document.getElementById('bar-chart-compare');
@@ -747,8 +753,119 @@ let BasketballStatsPro = (function () {
       });
     }
 
+    let setDoughnutCompareChart1 = function() {
+
+      let canvas_section = document.getElementById('doughnut1-section-compare');
+
+      //clear any previous charts
+      canvas_section.innerHTML = '';
+
+      //add a new canvas 
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart1-compare', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart1-compare');
+      
+      let data = 
+      {
+        labels: ["FGA", "FGM", "FGA2", "FGA2"],
+        datasets: 
+        [{
+          data: data_doughnut1_compare_a,
+          backgroundColor: 
+          [
+            "#22CECE",
+            "#D3F5F5"
+          ],
+          hoverBackgroundColor: 
+          [
+            "#22CECE",
+            "#D3F5F5"
+          ]
+         },
+         {
+          data: data_doughnut1_compare_b,
+          backgroundColor: 
+          [
+            "#FF6384",
+            "#FFE0E6"
+          ],
+          hoverBackgroundColor: [
+            "#FF6384",
+            "#FFE0E6"
+          ]
+        }]
+      }
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false
+        }
+      });
+    }
+
+    let setDoughnutCompareChart2 = function() {
+      let canvas_section = document.getElementById('doughnut2-section-compare');
+
+      //clear any previous charts
+      canvas_section.innerHTML = '';
+
+      //add a new canvas 
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart2-compare', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart2-compare');
+      
+      let data = {
+        labels: ["FTA", "FTM"],
+        datasets: 
+        [{
+          data: data_doughnut2_compare_a,
+          backgroundColor: 
+          [
+            "#22CECE",
+            "#D3F5F5"
+          ],
+          hoverBackgroundColor: 
+          [
+            "#22CECE",
+            "#D3F5F5"
+          ]
+        },
+        {
+          data: data_doughnut2_compare_b,
+          backgroundColor: 
+          [
+            "#FF6384",
+            "#FFE0E6"
+          ],
+          hoverBackgroundColor: 
+          [
+            "#FF6384",
+            "#FFE0E6"
+          ]
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false
+        }
+      });
+    }
+
     setRadarCompareChart();
     setBarCompareChart();
+    setDoughnutCompareChart1();
+    setDoughnutCompareChart2();
   };
 
   //Save player functionality

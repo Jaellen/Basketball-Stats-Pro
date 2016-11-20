@@ -136,6 +136,10 @@
 	      data_radar_compare_b = void 0;
 	  var data_bar_compare_a = void 0,
 	      data_bar_compare_b = void 0;
+	  var data_doughnut1_compare_a = void 0,
+	      data_doughnut1_compare_b = void 0;
+	  var data_doughnut2_compare_a = void 0,
+	      data_doughnut2_compare_b = void 0;
 
 	  //favourites variables
 	  var save_player_list = [];
@@ -596,6 +600,8 @@
 	      player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
 	      data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
 	      data_bar_compare_a = getBarChartData(all_stats_data, compare_player_a);
+	      data_doughnut1_compare_a = getDoughnutChart1Data(all_stats_data, compare_player_a);
+	      data_doughnut2_compare_a = getDoughnutChart2Data(all_stats_data, compare_player_a);
 	    }
 
 	    if (slot === "b") {
@@ -605,6 +611,8 @@
 	      player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
 	      data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b);
 	      data_bar_compare_b = getBarChartData(all_stats_data, compare_player_b);
+	      data_doughnut1_compare_b = getDoughnutChart1Data(all_stats_data, compare_player_b);
+	      data_doughnut2_compare_b = getDoughnutChart2Data(all_stats_data, compare_player_b);
 	    }
 
 	    displayComparePlayerStats();
@@ -740,7 +748,7 @@
 
 	      //add a new canvas 
 	      var canvas = canvas_section.appendChild(createElement('canvas'));
-	      setAttributes(canvas, { id: 'bar-chart-compare', width: '300', height: '300' });
+	      setAttributes(canvas, { id: 'bar-chart-compare', width: '400', height: '300' });
 
 	      //create the new chart
 	      var chart = document.getElementById('bar-chart-compare');
@@ -769,8 +777,83 @@
 	      });
 	    };
 
+	    var setDoughnutCompareChart1 = function setDoughnutCompareChart1() {
+
+	      var canvas_section = document.getElementById('doughnut1-section-compare');
+
+	      //clear any previous charts
+	      canvas_section.innerHTML = '';
+
+	      //add a new canvas 
+	      var canvas = canvas_section.appendChild(createElement('canvas'));
+	      setAttributes(canvas, { id: 'doughnut-chart1-compare', width: '300', height: '300' });
+
+	      //create the new chart
+	      var chart = document.getElementById('doughnut-chart1-compare');
+
+	      var data = {
+	        labels: ["FGA", "FGM", "FGA2", "FGA2"],
+	        datasets: [{
+	          data: data_doughnut1_compare_a,
+	          backgroundColor: ["#22CECE", "#D3F5F5"],
+	          hoverBackgroundColor: ["#22CECE", "#D3F5F5"]
+	        }, {
+	          data: data_doughnut1_compare_b,
+	          backgroundColor: ["#FF6384", "#FFE0E6"],
+	          hoverBackgroundColor: ["#FF6384", "#FFE0E6"]
+	        }]
+	      };
+
+	      var myChart = new Chart(chart, {
+	        type: 'doughnut',
+	        data: data,
+	        animation: { animateScale: true },
+	        options: {
+	          responsive: false
+	        }
+	      });
+	    };
+
+	    var setDoughnutCompareChart2 = function setDoughnutCompareChart2() {
+	      var canvas_section = document.getElementById('doughnut2-section-compare');
+
+	      //clear any previous charts
+	      canvas_section.innerHTML = '';
+
+	      //add a new canvas 
+	      var canvas = canvas_section.appendChild(createElement('canvas'));
+	      setAttributes(canvas, { id: 'doughnut-chart2-compare', width: '300', height: '300' });
+
+	      //create the new chart
+	      var chart = document.getElementById('doughnut-chart2-compare');
+
+	      var data = {
+	        labels: ["FTA", "FTM"],
+	        datasets: [{
+	          data: data_doughnut2_compare_a,
+	          backgroundColor: ["#22CECE", "#D3F5F5"],
+	          hoverBackgroundColor: ["#22CECE", "#D3F5F5"]
+	        }, {
+	          data: data_doughnut2_compare_b,
+	          backgroundColor: ["#FF6384", "#FFE0E6"],
+	          hoverBackgroundColor: ["#FF6384", "#FFE0E6"]
+	        }]
+	      };
+
+	      var myChart = new Chart(chart, {
+	        type: 'doughnut',
+	        data: data,
+	        animation: { animateScale: true },
+	        options: {
+	          responsive: false
+	        }
+	      });
+	    };
+
 	    setRadarCompareChart();
 	    setBarCompareChart();
+	    setDoughnutCompareChart1();
+	    setDoughnutCompareChart2();
 	  };
 
 	  //Save player functionality
