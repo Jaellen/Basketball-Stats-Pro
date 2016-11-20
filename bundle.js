@@ -134,6 +134,8 @@
 	      data_doughnut2_main = void 0;
 	  var data_radar_compare_a = void 0,
 	      data_radar_compare_b = void 0;
+	  var data_bar_compare_a = void 0,
+	      data_bar_compare_b = void 0;
 
 	  //favourites variables
 	  var save_player_list = [];
@@ -401,6 +403,7 @@
 
 	  var displayMainCharts = function displayMainCharts() {
 
+	    //chart global config
 	    Chart.scaleService.updateScaleDefaults('linear', {
 	      ticks: {
 	        min: 0
@@ -409,7 +412,17 @@
 
 	    var setRadarChart = function setRadarChart() {
 
-	      var ctx = document.getElementById('radar-chart-main');
+	      var canvas_section = document.getElementById('radar-section-main');
+
+	      //clear any previous charts
+	      canvas_section.innerHTML = '';
+
+	      //add a new canvas 
+	      var canvas = canvas_section.appendChild(createElement('canvas'));
+	      setAttributes(canvas, { id: 'radar-chart-main', width: '300', height: '300' });
+
+	      //create the new chart
+	      var chart = document.getElementById('radar-chart-main');
 
 	      var data = {
 	        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
@@ -426,7 +439,7 @@
 	        yLabels: [0, 20, 40, 60, 80, 100]
 	      };
 
-	      var myRadarChart = new Chart(ctx, {
+	      var myRadarChart = new Chart(chart, {
 	        type: 'radar',
 	        data: data,
 	        options: {
@@ -443,7 +456,17 @@
 
 	    var setDoughnutChart1 = function setDoughnutChart1() {
 
-	      var ctx = document.getElementById('doughnut-chart1-main');
+	      var canvas_section = document.getElementById('doughnut1-section-main');
+
+	      //clear any previous charts
+	      canvas_section.innerHTML = '';
+
+	      //add a new canvas 
+	      var canvas = canvas_section.appendChild(createElement('canvas'));
+	      setAttributes(canvas, { id: 'doughnut-chart1-main', width: '300', height: '300' });
+
+	      //create the new chart
+	      var chart = document.getElementById('doughnut-chart1-main');
 
 	      var data = {
 	        labels: ["FGA", "FGM"],
@@ -454,7 +477,7 @@
 	        }]
 	      };
 
-	      var myChart = new Chart(ctx, {
+	      var myChart = new Chart(chart, {
 	        type: 'doughnut',
 	        data: data,
 	        animation: { animateScale: true },
@@ -466,7 +489,17 @@
 
 	    var setDoughnutChart2 = function setDoughnutChart2() {
 
-	      var ctx = document.getElementById('doughnut-chart2-main');
+	      var canvas_section = document.getElementById('doughnut2-section-main');
+
+	      //clear any previous charts
+	      canvas_section.innerHTML = '';
+
+	      //add a new canvas 
+	      var canvas = canvas_section.appendChild(createElement('canvas'));
+	      setAttributes(canvas, { id: 'doughnut-chart2-main', width: '300', height: '300' });
+
+	      //create the new chart
+	      var chart = document.getElementById('doughnut-chart2-main');
 
 	      var data = {
 	        labels: ["FTA", "FTM"],
@@ -477,7 +510,7 @@
 	        }]
 	      };
 
-	      var myChart = new Chart(ctx, {
+	      var myChart = new Chart(chart, {
 	        type: 'doughnut',
 	        data: data,
 	        animation: { animateScale: true },
@@ -562,6 +595,7 @@
 	      player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0];
 	      player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
 	      data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
+	      data_bar_compare_a = getBarChartData(all_stats_data, compare_player_a);
 	    }
 
 	    if (slot === "b") {
@@ -570,6 +604,7 @@
 	      player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0];
 	      player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
 	      data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b);
+	      data_bar_compare_b = getBarChartData(all_stats_data, compare_player_b);
 	    }
 
 	    displayComparePlayerStats();
@@ -636,6 +671,7 @@
 
 	  var displayCompareCharts = function displayCompareCharts() {
 
+	    //charts global config
 	    Chart.scaleService.updateScaleDefaults('linear', {
 	      ticks: {
 	        min: 0
@@ -644,7 +680,17 @@
 
 	    var setRadarCompareChart = function setRadarCompareChart() {
 
-	      var ctx = document.getElementById('radar-chart-compare');
+	      var canvas_section = document.getElementById('radar-section-compare');
+
+	      //clear any previous charts
+	      canvas_section.innerHTML = '';
+
+	      //add a new canvas 
+	      var canvas = canvas_section.appendChild(createElement('canvas'));
+	      setAttributes(canvas, { id: 'radar-chart-compare', width: '300', height: '300' });
+
+	      //create the new chart
+	      var chart = document.getElementById('radar-chart-compare');
 
 	      var data = {
 	        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
@@ -670,7 +716,7 @@
 	        yLabels: [0, 20, 40, 60, 80, 100]
 	      };
 
-	      var myRadarChart = new Chart(ctx, {
+	      var myRadarChart = new Chart(chart, {
 	        type: 'radar',
 	        data: data,
 	        options: {
@@ -685,7 +731,46 @@
 	      });
 	    };
 
+	    var setBarCompareChart = function setBarCompareChart() {
+
+	      var canvas_section = document.getElementById('bar-section-compare');
+
+	      //clear any previous charts
+	      canvas_section.innerHTML = '';
+
+	      //add a new canvas 
+	      var canvas = canvas_section.appendChild(createElement('canvas'));
+	      setAttributes(canvas, { id: 'bar-chart-compare', width: '300', height: '300' });
+
+	      //create the new chart
+	      var chart = document.getElementById('bar-chart-compare');
+
+	      var data = {
+	        labels: ["PTS/G", "AST/G", "REB/G", "BLK/G", "PF/G", "2PM/G", "3PM/G"],
+	        datasets: [{
+	          label: compare_player_a,
+	          backgroundColor: ['rgba(34,206,206,0.2)', 'rgba(34,206,206,0.2)', 'rgba(34,206,206,0.2)', 'rgba(34,206,206,0.2)', 'rgba(34,206,206,0.2)', 'rgba(34,206,206,0.2)', 'rgba(34,206,206,0.2)'],
+	          borderColor: ['rgba(34,206,206,1)', 'rgba(34,206,206,1)', 'rgba(34,206,206,1)', 'rgba(34,206,206,1)', 'rgba(34,206,206,1)', 'rgba(34,206,206,1)', 'rgba(34,206,206,1)'],
+	          borderWidth: 1,
+	          data: data_bar_compare_a
+	        }, {
+	          label: compare_player_b,
+	          backgroundColor: ['rgba(255,61,103,0.2)', 'rgba(255,61,103,0.2)', 'rgba(255,61,103,0.2)', 'rgba(255,61,103,0.2)', 'rgba(255,61,103,0.2)', 'rgba(255,61,103,0.2)', 'rgba(255,61,103,0.2)'],
+	          borderColor: ['rgba(255,61,103,1)', 'rgba(255,61,103,1)', 'rgba(255,61,103,1)', 'rgba(255,61,103,1)', 'rgba(255,61,103,1)', 'rgba(255,61,103,1)', 'rgba(255,61,103,1)'],
+	          borderWidth: 1,
+	          data: data_bar_compare_b
+	        }],
+	        xLabels: [0, 5, 10, 15, 20, 25, 30, 35, 40]
+	      };
+
+	      var myBarChart = new Chart(chart, {
+	        type: 'horizontalBar',
+	        data: data
+	      });
+	    };
+
 	    setRadarCompareChart();
+	    setBarCompareChart();
 	  };
 
 	  //Save player functionality
@@ -1102,6 +1187,20 @@
 	      return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
 	    }).map(function (entry) {
 	      return [Number(getEfgPct(entry)), Number(entry.stats.FtPct["#text"]), Number(entry.stats.Fg3PtPct["#text"]), Number(getTsPct(entry)), Number(entry.stats.Fg2PtPct["#text"]), Number(entry.stats.FgPct["#text"])];
+	    });
+
+	    return array[0];
+	  }
+
+	  function getBarChartData(data, player_clicked) {
+	    //return an array with numbers for the chart
+	    var array = data.filter(function (entry) {
+	      return entry.stats.PtsPerGame !== undefined;
+	    }) //filter out undefined stats in the data set
+	    .filter(function (entry) {
+	      return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked;
+	    }).map(function (entry) {
+	      return [Number(entry.stats.PtsPerGame["#text"]), Number(entry.stats.AstPerGame["#text"]), Number(entry.stats.RebPerGame["#text"]), Number(entry.stats.BlkPerGame["#text"]), Number(entry.stats.FoulPersPerGame["#text"]), Number(entry.stats.Fg2PtMadePerGame["#text"]), Number(entry.stats.Fg3PtMadePerGame["#text"])];
 	    });
 
 	    return array[0];

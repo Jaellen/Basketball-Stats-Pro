@@ -56,6 +56,7 @@ let BasketballStatsPro = (function () {
   //graphs and chart variables
   let data_radar_main, data_doughnut1_main, data_doughnut2_main;
   let data_radar_compare_a, data_radar_compare_b;
+  let data_bar_compare_a, data_bar_compare_b;
 
   //favourites variables
   let save_player_list = [];
@@ -326,6 +327,7 @@ let BasketballStatsPro = (function () {
 
   let displayMainCharts = function() {
     
+    //chart global config
     Chart.scaleService.updateScaleDefaults('linear', {
       ticks: {
         min: 0
@@ -334,8 +336,18 @@ let BasketballStatsPro = (function () {
 
     let setRadarChart = function() { 
       
-      let ctx = document.getElementById('radar-chart-main');
-        
+      let canvas_section = document.getElementById('radar-section-main')
+
+      //clear any previous charts
+      canvas_section.innerHTML = '';
+
+      //add a new canvas 
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'radar-chart-main', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('radar-chart-main');
+
       let data = {
         labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
         datasets: [
@@ -353,7 +365,7 @@ let BasketballStatsPro = (function () {
         yLabels: [0, 20, 40, 60, 80, 100]
       };
         
-      let myRadarChart = new Chart(ctx, {
+      let myRadarChart = new Chart(chart, {
         type: 'radar',
         data: data,
         options: {
@@ -370,8 +382,18 @@ let BasketballStatsPro = (function () {
 
     let setDoughnutChart1 = function() { 
       
-      let ctx = document.getElementById('doughnut-chart1-main');
+      let canvas_section = document.getElementById('doughnut1-section-main')
 
+      //clear any previous charts
+      canvas_section.innerHTML = '';
+
+      //add a new canvas 
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart1-main', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart1-main');
+      
       let data = {
         labels: ["FGA", "FGM"],
         datasets: 
@@ -388,7 +410,7 @@ let BasketballStatsPro = (function () {
         }]
       };
   
-      let myChart = new Chart(ctx, {
+      let myChart = new Chart(chart, {
         type: 'doughnut',
         data: data,
         animation: { animateScale: true },
@@ -400,8 +422,18 @@ let BasketballStatsPro = (function () {
 
     let setDoughnutChart2 = function() { 
       
-      let ctx = document.getElementById('doughnut-chart2-main');
+      let canvas_section = document.getElementById('doughnut2-section-main')
 
+      //clear any previous charts
+      canvas_section.innerHTML = '';
+
+      //add a new canvas 
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart2-main', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart2-main');
+    
       let data = {
         labels: ["FTA", "FTM"],
         datasets: 
@@ -418,7 +450,7 @@ let BasketballStatsPro = (function () {
         }]
       };
         
-      let myChart = new Chart(ctx, {
+      let myChart = new Chart(chart, {
         type: 'doughnut',
         data: data,
         animation: { animateScale: true },
@@ -503,6 +535,7 @@ let BasketballStatsPro = (function () {
       player_a_main_stats = getPlayerMainStats(all_stats_data, compare_player_a)[0]; 
       player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a)[0];
       data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
+      data_bar_compare_a = getBarChartData(all_stats_data, compare_player_a);
     }
     
     if (slot === "b") {
@@ -511,6 +544,7 @@ let BasketballStatsPro = (function () {
       player_b_main_stats = getPlayerMainStats(all_stats_data, compare_player_b)[0]; 
       player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b)[0];
       data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b); 
+      data_bar_compare_b = getBarChartData(all_stats_data, compare_player_b);
     }
 
     displayComparePlayerStats();
@@ -577,6 +611,7 @@ let BasketballStatsPro = (function () {
 
   let displayCompareCharts = function() {
     
+    //charts global config
     Chart.scaleService.updateScaleDefaults('linear', {
       ticks: {
         min: 0
@@ -585,8 +620,18 @@ let BasketballStatsPro = (function () {
 
     let setRadarCompareChart = function() { 
       
-      let ctx = document.getElementById('radar-chart-compare');
-        
+      let canvas_section = document.getElementById('radar-section-compare')
+
+      //clear any previous charts
+      canvas_section.innerHTML = '';
+
+      //add a new canvas 
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'radar-chart-compare', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('radar-chart-compare');
+
       let data = {
         labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
         datasets: [
@@ -614,7 +659,7 @@ let BasketballStatsPro = (function () {
         yLabels: [0, 20, 40, 60, 80, 100]
       };
         
-      let myRadarChart = new Chart(ctx, {
+      let myRadarChart = new Chart(chart, {
         type: 'radar',
         data: data,
         options: {
@@ -629,7 +674,81 @@ let BasketballStatsPro = (function () {
       });
     }
 
+    let setBarCompareChart = function() {
+
+      let canvas_section = document.getElementById('bar-section-compare')
+
+      //clear any previous charts
+      canvas_section.innerHTML = '';
+
+      //add a new canvas 
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'bar-chart-compare', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('bar-chart-compare');
+      
+      var data = {
+        labels: ["PTS/G", "AST/G", "REB/G", "BLK/G", "PF/G", "2PM/G", "3PM/G"],
+        datasets: [
+          {
+            label: compare_player_a,
+            backgroundColor: [
+              'rgba(34,206,206,0.2)',
+              'rgba(34,206,206,0.2)',
+              'rgba(34,206,206,0.2)',
+              'rgba(34,206,206,0.2)',
+              'rgba(34,206,206,0.2)',
+              'rgba(34,206,206,0.2)',
+              'rgba(34,206,206,0.2)'
+            ],
+            borderColor: [
+              'rgba(34,206,206,1)',
+              'rgba(34,206,206,1)',
+              'rgba(34,206,206,1)',
+              'rgba(34,206,206,1)',
+              'rgba(34,206,206,1)',
+              'rgba(34,206,206,1)',
+              'rgba(34,206,206,1)'
+            ],
+            borderWidth: 1,
+            data: data_bar_compare_a
+          },
+          {
+            label: compare_player_b,
+            backgroundColor: [
+              'rgba(255,61,103,0.2)',
+              'rgba(255,61,103,0.2)',
+              'rgba(255,61,103,0.2)',
+              'rgba(255,61,103,0.2)',
+              'rgba(255,61,103,0.2)',
+              'rgba(255,61,103,0.2)',
+              'rgba(255,61,103,0.2)'
+            ],
+            borderColor: [
+              'rgba(255,61,103,1)',
+              'rgba(255,61,103,1)',
+              'rgba(255,61,103,1)',
+              'rgba(255,61,103,1)',
+              'rgba(255,61,103,1)',
+              'rgba(255,61,103,1)',
+              'rgba(255,61,103,1)'
+            ],
+            borderWidth: 1,
+            data: data_bar_compare_b,
+          }
+        ],
+        xLabels: [0, 5, 10, 15, 20, 25, 30, 35, 40]
+      };
+
+      let myBarChart = new Chart(chart, {
+        type: 'horizontalBar',
+        data: data
+      });
+    }
+
     setRadarCompareChart();
+    setBarCompareChart();
   };
 
   //Save player functionality
@@ -1033,6 +1152,25 @@ let BasketballStatsPro = (function () {
           Number(getTsPct(entry)),
           Number(entry.stats.Fg2PtPct["#text"]),
           Number(entry.stats.FgPct["#text"])
+        ]
+      });
+
+    return array[0];
+  }
+
+  function getBarChartData(data, player_clicked) {
+    //return an array with numbers for the chart
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { return [ 
+          Number(entry.stats.PtsPerGame["#text"]), 
+          Number(entry.stats.AstPerGame["#text"]),
+          Number(entry.stats.RebPerGame["#text"]),
+          Number(entry.stats.BlkPerGame["#text"]),
+          Number(entry.stats.FoulPersPerGame["#text"]),
+          Number(entry.stats.Fg2PtMadePerGame["#text"]),
+          Number(entry.stats.Fg3PtMadePerGame["#text"])
         ]
       });
 
