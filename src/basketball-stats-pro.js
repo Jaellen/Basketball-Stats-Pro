@@ -131,6 +131,16 @@ let BasketballStatsPro = (function () {
     document.getElementById('nav-rankings').addEventListener('click', function() {
       setNavRoute("d");
     }, false);
+
+    //setAdminBar 
+    document.getElementById('button-season').addEventListener('click', function() {
+
+    }, false);
+
+    document.getElementById('button-settings').addEventListener('click', function() {
+    
+    }, false);
+
   };
 
   //Main stats page functionality

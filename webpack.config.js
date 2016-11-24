@@ -1,5 +1,4 @@
 "use strict";
-let webpack = require('webpack');
 
 module.exports = {
   entry: './src/app.js',
@@ -23,12 +22,9 @@ module.exports = {
          presets: ['es2015']
        }
      },
-     {
-       test: /\.(jpe?g|png|gif|svg)$/i,
-       loaders: [
-        'file?hash=sha512&digest=hex&name=[hash].[ext]',
-        'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-        ]
+     { 
+      test: /\.(png|jpg)$/, 
+      loader: 'url-loader?limit=8192' 
      },
      {
        test: /\.json$/,
