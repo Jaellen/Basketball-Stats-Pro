@@ -1,5 +1,7 @@
 "use strict";
 
+/* FIND ALL INSTANCES OF 'TEMP' TO USE AJAX REQUEST AGAIN */
+
 /*!
   rx.js v4.1.0
   License:  Microsoft Open Technologies, Inc
@@ -23,7 +25,7 @@ var Chart = require('chart.js');
 
 
 //css styling
-require("./css/main.css");
+require("./css/main.scss");
 
 //For testing: 
 //var chai = require('chai');
@@ -74,6 +76,10 @@ let BasketballStatsPro = (function () {
   let table_b; 
   let table_c;
   let table_d;
+
+  //TEMP DATA FROM AJAX
+  all_stats_data = require("./js/data1");
+  all_profile_data = require("./js/data2");
 
   //async get requests 
   let getAllProfileData = Rx.Observable.create((observer) => {
@@ -128,7 +134,7 @@ let BasketballStatsPro = (function () {
   };
 
   //Main stats page functionality
-  let setAllStatsData = function() {
+  let setAllStatsData = function() {  
     //set all_stats_data
     getAllStatsData
       .take(1)
@@ -1005,7 +1011,7 @@ let BasketballStatsPro = (function () {
       setSeason("a");
 
       //reset main page stats and ranking tables 
-      setAllStatsData();
+      // setAllStatsData(); TEMP!! REMOVE COMMENT TO USE AJAX REQUEST 
 
       //case: if stats already being displayed, reset those
       if (current_player_clicked !== undefined) {
@@ -1026,7 +1032,7 @@ let BasketballStatsPro = (function () {
       setSeason("b");
 
       //reset main page stats and ranking tables 
-      setAllStatsData();
+      // setAllStatsData(); TEMP!! REMOVE COMMENT TO USE AJAX REQUEST 
 
       //case: if stats already being displayed, reset those
       // if (current_player_clicked !== undefined) {
@@ -1690,7 +1696,10 @@ let BasketballStatsPro = (function () {
     init: function() {
 
       setNavBar();
-      setAllStatsData();
+      // setAllStatsData(); TEMP!! REMOVE TO USE AJAX REQUEST
+      setSearch(); //TEMP!! REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!
+      setRankingsTables(); //TEMP!! REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!
+      
       getComparePlayer();
       setSavePlayerList();
     }

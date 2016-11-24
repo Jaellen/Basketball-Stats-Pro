@@ -1,5 +1,8 @@
+"use strict";
+let webpack = require('webpack');
+
 module.exports = {
-   entry: './src/app.js',
+  entry: './src/app.js',
   output: {
     filename: "bundle.js"
   },
@@ -21,6 +24,13 @@ module.exports = {
        }
      },
      {
+       test: /\.(jpe?g|png|gif|svg)$/i,
+       loaders: [
+        'file?hash=sha512&digest=hex&name=[hash].[ext]',
+        'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+        ]
+     },
+     {
        test: /\.json$/,
        loader: 'json-loader'
      },
@@ -37,5 +47,5 @@ module.exports = {
  resolve: {
    extensions: ['', '.js', '.es6']
  },
-  //watch: true
+  watch: true
 }
