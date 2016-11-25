@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<!-- TOP HEADER -->
+<!--************************** TOP HEADER **********************************-->
   
   <header class="header">
     <div class="container-fluid">
@@ -28,16 +28,33 @@
 
          <!-- admin section -->
         <div class="col-md-4 admin-div">
-          <img src="http://www.freeiconspng.com/uploads/calendar-icon-business-3.png" id="button-season" height="30px" />
-          <img src="http://bsccongress.com/wp-content/uploads/2016/06/gear-icon-clip-art.png" id="button-settings" height="30px" />
+          <img src="http://www.freeiconspng.com/uploads/calendar-icon-business-3.png" id="header-season" height="20px" />
+          <img src="http://bsccongress.com/wp-content/uploads/2016/06/gear-icon-clip-art.png" id="header-settings" height="20px" />
         </div>
 
       </div>
     </div>
   </header>
 
-<!-- SIDE BAR -->
-  <nav></nav>
+<!--****************************** SIDE BAR ********************************-->
+  <nav class="sidebar">
+    <div id="sidebar-stats">
+      <img src="http://flaticons.net/icons/Application/User-Profile.png" height="20px" />
+      <h2>Stats</h2>
+    </div>
+    <div id="sidebar-compare">
+      <img src="http://www.iconsdb.com/icons/preview/white/bar-chart-5-xxl.png" height="20px" />
+      <h2>Compare</h2>
+    </div>
+    <div id="sidebar-rankings">
+      <img src="http://www.iconsdb.com/icons/preview/white/trophy-xxl.png" height="20px" />
+      <h2>Rankings</h2>
+    </div>
+    <div id="sidebar-favourites">
+      <img src="http://www.iconsplace.com/icons/preview/white/rating-star-256.png" height="20px" />
+      <h2>Favourites</h2>
+    </div>
+  </nav>
 
 <!-- STATS PAGE -->
   <section></section>
@@ -48,31 +65,9 @@
 <!-- FAVOURITES PAGE -->
 
 
-<br><br><br><br><br><br>
+<br><br><br>
 <!-- ******* OLD STRUCTURE ******** -->
-  
-  <!-- NAV BAR -->
-  <section class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="row">
-        
-        <!-- Logo -->
-        <div class="col-md-2">
-        </div>
-      
-        <!-- Navigation -->
-        <div class="col-md-6" role="navigation">
-          <ul class="nav nav-pills">
-            <li role="presentation"><a href="#" id="nav-stats"><h3>Stats</h3></a></li>
-            <li role="presentation"><a href="#" id="nav-compare"><h3>Compare</h3></a></li>
-            <li role="presentation"><a href="#" id="nav-favourites"><h3>Favourites</h3></a></li>
-            <li role="presentation"><a href="#" id="nav-rankings"><h3>Rankings</h3></a></li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-  </section>
+<div class="old">  
 
   <!-- STATS PAGE -->
   <section id="stats-page">
@@ -278,6 +273,8 @@
 
     </div>
   </section>
+
+</div>
   
   <!-- App Entry file -->
   <script src="bundle.js" charset="utf-8"></script>

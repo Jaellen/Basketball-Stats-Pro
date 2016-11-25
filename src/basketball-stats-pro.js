@@ -116,28 +116,29 @@ let BasketballStatsPro = (function () {
   let setNavBar = function() {
 
     //set navbar
-    document.getElementById('nav-stats').addEventListener('click', function() {
+    document.getElementById('sidebar-stats').addEventListener('click', function() {
       setNavRoute("a");
     }, false);
 
-    document.getElementById('nav-compare').addEventListener('click', function() {
+    document.getElementById('sidebar-compare').addEventListener('click', function() {
       setNavRoute("b");
     }, false);
     
-    document.getElementById('nav-favourites').addEventListener('click', function() {
-      setNavRoute("c");
-    }, false); 
-
-    document.getElementById('nav-rankings').addEventListener('click', function() {
+    document.getElementById('sidebar-rankings').addEventListener('click', function() {
       setNavRoute("d");
     }, false);
 
+    document.getElementById('sidebar-favourites').addEventListener('click', function() {
+      setNavRoute("c");
+    }, false); 
+
+
     //setAdminBar 
-    document.getElementById('button-season').addEventListener('click', function() {
+    document.getElementById('header-season').addEventListener('click', function() {
 
     }, false);
 
-    document.getElementById('button-settings').addEventListener('click', function() {
+    document.getElementById('header-settings').addEventListener('click', function() {
     
     }, false);
 
