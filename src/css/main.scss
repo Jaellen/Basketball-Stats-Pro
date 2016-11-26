@@ -24,6 +24,7 @@ $font1-shade-light: #FBFDFB;
 
 //fonts
 $font-museo: 'museo_sans500';
+$font-roboto: 'Roboto', sans-serif;
 $title-font-size: 1.6em;
 
 //heights and widths
@@ -32,10 +33,10 @@ $sidebar-icon-heights: 25px;
 $sidebar-width: 120px;
 
 //margins and paddings
-$section-padding: 20px 20px;
+$section-padding: 30px 30px;
 
 //remove unwanted defaults
-h1, h2, h3, h4, h5, h6, .row, .container-fluid,
+p, h1, h2, h3, h4, h5, h6, .row, .container-fluid,
 .col-md-1, .col-md-2, .col-md-3, .col-md-4, 
 .col-md-5, .col-md-6, .col-md-7, .col-md-8,
 .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
@@ -106,14 +107,15 @@ h2 {
     height: $header-height;
     background-color: $color1-shade-light;
     margin: 0 0 0 20px;
-    .glyphicon, .glyphicon-calendar, .glyphicon-cog {
+    .glyphicon, .glyphicon-calendar, .glyphicon-cog, .glyphicon-info-sign {
       color: $color1-shade-darkest;
       transition: 0.2s;
       transition-property: color;
       font-size: 1.4em;
       margin: 13px 13px;
     }
-    #header-season:hover, #header-settings:hover, #header-season:active, #header-settings:active {
+    #header-season:hover, #header-settings:hover,  #header-info:hover,  
+    #header-season:active, #header-settings:active, #header-info:active, {
       cursor: pointer;
       color: $font1-shade-light;
       transition: 0.2s;
@@ -179,12 +181,13 @@ h2 {
       background-color: $color2-shade-medium;
       border: none;
       border-bottom: 4px solid $font1-shade-medium;
-      font-size: 32px;
+      font-size: 30px;
       font-family: $font-museo;
     }
     ul {
+      margin: 0 0 0 13px;
       list-style: none;
-      font-size: 32px;
+      font-size: 30px;
       font-family: $font-museo; 
     }
     ul {
@@ -197,8 +200,29 @@ h2 {
         text-decoration: none;   
         text-transform: capitalize;
       }  
-    }
+    }  
   }
+
+  //profile section
+  .section-profile {
+    padding: $section-padding;
+    background-color: $color2-shade-light;
+    font-size: 1.9em;
+    font-family: $font-roboto;
+    font-weight: 500;
+    color: $font1-shade-medium;
+    #profile-name {
+      font-size: 1.3em;
+      font-family: $font-roboto;
+      font-weight: 700;
+    }
+    .glyphicon, .glyphicon-king {
+        color: #ff6600;
+        margin: 10% 0 0 0;
+    }  
+  }
+
+
 }
 
 

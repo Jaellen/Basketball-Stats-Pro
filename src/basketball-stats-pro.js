@@ -161,6 +161,10 @@ let BasketballStatsPro = (function () {
     document.getElementById('header-settings').addEventListener('click', function() {
     
     }, false);
+
+    document.getElementById('header-info').addEventListener('click', function() {
+    
+    }, false);
   };
 
   //Main stats page functionality
@@ -303,17 +307,27 @@ let BasketballStatsPro = (function () {
     let displayPlayerProfile = function() {
       
       //clear any previous results and display player profile
-      document.getElementById('profile').innerHTML = '';
+      clearInnerHtml('profile', 'profile-name', 'profile-team', 'profile-logo', 
+        'profile-jersey', 'profile-position', 'profile-age', 'profile-height', 'profile-weight');
 
-      for (let prop in player_profile) {
-            document.getElementById('profile').appendChild(createElement( 'li', player_profile[prop] ));
-      }
+      //add profile info
+      document.getElementById('profile-name').appendChild(createElement('p', player_profile.name));
+      document.getElementById('profile-team').appendChild(createElement('p', player_profile.team));
+      document.getElementById('profile-jersey').appendChild(createElement('p', player_profile.jersey, " | ",
+                                                              createElement('span', player_profile.position)));
+      document.getElementById('profile-age').appendChild(createElement('p', player_profile.age));
+      document.getElementById('profile-height').appendChild(createElement('p', player_profile.height));
+      document.getElementById('profile-weight').appendChild(createElement('p', player_profile.weight));
+
+      //add logo
+      let logo = document.getElementById('profile-logo').appendChild(createElement('span'));
+      setAttributes(logo, {class: "glyphicon glyphicon-king"});    
     }
 
     let displayPlayerMainStats = function() {
       
       //clear any previous results and display player's main stats
-      document.getElementById('stats-main').innerHTML = '';
+      clearInnerHtml('stats-main');
 
       for (let stat in player_main_stats) {
             document.getElementById('stats-main').appendChild(createElement( 'li', player_main_stats[stat] ));
@@ -323,7 +337,7 @@ let BasketballStatsPro = (function () {
     let displayPlayerSecondaryStats = function() {
     
       //clear any previous results and display player's secondary stats 
-      document.getElementById('stats-secondary').innerHTML = '';
+      clearInnerHtml('stats-secondary');
       
       for (let stat in player_secondary_stats) {
             document.getElementById('stats-secondary').appendChild(createElement( 'li', player_secondary_stats[stat] ));
@@ -333,13 +347,14 @@ let BasketballStatsPro = (function () {
     let displayPlayerTeamName = function() {
       
       //clear any previous results and display player team name
-      document.getElementById('team-name').innerHTML = '';
+      clearInnerHtml('team-name');
       document.getElementById('team-name').appendChild(createElement( 'h4', player_team_name.toString() ));
     }
 
     let displayPlayerTeamList = function() { 
+      
       //clear any previous results 
-      document.getElementById('team-list').innerHTML = '';
+      clearInnerHtml('team-list');
       
       //display player team list 
       player_team_list.forEach((value, i) => {
@@ -374,12 +389,11 @@ let BasketballStatsPro = (function () {
 
     let setRadarChart = function() { 
       
-      let canvas_section = document.getElementById('radar-section-main')
-
       //clear any previous charts
-      canvas_section.innerHTML = '';
+      clearInnerHtml('radar-section-main');
 
       //add a new canvas 
+      let canvas_section = document.getElementById('radar-section-main');
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'radar-chart-main', width: '300', height: '300'});
 
@@ -420,12 +434,11 @@ let BasketballStatsPro = (function () {
 
     let setDoughnutChart1 = function() { 
       
-      let canvas_section = document.getElementById('doughnut1-section-main')
-
       //clear any previous charts
-      canvas_section.innerHTML = '';
+      clearInnerHtml('doughnut1-section-main');
 
       //add a new canvas 
+      let canvas_section = document.getElementById('doughnut1-section-main');
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart1-main', width: '300', height: '300'});
 
@@ -460,12 +473,11 @@ let BasketballStatsPro = (function () {
 
     let setDoughnutChart2 = function() { 
       
-      let canvas_section = document.getElementById('doughnut2-section-main')
-
       //clear any previous charts
-      canvas_section.innerHTML = '';
+      clearInnerHtml('doughnut2-section-main');
 
       //add a new canvas 
+      let canvas_section = document.getElementById('doughnut2-section-main');
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart2-main', width: '300', height: '300'});
 
@@ -598,14 +610,14 @@ let BasketballStatsPro = (function () {
     let displayCompareProfiles = function() {
 
       //clear any previous results and display player a profile
-      document.getElementById('profile-data-player-a').innerHTML = '';
+      clearInnerHtml('profile-data-player-a');
 
       for (let prop in player_a_profile) {
             document.getElementById('profile-data-player-a').appendChild(createElement( 'li', player_a_profile[prop] ));
       }
 
       //clear any previous results and display player b profile
-      document.getElementById('profile-data-player-b').innerHTML = '';
+      clearInnerHtml('profile-data-player-b');
 
       for (let prop in player_b_profile) {
             document.getElementById('profile-data-player-b').appendChild(createElement( 'li', player_b_profile[prop] ));
@@ -615,14 +627,14 @@ let BasketballStatsPro = (function () {
     let displayCompareMainStats = function() {
       
       //clear any previous results and display player a profile
-      document.getElementById('stats-main-player-a').innerHTML = '';
+      clearInnerHtml('stats-main-player-a');
 
       for (let stat in player_a_main_stats) {
             document.getElementById('stats-main-player-a').appendChild(createElement( 'li', player_a_main_stats[stat] ));
       }
 
       //clear any previous results and display player b profile
-      document.getElementById('stats-main-player-b').innerHTML = '';
+      clearInnerHtml('stats-main-player-b');
 
       for (let stat in player_b_main_stats) {
             document.getElementById('stats-main-player-b').appendChild(createElement( 'li', player_b_main_stats[stat] ));
@@ -632,14 +644,14 @@ let BasketballStatsPro = (function () {
     let displayCompareSecondaryStats = function() {
       
       //clear any previous results and display secondary stats of player a
-      document.getElementById('secondary-stats-player-a').innerHTML = '';
+      clearInnerHtml('secondary-stats-player-a');
 
       for (let stat in player_a_sec_stats) {
             document.getElementById('secondary-stats-player-a').appendChild(createElement( 'li', player_a_sec_stats[stat] ));
       }
 
       //clear any previous results and display secondary stats of player b
-      document.getElementById('secondary-stats-player-b').innerHTML = '';
+      clearInnerHtml('secondary-stats-player-b');
 
       for (let stat in player_b_sec_stats) {
             document.getElementById('secondary-stats-player-b').appendChild(createElement( 'li', player_b_sec_stats[stat] ));
@@ -662,12 +674,11 @@ let BasketballStatsPro = (function () {
 
     let setRadarCompareChart = function() { 
       
-      let canvas_section = document.getElementById('radar-section-compare')
-
       //clear any previous charts
-      canvas_section.innerHTML = '';
+      clearInnerHtml('radar-section-compare');
 
       //add a new canvas 
+      let canvas_section = document.getElementById('radar-section-compare');
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'radar-chart-compare', width: '300', height: '300'});
 
@@ -718,12 +729,11 @@ let BasketballStatsPro = (function () {
 
     let setBarCompareChart = function() {
 
-      let canvas_section = document.getElementById('bar-section-compare')
-
       //clear any previous charts
-      canvas_section.innerHTML = '';
+      clearInnerHtml('bar-section-compare');
 
       //add a new canvas 
+      let canvas_section = document.getElementById('bar-section-compare');
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'bar-chart-compare', width: '400', height: '300'});
 
@@ -791,12 +801,11 @@ let BasketballStatsPro = (function () {
 
     let setDoughnutCompareChart1 = function() {
 
-      let canvas_section = document.getElementById('doughnut1-section-compare');
-
       //clear any previous charts
-      canvas_section.innerHTML = '';
+      clearInnerHtml('doughnut1-section-compare');
 
       //add a new canvas 
+      let canvas_section = document.getElementById('doughnut1-section-compare');
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart1-compare', width: '300', height: '300'});
 
@@ -845,12 +854,12 @@ let BasketballStatsPro = (function () {
     }
 
     let setDoughnutCompareChart2 = function() {
-      let canvas_section = document.getElementById('doughnut2-section-compare');
-
+      
       //clear any previous charts
-      canvas_section.innerHTML = '';
+      clearInnerHtml('doughnut2-section-compare');
 
       //add a new canvas 
+      let canvas_section = document.getElementById('doughnut2-section-compare');
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart2-compare', width: '300', height: '300'});
 
@@ -951,7 +960,9 @@ let BasketballStatsPro = (function () {
   };
 
   let displaySavePlayerList = function() {
-    document.getElementById('favourites').innerHTML = '';
+    
+    //clear any previous list
+    clearInnerHtml('favourites');
 
     //go through each player in the save player list and display their properties
     save_player_list.forEach( (player, i) => {   
@@ -1015,10 +1026,7 @@ let BasketballStatsPro = (function () {
   let displayRankings = function() {
      
     //clear any previous tables in the case of changing season option
-    document.getElementById('table-pts-g').innerHTML = '';
-    document.getElementById('table-ast-g').innerHTML = '';
-    document.getElementById('table-reb-g').innerHTML = '';
-    document.getElementById('table-blk-g').innerHTML = '';
+    clearInnerHtml('table-pts-g', 'table-ast-g', 'table-reb-g', 'table-blk-g');
 
     //display tables
     displayTable(table_a, 'table-pts-g', 'table-a');
@@ -1077,7 +1085,6 @@ let BasketballStatsPro = (function () {
         <button class="btn btn-warning" id="seasonB">2015/2016</button>
       </div> 
     */
-
   };
 
   /* ------------------ Utility and Helper functions ----------------------- */
@@ -1129,7 +1136,7 @@ let BasketballStatsPro = (function () {
 
   function setAttributes(el, attrs) {
     // for multiple attributes, send attrs in the form of { attr: value, attr: value... }
-    for(var key in attrs) {
+    for(let key in attrs) {
       el.setAttribute(key, attrs[key]);
     }
   }
@@ -1147,6 +1154,13 @@ let BasketballStatsPro = (function () {
   function hasClass(el, className) {
       
       return el.classList ? el.classList.contains(className) : new RegExp('\\b'+ className+'\\b').test(el.className);
+  }
+
+  function clearInnerHtml(ids) {
+    //can take multiple arguments  
+    for(let id in arguments) {
+      document.getElementById(arguments[id]).innerHTML = "";
+    }
   }
 
   //navbar utilities 
@@ -1284,9 +1298,10 @@ let BasketballStatsPro = (function () {
         return  { 
           name: (entry.player.FirstName + " " + entry.player.LastName),
           team: (entry.team.City + " " + entry.team.Name),
-          jersey: ("Jersey #: " + entry.player.JerseyNumber),
-          age: ("age: " + entry.player.Age),
-          height: (entry.player.Height + " ft\'in\"" ),
+          jersey: ("#" + entry.player.JerseyNumber),
+          position: (entry.player.Position),
+          age: (entry.player.Age + "yrs"),
+          height: (entry.player.Height + " ft\'" ),
           weight: (entry.player.Weight + " lbs") 
         } 
       });
