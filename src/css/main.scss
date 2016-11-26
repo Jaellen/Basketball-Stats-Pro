@@ -1,0 +1,216 @@
+
+/*------------------------------- Variables ---------------------------------*/
+
+//palette color 1 is shades of green
+$color1-shade-darkest: #1A685F;
+$color1-shade-dark: #3D8E86;
+$color1-shade-medium: #26A59A;
+$color1-shade-light: #4DB7AD;
+
+//palette color 2 is shades of black/white
+$color2-shade-darkest: #1D2027;
+$color2-shade-dark: #272A33;
+$color2-shade-medium: #F0F0F0;
+$color2-shade-light: #F8F8F8;
+
+//palette color 3 is shades of yellow
+$color3-shade-medium: #ffbf00;
+
+//font color 1 is shades of black/white
+$font1-shade-darkest: #767887;
+$font1-shade-dark: #C4C3D1;
+$font1-shade-medium: #3d3d3d;
+$font1-shade-light: #FBFDFB;
+
+//fonts
+$font-museo: 'museo_sans500';
+$title-font-size: 1.6em;
+
+//heights and widths
+$header-height: 50px;
+$sidebar-icon-heights: 25px;
+$sidebar-width: 120px;
+
+//margins and paddings
+$section-padding: 20px 20px;
+
+//remove unwanted defaults
+h1, h2, h3, h4, h5, h6, .row, .container-fluid,
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, 
+.col-md-5, .col-md-6, .col-md-7, .col-md-8,
+.col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+  margin: 0;
+  padding: 0;
+}
+
+//header font
+h1 {
+  font-size: $title-font-size;
+  font-family: $font-museo;
+  text-transform: capitalize;
+  line-height: $header-height;
+}
+
+//sidebar font
+h2 {
+  margin: 10px auto 0 auto;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 15px;
+  font-family: $font-museo;
+  color: $font1-shade-light;
+}
+
+/* ------------------------------ Header ------------------------------------*/
+
+.header {
+  position: fixed;
+  width: 100%;
+  height: $header-height;
+  z-index: 3;
+  background-color: $color1-shade-light;
+  .logo-div, .col-md-2 {
+    height: $header-height;
+    width: $sidebar-width;
+    background-color: $color1-shade-medium;
+    .glyphicon, .glyphicon-dashboard {
+      color: $color3-shade-medium;
+      font-size: 2.5em;
+      line-height: $header-height;
+      vertical-align: middle;
+      margin: 0 37%;
+    }
+    // logo styling: 
+    // img {
+    //   height: 100%;
+    //   display: block;
+    //   margin: auto;
+    //   padding: 6%;
+    // }
+  }
+  .title-div {
+    height: $header-height;
+    padding: 0, 0, 0, 10%;
+    background-color: $color1-shade-light;
+    color: $font1-shade-light;
+    border-right: 2px solid $color1-shade-medium;
+    h1 {
+      margin: 0 0 0 20px;
+    }
+    span {
+      color: $color1-shade-darkest;
+      display: inline;
+    }
+  }
+  .admin-div {
+    height: $header-height;
+    background-color: $color1-shade-light;
+    margin: 0 0 0 20px;
+    .glyphicon, .glyphicon-calendar, .glyphicon-cog {
+      color: $color1-shade-darkest;
+      transition: 0.2s;
+      transition-property: color;
+      font-size: 1.4em;
+      margin: 13px 13px;
+    }
+    #header-season:hover, #header-settings:hover, #header-season:active, #header-settings:active {
+      cursor: pointer;
+      color: $font1-shade-light;
+      transition: 0.2s;
+      transition-property: color;
+    }
+  }
+}
+
+/* ----------------------------- SideBar ------------------------------------*/
+
+ .sidebar {
+    width: $sidebar-width;
+    height: 100%;
+    position: fixed;
+    display: block;
+    margin: $header-height 0;
+    background-color: $color2-shade-dark;
+    div {
+      padding: 18px 0;
+      img {
+        display: block;
+        height: $sidebar-icon-heights;
+        margin: auto;
+      }
+    }
+    div:hover {
+      background-color: $color2-shade-darkest; 
+      cursor: pointer;
+    }
+    .sidebar-active {
+      background-color: $color2-shade-darkest; 
+      border-left: 4px solid $color1-shade-light;
+      border-right: 4px solid $color2-shade-darkest; 
+    }
+    .glyphicon, .glyphicon-user, .glyphicon-align-left, .glyphicon-flag, .glyphicon-heart-empty {
+      color: $font1-shade-light;
+      font-size: 1.9em;
+      margin: 0 auto 0 39%;
+    } 
+ }
+
+/* --------------------------- Stats Page -----------------------------------*/
+
+.stats-page {
+  margin: 0 0 0 $sidebar-width;
+  padding: $header-height 0 0 0;
+
+  //search section
+  .section-search {
+    padding: $section-padding;
+    background-color: $color2-shade-medium;
+    .glyphicon, .glyphicon-search {
+      color: $font1-shade-medium;
+      font-size: 3.1em;
+      line-height: 100%;
+      vertical-align: middle;
+      margin: 0 5px 0 0;
+    }
+    input:focus {
+      outline: none;
+    }
+    .search-field {
+      background-color: $color2-shade-medium;
+      border: none;
+      border-bottom: 4px solid $font1-shade-medium;
+      font-size: 32px;
+      font-family: $font-museo;
+    }
+    ul {
+      list-style: none;
+      font-size: 32px;
+      font-family: $font-museo; 
+    }
+    ul {
+      li:hover {
+        cursor: pointer;
+        color: $color3-shade-medium;
+      }
+      a {
+        color: $color1-shade-medium;
+        text-decoration: none;   
+        text-transform: capitalize;
+      }  
+    }
+  }
+}
+
+
+
+table, tr, th, td {
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  padding: 5px;
+}
+
+
+ .old {
+    margin-left: $sidebar-width;
+ }

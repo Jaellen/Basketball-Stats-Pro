@@ -95,6 +95,7 @@ let BasketballStatsPro = (function () {
       });
       return () => {};
   });
+  
   let getAllStatsData = Rx.Observable.create((observer) => {
     xhrRequest
      .get(cumulative_player_data_url)
@@ -113,23 +114,42 @@ let BasketballStatsPro = (function () {
   /* ------------------------ Program Logic -------------------------------- */
 
   //Navigation
-  let setNavBar = function() {
+  let setNav = function() {
+    let button_a = document.getElementById('sidebar-stats');
+    let button_b = document.getElementById('sidebar-compare');
+    let button_c = document.getElementById('sidebar-rankings');
+    let button_d = document.getElementById('sidebar-favourites');
 
-    //set navbar
-    document.getElementById('sidebar-stats').addEventListener('click', function() {
-      setNavRoute("a");
+    //button 'stats'
+    button_a.addEventListener('click', function() { 
+      //change page
+      setNavRoute('a');
+      //set title of current page and button to active
+      setNavActive('a');
     }, false);
 
-    document.getElementById('sidebar-compare').addEventListener('click', function() {
-      setNavRoute("b");
+    //button 'compare'
+    button_b.addEventListener('click', function() {
+      //change page
+      setNavRoute('b');
+      //set title of current page and button to active
+      setNavActive('b');
     }, false);
     
-    document.getElementById('sidebar-rankings').addEventListener('click', function() {
-      setNavRoute("d");
+    //button 'rankings'
+    button_c.addEventListener('click', function() {
+      //change page
+      setNavRoute('c');
+      //set the title of current page and button to active
+      setNavActive('c');
     }, false);
 
-    document.getElementById('sidebar-favourites').addEventListener('click', function() {
-      setNavRoute("c");
+    //button 'favourites'
+    button_d.addEventListener('click', function() {
+      //change page
+      setNavRoute('d');
+      //set the title of current page and button to active
+      setNavActive('d');
     }, false); 
 
 
@@ -141,7 +161,6 @@ let BasketballStatsPro = (function () {
     document.getElementById('header-settings').addEventListener('click', function() {
     
     }, false);
-
   };
 
   //Main stats page functionality
@@ -1010,49 +1029,56 @@ let BasketballStatsPro = (function () {
 
   let setChangeSeason = function() {
 
-    //change season to 2015/2016
-    document.getElementById('seasonA').addEventListener('click', function() {
+    // //change season to 2015/2016
+    // document.getElementById('seasonA').addEventListener('click', function() {
       
-      //case: clicked season is already selected
-      if (cumulative_player_data_url === STATS_2016_2017) {
-        return;
-      }
+    //   //case: clicked season is already selected
+    //   if (cumulative_player_data_url === STATS_2016_2017) {
+    //     return;
+    //   }
 
-      //change source data  
-      setSeason("a");
+    //   //change source data  
+    //   setSeason("a");
 
-      //reset main page stats and ranking tables 
-      // setAllStatsData(); TEMP!! REMOVE COMMENT TO USE AJAX REQUEST 
+    //   //reset main page stats and ranking tables 
+    //   // setAllStatsData(); TEMP!! REMOVE COMMENT TO USE AJAX REQUEST 
 
-      //case: if stats already being displayed, reset those
-      if (current_player_clicked !== undefined) {
-        setPlayerStats();
-      }
+    //   //case: if stats already being displayed, reset those
+    //   if (current_player_clicked !== undefined) {
+    //     setPlayerStats();
+    //   }
 
-    }, false);
+    // }, false);
 
-    //change season to 2016/2017
-    document.getElementById('seasonB').addEventListener('click', function() {
+    // //change season to 2016/2017
+    // document.getElementById('seasonB').addEventListener('click', function() {
 
-      //case: clicked season is already selected
-      // if (cumulative_player_data_url === STATS_2015_2016) {
-      //   return;
-      // }
+    //   //case: clicked season is already selected
+    //   // if (cumulative_player_data_url === STATS_2015_2016) {
+    //   //   return;
+    //   // }
       
-      //change source data  
-      setSeason("b");
+    //   //change source data  
+    //   setSeason("b");
 
-      //reset main page stats and ranking tables 
-      // setAllStatsData(); TEMP!! REMOVE COMMENT TO USE AJAX REQUEST 
+    //   //reset main page stats and ranking tables 
+    //   // setAllStatsData(); TEMP!! REMOVE COMMENT TO USE AJAX REQUEST 
 
-      //case: if stats already being displayed, reset those
-      // if (current_player_clicked !== undefined) {
-      //   setPlayerStats();
-      // }
+    //   //case: if stats already being displayed, reset those
+    //   // if (current_player_clicked !== undefined) {
+    //   //   setPlayerStats();
+    //   // }
 
-    }, false);
+    // }, false);
+
+    /* old buttons
+      <div class="col-md-4">
+        <button class="btn btn-warning" id="seasonA">2016/2017</button>
+        <button class="btn btn-warning" id="seasonB">2015/2016</button>
+      </div> 
+    */
+
   };
-
 
   /* ------------------ Utility and Helper functions ----------------------- */
 
@@ -1125,37 +1151,121 @@ let BasketballStatsPro = (function () {
 
   //navbar utilities 
   function setNavRoute(option) {
-    let navA = document.getElementById('stats-page');
-    let navB = document.getElementById('compare-page');
-    let navC = document.getElementById('favourites-page');
-    let navD = document.getElementById('rankings-page');
+    let pageA = document.getElementById('stats-page');
+    let pageB = document.getElementById('compare-page');
+    let pageC = document.getElementById('rankings-page');
+    let pageD = document.getElementById('favourites-page');
 
-    if (option == "a") {
-      removeClass(navA, 'hidden');
-      addClass(navB, 'hidden');
-      addClass(navC, 'hidden');
-      addClass(navD, 'hidden');
+    if (option === 'a') {
+      removeClass(pageA, 'hidden');
+      addClass(pageB, 'hidden');
+      addClass(pageC, 'hidden');
+      addClass(pageD, 'hidden');
     }
 
-    if (option == "b") {
-      addClass(navA, 'hidden');
-      removeClass(navB, 'hidden');
-      addClass(navC, 'hidden');
-      addClass(navD, 'hidden');
+    if (option === 'b') {
+      addClass(pageA, 'hidden');
+      removeClass(pageB, 'hidden');
+      addClass(pageC, 'hidden');
+      addClass(pageD, 'hidden');
     } 
     
-    if (option == "c") {
-      addClass(navA, 'hidden');
-      addClass(navB, 'hidden');
-      removeClass(navC, 'hidden');
-      addClass(navD, 'hidden');
+    if (option === 'c') {
+      addClass(pageA, 'hidden');
+      addClass(pageB, 'hidden');
+      removeClass(pageC, 'hidden');
+      addClass(pageD, 'hidden');
     }
 
-    if (option == "d") {
-      addClass(navA, 'hidden');
-      addClass(navB, 'hidden');
-      addClass(navC, 'hidden');
-      removeClass(navD, 'hidden');
+    if (option === 'd') {
+      addClass(pageA, 'hidden');
+      addClass(pageB, 'hidden');
+      addClass(pageC, 'hidden');
+      removeClass(pageD, 'hidden');
+    }
+  }
+
+  function setNavActive(option) {
+    let title_div = document.getElementById('title-div')
+    let button_a = document.getElementById('sidebar-stats');
+    let button_b = document.getElementById('sidebar-compare');
+    let button_c = document.getElementById('sidebar-rankings');
+    let button_d = document.getElementById('sidebar-favourites');
+
+    if (option === 'a') {
+      //clear current title
+      title_div.innerHTML = '';
+
+      //set the title of the clicked page
+      title_div.appendChild(
+        createElement('h1', 
+          createElement('span', "Basketball Stats Pro |"), " stats overview"));
+    
+      //set the button clicked to active
+      addClass(button_a, 'sidebar-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_b, 'sidebar-active');
+      removeClass(button_c, 'sidebar-active');
+      removeClass(button_d, 'sidebar-active');
+    }
+
+    if (option === 'b') {
+      //clear current title
+      title_div.innerHTML = '';
+
+      //set the title of the clicked page
+      title_div.appendChild(
+        createElement('h1', 
+          createElement('span', "Basketball Stats Pro |"), " compare players"));
+
+      //set the button clicked to active
+      addClass(button_b, 'sidebar-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_a, 'sidebar-active');
+      removeClass(button_c, 'sidebar-active');
+      removeClass(button_d, 'sidebar-active');
+    } 
+    
+    if (option === 'c') {
+      //clear current title
+      title_div.innerHTML = '';
+
+      //set the title of the clicked page
+      title_div.appendChild(
+        createElement('h1', 
+          createElement('span', "Basketball Stats Pro |"), " player rankings"));
+
+      //set the button clicked to active
+      addClass(button_c, 'sidebar-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_a, 'sidebar-active');
+      removeClass(button_b, 'sidebar-active');
+      removeClass(button_d, 'sidebar-active');
+    }
+
+    if (option === 'd') {
+      //clear the title of current page
+      title_div.innerHTML = '';
+
+      //set the title of the clicked page
+      title_div.appendChild(
+        createElement('h1', 
+          createElement('span', "Basketball Stats Pro |"), " saved players"));
+
+      //set the button clicked to active
+      addClass(button_d, 'sidebar-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_a, 'sidebar-active');
+      removeClass(button_b, 'sidebar-active');
+      removeClass(button_c, 'sidebar-active');
+
+      //set the button clicked to active
+      let button_clicked = document.getElementById('sidebar-favourites');
+      addClass(button_clicked, 'sidebar-active');
     }
   }
 
@@ -1706,7 +1816,7 @@ let BasketballStatsPro = (function () {
 
     init: function() {
 
-      setNavBar();
+      setNav();
       // setAllStatsData(); TEMP!! REMOVE TO USE AJAX REQUEST
       setSearch(); //TEMP!! REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!
       setRankingsTables(); //TEMP!! REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!

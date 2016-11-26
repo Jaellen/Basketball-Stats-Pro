@@ -18,18 +18,19 @@
         
         <!-- logo -->
         <div class="col-md-2 logo-div">
-          <span><img src="http://cdn.mysitemyway.com/icons-watermarks/flat-circle-white-on-yellow/classica/classica_basketball/classica_basketball_flat-circle-white-on-yellow_512x512.png" height="85px" /></span>
+          <span class="glyphicon glyphicon-dashboard"></span>
+          <!-- <span><img src="http://cdn.mysitemyway.com/icons-watermarks/flat-circle-white-on-yellow/classica/classica_basketball/classica_basketball_flat-circle-white-on-yellow_512x512.png" height="85px" /></span> -->
         </div>
 
         <!-- current page title -->
-        <div class="col-md-6 title-div">
-          <h1>Stats Overview</h1>
+        <div class="col-md-6 title-div" id="title-div">
+          <h1><span>Basketball Stats Pro |</span> Stats Overview</h1>
         </div>
 
          <!-- admin section -->
         <div class="col-md-4 admin-div">
-          <img src="http://www.freeiconspng.com/uploads/calendar-icon-business-3.png" id="header-season" height="20px" />
-          <img src="http://bsccongress.com/wp-content/uploads/2016/06/gear-icon-clip-art.png" id="header-settings" height="20px" />
+          <span class="glyphicon glyphicon-calendar" id="header-season"></span>
+          <span class="glyphicon glyphicon-cog" id="header-settings"></span>
         </div>
 
       </div>
@@ -37,56 +38,55 @@
   </header>
 
 <!--****************************** SIDE BAR ********************************-->
+  
   <nav class="sidebar">
-    <div id="sidebar-stats">
-      <img src="http://flaticons.net/icons/Application/User-Profile.png" height="20px" />
+    
+    <!-- stats -->
+    <div id="sidebar-stats" class="sidebar-active">
+      <span class="glyphicon glyphicon-user"></span>
       <h2>Stats</h2>
     </div>
+    
+    <!-- compare -->
     <div id="sidebar-compare">
-      <img src="http://www.iconsdb.com/icons/preview/white/bar-chart-5-xxl.png" height="20px" />
+      <span class="glyphicon glyphicon-align-left"></span>
       <h2>Compare</h2>
     </div>
+    
+    <!-- rankings -->
     <div id="sidebar-rankings">
-      <img src="http://www.iconsdb.com/icons/preview/white/trophy-xxl.png" height="20px" />
+      <span class="glyphicon glyphicon-flag"></span>
       <h2>Rankings</h2>
     </div>
+    
+    <!-- favourites -->
     <div id="sidebar-favourites">
-      <img src="http://www.iconsplace.com/icons/preview/white/rating-star-256.png" height="20px" />
+      <span class="glyphicon glyphicon-heart-empty"></span>
       <h2>Favourites</h2>
     </div>
+  
   </nav>
 
-<!-- STATS PAGE -->
-  <section></section>
-<!-- COMPARE PAGE -->
-
-<!-- RANKINGS PAGE -->
-
-<!-- FAVOURITES PAGE -->
-
-
-<br><br><br>
-<!-- ******* OLD STRUCTURE ******** -->
-<div class="old">  
-
-  <!-- STATS PAGE -->
-  <section id="stats-page">
+<!--****************************** STATS PAGE ******************************-->
+  
+  <section id="stats-page" class="stats-page">
     <div class="container-fluid">
-      <h1>Main Page</h1>
 
-      <!-- Autocomple Search bar -->  
-      <div class="row">
-        <div class="col-md-5">
-          <h3>Recommendations Search</h3>
-          <input type="text" id="searchBox" class="search-field" />
+      <!-- search and profile section -->  
+      <section class="section-search">
+        
+        <div class="row">
+          <span class="glyphicon glyphicon-search"></span>
+          <input type="text" id="searchBox" class="search-field" placeholder="Search player" />
           <ul id="searchResults" class="term-list hidden"></ul>
         </div>
 
-        <div class="col-md-4">
-          <button class="btn btn-warning" id="seasonA">2016/2017</button>
-          <button class="btn btn-warning" id="seasonB">2015/2016</button>
+        <div class="row">
+          
+          
         </div>
-      </div>
+
+      </section>
 
       <!-- Profile and Stats Data --> 
       <div class="row">
@@ -129,12 +129,25 @@
     
     </div>
   </section>
+
+<!--************************** COMPARE PAGE ********************************-->
+
+<!--************************** RANKINGS PAGE *******************************-->
+
+<!--************************* FAVOURITES PAGE ******************************-->
+
+
+<br><br><br>
+<!-- ******* OLD STRUCTURE ******** -->
+<div class="old">  
+
+  <!-- STATS PAGE -->
+
   
   <!-- COMPARE PAGE --> 
   <section id="compare-page" class="hidden">
     <div class="container-fluid">
-      <h1>Compare Page</h1>
-
+    
       <!-- Compare Profile Main Stats -->
       <div class="row">
 
@@ -195,7 +208,6 @@
   <!-- FAVOURITES PAGE --> 
   <section id="favourites-page" class="hidden">
     <div class="container-fluid">
-      <h1>Favourites Page</h1>
 
       <!-- Favourites List -->    
       <div class="row">  
@@ -208,7 +220,6 @@
   <!-- RANKINGS PAGE --> 
   <section id="rankings-page" class="hidden">
     <div class="container-fluid">
-      <h1>Rankings Page</h1>
 
       <!-- Ranking Type Buttons -->
       <div class="row">
