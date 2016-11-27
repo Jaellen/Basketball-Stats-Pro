@@ -213,7 +213,6 @@ h2 {
     color: $font1-shade-medium;
     #profile-name {
       font-size: 1.3em;
-      font-family: $font-roboto;
       font-weight: 700;
     }
     .glyphicon, .glyphicon-king {
@@ -222,7 +221,40 @@ h2 {
     }  
   }
 
-
+  //stats section 
+  .section-main-stats {
+    padding: $section-padding;
+    background-color: $color2-shade-medium;
+    font-family: $font-roboto;
+  } 
+  .season {
+    margin: 1.5% 0 0 0;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: $font1-shade-medium;
+    text-transform: capitalize;
+  }
+  .stats-main {
+    font-weight: 500;
+    font-size: 1.2em;
+    table, tr, th, td {
+      border-color: $color1-shade-light;
+      border-width: 3px;
+      border-top: none;
+      border-bottom: none;
+      text-align: center;
+    }
+    tr:first-of-type, {
+      border-bottom: 3px solid $color1-shade-light;
+      border-left: none;
+    }
+    table, tr, th:first-of-type, td:first-of-type {
+      border-left: none;
+    }
+    table, tr, th:last-of-type, td:last-of-type {
+      border-right: none;
+    }
+  }
 }
 
 
