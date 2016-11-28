@@ -57,11 +57,14 @@ let BasketballStatsPro = (function () {
   let compare_player_clicked;
 
   //graphs and chart variables
-  let data_radar_main, data_doughnut1_main, data_doughnut2_main;
+  let data_doughnut1_main, data_doughnut2_main;
+  let data_doughnut3_main, data_doughnut4_main, data_radar_main;
   let data_radar_compare_a, data_radar_compare_b;
   let data_bar_compare_a, data_bar_compare_b;
   let data_doughnut1_compare_a, data_doughnut1_compare_b;
   let data_doughnut2_compare_a, data_doughnut2_compare_b;
+  let data_doughnut3_compare_a, data_doughnut3_compare_b;
+  let data_doughnut4_compare_a, data_doughnut4_compare_b;
 
   //favourites variables
   let save_player_list = [];
@@ -299,6 +302,8 @@ let BasketballStatsPro = (function () {
     data_radar_main = getRadarChartData(all_stats_data, current_player_clicked);
     data_doughnut1_main = getDoughnutChart1Data(all_stats_data, current_player_clicked);
     data_doughnut2_main = getDoughnutChart2Data(all_stats_data, current_player_clicked);
+    data_doughnut3_main = getDoughnutChart3Data(all_stats_data, current_player_clicked);
+    data_doughnut4_main = getDoughnutChart4Data(all_stats_data, current_player_clicked);
 
     displayPlayerStats();
     displayMainCharts();
@@ -333,14 +338,10 @@ let BasketballStatsPro = (function () {
 
       //display season
       document.getElementById('stats-season').appendChild(createElement('p', current_season_picked));
-      document.getElementById('stats-season-text').appendChild(createElement('p', "career stats"));
+      document.getElementById('stats-season-text').appendChild(createElement('p', "season stats"));
 
       //display stats table
       displayMainStatsTable(player_main_stats, 'table-stats-main');
-
-      // for (let stat in player_main_stats) {
-      //       document.getElementById('stats-main').appendChild(createElement( 'li', player_main_stats[stat] ));
-      // }
     }
 
     let displayPlayerSecondaryStats = function() {
@@ -389,12 +390,208 @@ let BasketballStatsPro = (function () {
 
   let displayMainCharts = function() {
     
+    //display doughnut charts section header text
+    document.getElementById('doughnut-section-text').appendChild(createElement('p', "Attempts vs. Made Stats"));
+
     //chart global config
     Chart.scaleService.updateScaleDefaults('linear', {
       ticks: {
         min: 0
       }
     })
+
+ 
+    let setDoughnutChart1 = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('doughnut1-section-main');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('doughnut1-section-main');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart1-main'});
+
+      canvas_section.appendChild(createElement('span', (player_main_stats.FgPct)));
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart1-main');
+      
+      let data = {
+        datasets: 
+        [{
+          data: data_doughnut1_main,
+          backgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ],
+          hoverBackgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ]
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false,
+          cutoutPercentage: 75,
+          events: [],
+          title: {
+            display: true,
+            text: "Field Goal %",
+            fontSize: 20,
+            fontColor: "#9E9E9E"
+          }
+        }
+      });
+    } 
+
+    let setDoughnutChart2 = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('doughnut2-section-main');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('doughnut2-section-main');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart2-main'});
+
+      canvas_section.appendChild(createElement('span', (player_main_stats.FtPct)));
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart2-main');
+      
+      let data = {
+        datasets: 
+        [{
+          data: data_doughnut2_main,
+          backgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ],
+          hoverBackgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ]
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false,
+          cutoutPercentage: 75,
+          events: [],
+          title: {
+            display: true,
+            text: "Free Throw %",
+            fontSize: 20,
+            fontColor: "#9E9E9E"
+          }
+        }
+      });
+    }     
+
+    let setDoughnutChart3 = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('doughnut3-section-main');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('doughnut3-section-main');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart3-main'});
+
+      canvas_section.appendChild(createElement('span', (player_main_stats.Fg2PtPct)));
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart3-main');
+      
+      let data = {
+        datasets: 
+        [{
+          data: data_doughnut3_main,
+          backgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ],
+          hoverBackgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ]
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false,
+          cutoutPercentage: 75,
+          events: [],
+          title: {
+            display: true,
+            text: "2 Point %",
+            fontSize: 20,
+            fontColor: "#9E9E9E"
+          }
+        }
+      });
+    }  
+
+    let setDoughnutChart4 = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('doughnut4-section-main');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('doughnut4-section-main');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart4-main'});
+
+      canvas_section.appendChild(createElement('span', (player_main_stats.Fg3PtPct)));
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart4-main');
+      
+      let data = {
+        datasets: 
+        [{
+          data: data_doughnut4_main,
+          backgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ],
+          hoverBackgroundColor: [
+            "#FFCE56",
+            "#4BC0C0"
+          ]
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false,
+          cutoutPercentage: 75,
+          events: [],
+          title: {
+            display: true,
+            text: "3 Point %",
+            fontSize: 20,
+            fontColor: "#9E9E9E"
+          }
+        }
+      });
+    } 
 
     let setRadarChart = function() { 
       
@@ -441,87 +638,11 @@ let BasketballStatsPro = (function () {
       });
     }
 
-    let setDoughnutChart1 = function() { 
-      
-      //clear any previous charts
-      clearInnerHtml('doughnut1-section-main');
-
-      //add a new canvas 
-      let canvas_section = document.getElementById('doughnut1-section-main');
-      let canvas = canvas_section.appendChild(createElement('canvas'));
-      setAttributes(canvas, {id: 'doughnut-chart1-main', width: '300', height: '300'});
-
-      //create the new chart
-      let chart = document.getElementById('doughnut-chart1-main');
-      
-      let data = {
-        labels: ["FGA", "FGM"],
-        datasets: 
-        [{
-          data: data_doughnut1_main,
-          backgroundColor: [
-            "#4BC0C0",
-            "#FFCE56"
-          ],
-          hoverBackgroundColor: [
-            "#4BC0C0",
-            "#FFCE56"
-          ]
-        }]
-      };
-  
-      let myChart = new Chart(chart, {
-        type: 'doughnut',
-        data: data,
-        animation: { animateScale: true },
-        options: {
-          responsive: false
-        }
-      });
-    } 
-
-    let setDoughnutChart2 = function() { 
-      
-      //clear any previous charts
-      clearInnerHtml('doughnut2-section-main');
-
-      //add a new canvas 
-      let canvas_section = document.getElementById('doughnut2-section-main');
-      let canvas = canvas_section.appendChild(createElement('canvas'));
-      setAttributes(canvas, {id: 'doughnut-chart2-main', width: '300', height: '300'});
-
-      //create the new chart
-      let chart = document.getElementById('doughnut-chart2-main');
-    
-      let data = {
-        labels: ["FTA", "FTM"],
-        datasets: 
-        [{
-          data: data_doughnut2_main,
-          backgroundColor: [
-            "#4BC0C0",
-            "#FFCE56"
-          ],
-          hoverBackgroundColor: [
-            "#4BC0C0",
-            "#FFCE56"
-          ]
-        }]
-      };
-        
-      let myChart = new Chart(chart, {
-        type: 'doughnut',
-        data: data,
-        animation: { animateScale: true },
-        options: {
-            responsive: false
-        }
-      });
-    }    
-
-    setRadarChart();
     setDoughnutChart1();
     setDoughnutChart2();
+    setDoughnutChart3();
+    setDoughnutChart4();
+    setRadarChart();
   };
 
   //Compare player functionality
@@ -1343,14 +1464,14 @@ let BasketballStatsPro = (function () {
           RebPerGame: (entry.stats.RebPerGame["#text"]),
           BlkPerGame: (entry.stats.BlkPerGame["#text"]),
           FoulPersPerGame: (entry.stats.FoulPersPerGame["#text"]),
-          FgPct: (entry.stats.FgPct["#text"] + "%"),
-          FtPct: (entry.stats.FtPct["#text"] + "%"),
-          Fg2PtPct: (entry.stats.Fg2PtPct["#text"] + "%"),
-          Fg3PtPct: (entry.stats.Fg3PtPct["#text"] + "%"),
+          FgPct: (entry.stats.FgPct["#text"]),
+          FtPct: (entry.stats.FtPct["#text"]),
+          Fg2PtPct: (entry.stats.Fg2PtPct["#text"]),
+          Fg3PtPct: (entry.stats.Fg3PtPct["#text"]),
           Fg2PtMadePerGame: (entry.stats.Fg2PtMadePerGame["#text"]),
           Fg3PtMadePerGame: (entry.stats.Fg3PtMadePerGame["#text"]),
-          EFgPct: (getEfgPct(entry) + "%"),
-          TsPct: (getTsPct(entry) + "%"),
+          EFgPct: (getEfgPct(entry)),
+          TsPct: (getTsPct(entry)),
           PlusMinus: (entry.stats.PlusMinus["#text"]),
           MinSecondsPerGame: ( (Number(entry.stats.MinSecondsPerGame["#text"]) / 60).toPrecision(3) )
         } 
@@ -1490,8 +1611,8 @@ let BasketballStatsPro = (function () {
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
       .map((entry) => { return [ 
-          Number(entry.stats.FgAtt["#text"]), 
-          Number(entry.stats.FgMade["#text"])
+          Number(entry.stats.FgMade["#text"]), 
+          Number( Number(entry.stats.FgAtt["#text"]) - Number(entry.stats.FgMade["#text"]) )
         ]
       });
 
@@ -1504,8 +1625,36 @@ let BasketballStatsPro = (function () {
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
       .map((entry) => { return [ 
-          Number(entry.stats.FtAtt["#text"]), 
-          Number(entry.stats.FtMade["#text"])
+          Number(entry.stats.FtMade["#text"]), 
+          Number( Number(entry.stats.FtAtt["#text"]) - Number(entry.stats.FtMade["#text"]) )
+        ]
+      });
+
+    return array[0];
+  }
+
+  function getDoughnutChart3Data(data, player_clicked) {
+    //return an array with numbers for the chart
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { return [ 
+          Number(entry.stats.Fg2PtPct["#text"]), 
+          Number( 100 - Number(entry.stats.Fg2PtPct["#text"]) )
+        ]
+      });
+
+    return array[0];
+  }
+
+  function getDoughnutChart4Data(data, player_clicked) {
+    //return an array with numbers for the chart
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { return [ 
+          Number(entry.stats.Fg3PtPct["#text"]), 
+          Number( 100 - Number(entry.stats.Fg3PtPct["#text"]) )
         ]
       });
 

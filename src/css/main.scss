@@ -6,6 +6,7 @@ $color1-shade-darkest: #1A685F;
 $color1-shade-dark: #3D8E86;
 $color1-shade-medium: #26A59A;
 $color1-shade-light: #4DB7AD;
+$color1-shade-lightest: #4BC0C0;
 
 //palette color 2 is shades of black/white
 $color2-shade-darkest: #1D2027;
@@ -14,13 +15,14 @@ $color2-shade-medium: #F0F0F0;
 $color2-shade-light: #F8F8F8;
 
 //palette color 3 is shades of yellow
-$color3-shade-medium: #ffbf00;
+$color3-shade-medium: #ffce56;
 
 //font color 1 is shades of black/white
 $font1-shade-darkest: #767887;
 $font1-shade-dark: #C4C3D1;
-$font1-shade-medium: #3d3d3d;
-$font1-shade-light: #FBFDFB;
+$font1-shade-medium: #3D3D3D;
+$font1-shade-light: #939393;
+$font1-shade-lightest: #FBFDFB;
 
 //fonts
 $font-museo: 'museo_sans500';
@@ -59,7 +61,7 @@ h2 {
   text-transform: uppercase;
   font-size: 15px;
   font-family: $font-museo;
-  color: $font1-shade-light;
+  color: $font1-shade-lightest;
 }
 
 /* ------------------------------ Header ------------------------------------*/
@@ -93,7 +95,7 @@ h2 {
     height: $header-height;
     padding: 0, 0, 0, 10%;
     background-color: $color1-shade-light;
-    color: $font1-shade-light;
+    color: $font1-shade-lightest;
     border-right: 2px solid $color1-shade-medium;
     h1 {
       margin: 0 0 0 20px;
@@ -117,7 +119,7 @@ h2 {
     #header-season:hover, #header-settings:hover,  #header-info:hover,  
     #header-season:active, #header-settings:active, #header-info:active, {
       cursor: pointer;
-      color: $font1-shade-light;
+      color: $font1-shade-lightest;
       transition: 0.2s;
       transition-property: color;
     }
@@ -151,7 +153,7 @@ h2 {
       border-right: 4px solid $color2-shade-darkest; 
     }
     .glyphicon, .glyphicon-user, .glyphicon-align-left, .glyphicon-flag, .glyphicon-heart-empty {
-      color: $font1-shade-light;
+      color: $font1-shade-lightest;
       font-size: 1.9em;
       margin: 0 auto 0 39%;
     } 
@@ -226,6 +228,7 @@ h2 {
     padding: $section-padding;
     background-color: $color2-shade-medium;
     font-family: $font-roboto;
+    color: $font1-shade-medium;
   } 
   .season {
     margin: 1.5% 0 0 0;
@@ -254,7 +257,46 @@ h2 {
     table, tr, th:last-of-type, td:last-of-type {
       border-right: none;
     }
+    th {
+      color: $font1-shade-light;
+    }
   }
+
+  //doughnut charts section
+  .section-main-doughnut-charts {
+    height: 293px;
+    padding: $section-padding;
+    background-color: $color2-shade-light;
+    font-family: $font-roboto;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: $font1-shade-medium;
+    canvas {
+      height: 220px; 
+      width: 220px;
+    }
+    #doughnut-section-text {
+      margin: 8px 0 0 0;
+    }
+    #doughnut1-section-main, #doughnut2-section-main, 
+    #doughnut3-section-main, #doughnut4-section-main {
+      margin: 0 20px 0 20px;
+      position: relative;
+      canvas{
+        position: absolute;
+        z-index: 2;
+      }
+      span {
+        position: absolute;
+        z-index: 3;
+        margin: 97px 0 0 60px;
+        text-align: center;
+        font-size: 50px;
+        font-weight: 500;
+      }
+    }
+  }
+
 }
 
 
