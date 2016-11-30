@@ -46,7 +46,8 @@ let BasketballStatsPro = (function () {
   let search_array;
   let current_player_clicked;
   let current_season_picked;
-  let player_profile, player_main_stats, player_secondary_stats;
+  let player_profile, player_main_stats;
+  let player_secondary_stats1, player_secondary_stats2;
   let player_team_name, player_team_list, player_team_positions;
 
   //compare stats variables
@@ -290,7 +291,8 @@ let BasketballStatsPro = (function () {
     //set player's profile data, main stats, and secondary stats
     player_profile = getPlayerProfile(all_profile_data, current_player_clicked);
     player_main_stats = getPlayerMainStats(all_stats_data, current_player_clicked);  
-    player_secondary_stats = getPlayerSecondaryStats(all_stats_data, current_player_clicked);
+    player_secondary_stats1 = getPlayerSecondaryStats1(all_stats_data, current_player_clicked);
+    player_secondary_stats2 = getPlayerSecondaryStats2(all_stats_data, current_player_clicked);
     current_season_picked = '2016-2017';
 
     //set player's team data
@@ -299,14 +301,15 @@ let BasketballStatsPro = (function () {
     player_team_positions = getTeamPositions(all_stats_data, current_player_clicked);
 
     //set chart and graph data
-    data_radar_main = getRadarChartData(all_stats_data, current_player_clicked);
     data_doughnut1_main = getDoughnutChart1Data(all_stats_data, current_player_clicked);
     data_doughnut2_main = getDoughnutChart2Data(all_stats_data, current_player_clicked);
     data_doughnut3_main = getDoughnutChart3Data(all_stats_data, current_player_clicked);
     data_doughnut4_main = getDoughnutChart4Data(all_stats_data, current_player_clicked);
+    data_radar_main = getRadarChartData(all_stats_data, current_player_clicked);
 
     displayPlayerStats();
     displayMainCharts();
+    displaySecondaryChart();
   };
 
   let displayPlayerStats = function() {
@@ -314,8 +317,8 @@ let BasketballStatsPro = (function () {
     let displayPlayerProfile = function() {
       
       //clear any previous results
-      clearInnerHtml('profile-name', 'profile-team', 'profile-logo', 
-        'profile-jersey', 'profile-position', 'profile-age', 'profile-height', 'profile-weight');
+      clearInnerHtml('profile-name', 'profile-team', 'profile-jersey', 
+        'profile-position', 'profile-age', 'profile-height', 'profile-weight');
 
       //display profile info
       document.getElementById('profile-name').appendChild(createElement('p', player_profile.name));
@@ -325,10 +328,6 @@ let BasketballStatsPro = (function () {
       document.getElementById('profile-age').appendChild(createElement('p', player_profile.age));
       document.getElementById('profile-height').appendChild(createElement('p', player_profile.height));
       document.getElementById('profile-weight').appendChild(createElement('p', player_profile.weight));
-
-      //display logo
-      let logo = document.getElementById('profile-logo').appendChild(createElement('span'));
-      setAttributes(logo, {class: "glyphicon glyphicon-king"});    
     }
 
     let displayPlayerMainStats = function() {
@@ -338,20 +337,24 @@ let BasketballStatsPro = (function () {
 
       //display season
       document.getElementById('stats-season').appendChild(createElement('p', current_season_picked));
-      document.getElementById('stats-season-text').appendChild(createElement('p', "season stats"));
+      document.getElementById('stats-season-text').appendChild(createElement('p', "per game stats"));
 
       //display stats table
       displayMainStatsTable(player_main_stats, 'table-stats-main');
     }
 
     let displayPlayerSecondaryStats = function() {
-    
-      //clear any previous results and display player's secondary stats 
-      clearInnerHtml('stats-secondary');
       
-      for (let stat in player_secondary_stats) {
-            document.getElementById('stats-secondary').appendChild(createElement( 'li', player_secondary_stats[stat] ));
-      }
+      //clear any previous results
+      clearInnerHtml('secondary-stats-text');
+
+      //display secondary stats section header text
+      document.getElementById('secondary-stats-text').appendChild(createElement('p', current_season_picked));
+      document.getElementById('secondary-stats-text').appendChild(createElement('p', "season stats"));
+
+      //display stats table
+      displaySecondaryStatsTable1(player_secondary_stats1, 'table1-stats-secondary');
+      displaySecondaryStatsTable2(player_secondary_stats2, 'table2-stats-secondary');
     }
 
     let displayPlayerTeamName = function() {
@@ -390,8 +393,12 @@ let BasketballStatsPro = (function () {
 
   let displayMainCharts = function() {
     
+    //clear any previous results
+    clearInnerHtml('doughnut-section-text');
+    
     //display doughnut charts section header text
-    document.getElementById('doughnut-section-text').appendChild(createElement('p', "Attempts vs. Made Stats"));
+    document.getElementById('doughnut-section-text').appendChild(createElement('p', current_season_picked));
+    document.getElementById('doughnut-section-text').appendChild(createElement('p', "key percentage stats"));
 
     //chart global config
     Chart.scaleService.updateScaleDefaults('linear', {
@@ -400,7 +407,6 @@ let BasketballStatsPro = (function () {
       }
     })
 
- 
     let setDoughnutChart1 = function() { 
       
       //clear any previous charts
@@ -411,7 +417,16 @@ let BasketballStatsPro = (function () {
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart1-main'});
 
-      canvas_section.appendChild(createElement('span', (player_main_stats.FgPct)));
+      //set the center number
+      let center_number;
+      if (player_main_stats.FgPct === "0.0" ) {
+        center_number = "";
+      } 
+      else {
+        center_number = player_main_stats.FgPct;
+      }
+
+      canvas_section.appendChild(createElement('span', center_number));
 
       //create the new chart
       let chart = document.getElementById('doughnut-chart1-main');
@@ -459,7 +474,16 @@ let BasketballStatsPro = (function () {
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart2-main'});
 
-      canvas_section.appendChild(createElement('span', (player_main_stats.FtPct)));
+      //set the center number
+      let center_number;
+      if (player_main_stats.FtPct === "0.0" ) {
+        center_number = "";
+      } 
+      else {
+        center_number = player_main_stats.FtPct;
+      }
+
+      canvas_section.appendChild(createElement('span', center_number));
 
       //create the new chart
       let chart = document.getElementById('doughnut-chart2-main');
@@ -507,7 +531,16 @@ let BasketballStatsPro = (function () {
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart3-main'});
 
-      canvas_section.appendChild(createElement('span', (player_main_stats.Fg2PtPct)));
+      //set the center number
+      let center_number;
+      if (player_main_stats.Fg2PtPct === "0.0" ) {
+        center_number = "";
+      } 
+      else {
+        center_number = player_main_stats.Fg2PtPct;
+      }
+
+      canvas_section.appendChild(createElement('span', center_number));
 
       //create the new chart
       let chart = document.getElementById('doughnut-chart3-main');
@@ -555,7 +588,16 @@ let BasketballStatsPro = (function () {
       let canvas = canvas_section.appendChild(createElement('canvas'));
       setAttributes(canvas, {id: 'doughnut-chart4-main'});
 
-      canvas_section.appendChild(createElement('span', (player_main_stats.Fg3PtPct)));
+      //set the center number
+      let center_number;
+      if (player_main_stats.Fg3PtPct === "0.0" ) {
+        center_number = "";
+      } 
+      else {
+        center_number = player_main_stats.Fg3PtPct;
+      }
+      
+      canvas_section.appendChild(createElement('span', center_number));
 
       //create the new chart
       let chart = document.getElementById('doughnut-chart4-main');
@@ -593,6 +635,22 @@ let BasketballStatsPro = (function () {
       });
     } 
 
+    setDoughnutChart1();
+    setDoughnutChart2();
+    setDoughnutChart3();
+    setDoughnutChart4();
+  };
+
+  let displaySecondaryChart = function() {
+
+    //chart global config
+    Chart.scaleService.updateScaleDefaults('linear', {
+      ticks: {
+        min: 0
+      }
+    })
+
+    //display radar chart
     let setRadarChart = function() { 
       
       //clear any previous charts
@@ -638,12 +696,8 @@ let BasketballStatsPro = (function () {
       });
     }
 
-    setDoughnutChart1();
-    setDoughnutChart2();
-    setDoughnutChart3();
-    setDoughnutChart4();
     setRadarChart();
-  };
+  }
 
   //Compare player functionality
   let getComparePlayer = function() {
@@ -1511,6 +1565,106 @@ let BasketballStatsPro = (function () {
     //display each stat
     for (let stat in data) {
       document.getElementById('stats-row').appendChild(createElement('td', data[stat]));  
+    }
+  }
+
+  function getPlayerSecondaryStats1(data, player_clicked) {
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { 
+        return  { 
+          GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+          MinSeconds: ((Number(entry.stats.MinSeconds["#text"]) / 60).toPrecision(3)),
+          Pts: (entry.stats.Pts["#text"]),
+          FgAtt: (entry.stats.FgAtt["#text"]),
+          FgMade: (entry.stats.FgMade["#text"]),
+          Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+          Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+          Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+          Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"])
+          } 
+      });
+    return array[0];
+  }
+
+  function getPlayerSecondaryStats2(data, player_clicked) {
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { 
+        return  { 
+          FtAtt: (entry.stats.FtAtt["#text"]),
+          FtMade: (entry.stats.FtMade["#text"]),
+          OffReb: (entry.stats.OffReb["#text"]),
+          DefReb: (entry.stats.DefReb["#text"]),
+          Reb: (entry.stats.Reb["#text"]),
+          Ast: (entry.stats.Ast["#text"]),
+          Blk: (entry.stats.Blk["#text"]),
+          Stl: (entry.stats.Stl["#text"]),
+          Tov: (entry.stats.Tov["#text"]),
+          FoulPers: (entry.stats.FoulPers["#text"])
+        } 
+      });
+    return array[0];
+  }
+
+  function displaySecondaryStatsTable1(data, tableId) {
+    
+    //clear any current table
+    clearInnerHtml(tableId);
+
+    //create table headers 
+    document.getElementById(tableId).appendChild(
+      createElement('tr',
+        createElement('th', 'GP'),
+        createElement('th', 'MIN'),
+        createElement('th', 'PTS'),
+        createElement('th', 'FGA'),
+        createElement('th', 'FGM'),
+        createElement('th', '2PM'),
+        createElement('th', '2PA'),
+        createElement('th', '3PM'),
+        createElement('th', '3PA')
+      ));
+
+    //create a row for the stats
+    let row = document.getElementById(tableId).appendChild(createElement('tr'));
+    setAttributes(row, {id: 'stats-row-table1'});
+
+    //display each stat
+    for (let stat in data) {
+      document.getElementById('stats-row-table1').appendChild(createElement('td', data[stat]));  
+    }
+  }
+
+  function displaySecondaryStatsTable2(data, tableId) {
+    
+    //clear any current table
+    clearInnerHtml(tableId);
+
+    //create table headers 
+    document.getElementById(tableId).appendChild(
+      createElement('tr',
+        createElement('th', 'FTA'),
+        createElement('th', 'FTM'),
+        createElement('th', 'OREB'),
+        createElement('th', 'DREB'),
+        createElement('th', 'REB'),
+        createElement('th', 'AST'),
+        createElement('th', 'BLK'),
+        createElement('th', 'STL'),
+        createElement('th', 'TOV'),
+        createElement('th', 'PF')
+      ));
+
+    //create a row for the stats
+    let row = document.getElementById(tableId).appendChild(createElement('tr'));
+    setAttributes(row, {id: 'stats-row-table2'});
+
+    //display each stat
+    for (let stat in data) {
+      document.getElementById('stats-row-table2').appendChild(createElement('td', data[stat]));  
     }
   }
 

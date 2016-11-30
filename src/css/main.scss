@@ -70,7 +70,7 @@ h2 {
   position: fixed;
   width: 100%;
   height: $header-height;
-  z-index: 3;
+  z-index: 10;
   background-color: $color1-shade-light;
   .logo-div, .col-md-2 {
     height: $header-height;
@@ -133,6 +133,7 @@ h2 {
     height: 100%;
     position: fixed;
     display: block;
+    z-index: 9;
     margin: $header-height 0;
     background-color: $color2-shade-dark;
     div {
@@ -217,10 +218,6 @@ h2 {
       font-size: 1.3em;
       font-weight: 700;
     }
-    .glyphicon, .glyphicon-king {
-        color: #ff6600;
-        margin: 10% 0 0 0;
-    }  
   }
 
   //stats section 
@@ -250,6 +247,7 @@ h2 {
     tr:first-of-type, {
       border-bottom: 3px solid $color1-shade-light;
       border-left: none;
+      width: 100%;
     }
     table, tr, th:first-of-type, td:first-of-type {
       border-left: none;
@@ -277,6 +275,7 @@ h2 {
     }
     #doughnut-section-text {
       margin: 8px 0 0 0;
+      text-transform: capitalize;
     }
     #doughnut1-section-main, #doughnut2-section-main, 
     #doughnut3-section-main, #doughnut4-section-main {
@@ -297,6 +296,50 @@ h2 {
     }
   }
 
+  //radar chart and secondary stats section
+  .section-main-secondary-stats {
+    padding: $section-padding;
+    background-color: $color2-shade-medium;
+    font-family: $font-roboto;
+    color: $font1-shade-medium;
+    #secondary-stats-text {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: $font1-shade-medium;
+      text-transform: capitalize;
+      margin: 8px 0 0 0;
+    }
+    .stats-secondary {
+      font-weight: 500;
+      font-size: 1.2em;
+      table {
+        border: none;
+      }
+      #table1-stats-secondary, #table2-stats-secondary {
+        table, tr, th, td {
+        border-color: $color1-shade-light;
+        border-width: 3px;
+        border-top: none;
+        border-bottom: none;
+        text-align: center;
+        }
+        tr:first-of-type, {
+          border-bottom: 3px solid $color1-shade-light;
+          border-left: none;
+        }
+        table, tr, th:first-of-type, td:first-of-type {
+          border-left: none;
+        }
+        table, tr, th:last-of-type, td:last-of-type {
+          border-right: none;
+        }
+        th {
+          color: $font1-shade-light;
+        }
+      }
+    }
+
+  }
 }
 
 
