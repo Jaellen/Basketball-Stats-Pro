@@ -48,7 +48,8 @@ let BasketballStatsPro = (function () {
   let current_season_picked;
   let player_profile, player_main_stats;
   let player_secondary_stats1, player_secondary_stats2;
-  let player_team_name, player_team_list, player_team_positions;
+  let player_team_name, player_team_list;
+  let player_team_positions, player_team_jerseys;
 
   //compare stats variables
   let compare_player_a, compare_player_b;
@@ -299,6 +300,7 @@ let BasketballStatsPro = (function () {
     player_team_name = getTeamName(all_stats_data, current_player_clicked);
     player_team_list = getTeamList(all_stats_data, current_player_clicked);
     player_team_positions = getTeamPositions(all_stats_data, current_player_clicked);
+    player_team_jerseys = getTeamJerseyNumbers(all_stats_data, current_player_clicked);
 
     //set chart and graph data
     data_doughnut1_main = getDoughnutChart1Data(all_stats_data, current_player_clicked);
@@ -361,7 +363,7 @@ let BasketballStatsPro = (function () {
       
       //clear any previous results and display player team name
       clearInnerHtml('team-name');
-      document.getElementById('team-name').appendChild(createElement( 'h4', player_team_name.toString() ));
+      document.getElementById('team-name').appendChild(createElement( 'div', player_team_name.toString(), " Team Players" ));
     }
 
     let displayPlayerTeamList = function() { 
@@ -369,19 +371,38 @@ let BasketballStatsPro = (function () {
       //clear any previous results 
       clearInnerHtml('team-list');
       
-      //display player team list 
-      player_team_list.forEach((value, i) => {
+      //display each team player 
+      //i = 1 in order to achieve a loop where every third element adds a break
+      for (let i = 1; i <= player_team_list.length; i++ ) {
+
+        //after every third element in the list, start a new line
+        if (i % 3 === 0) {
         document.getElementById('team-list')
-          .appendChild(createElement( 'li', createElement('a', player_team_list[i], ", ", player_team_positions[i])  ))
-          .setAttribute('id', player_team_list[i]);
-        
+          .appendChild(createElement( 'span', 
+                         createElement('a', player_team_list[(i-1)], " #", player_team_jerseys[(i-1)], " | ", player_team_positions[(i-1)] ) ))
+          .setAttribute('id', player_team_list[(i-1)]);
+
+        //note: these two lines are the difference between the if else code
+        document.getElementById('team-list').appendChild(createElement('br'));
+        document.getElementById('team-list').appendChild(createElement('br'));
+        document.getElementById('team-list').appendChild(createElement('br'));
+        }
+
+        else {
+          document.getElementById('team-list')
+          .appendChild(createElement( 'span', 
+                         createElement('a', player_team_list[(i-1)], " #", player_team_jerseys[(i-1)], " | ", player_team_positions[(i-1)] ) ))
+          .setAttribute('id', player_team_list[(i-1)]);
+        }
+
         //add a click event listener  
-        document.getElementById(player_team_list[i]).addEventListener('click', function(event) {            
+        document.getElementById(player_team_list[(i-1)]).addEventListener('click', function(event) {            
           current_player_clicked = event.currentTarget.getAttribute('id').toLowerCase();
           //display that player's data
           setPlayerStats();
         });
-      });
+
+      }
     }
 
     displayPlayerProfile();
@@ -452,7 +473,7 @@ let BasketballStatsPro = (function () {
         animation: { animateScale: true },
         options: {
           responsive: false,
-          cutoutPercentage: 75,
+          cutoutPercentage: 80,
           events: [],
           title: {
             display: true,
@@ -509,7 +530,7 @@ let BasketballStatsPro = (function () {
         animation: { animateScale: true },
         options: {
           responsive: false,
-          cutoutPercentage: 75,
+          cutoutPercentage: 80,
           events: [],
           title: {
             display: true,
@@ -566,7 +587,7 @@ let BasketballStatsPro = (function () {
         animation: { animateScale: true },
         options: {
           responsive: false,
-          cutoutPercentage: 75,
+          cutoutPercentage: 80,
           events: [],
           title: {
             display: true,
@@ -623,7 +644,7 @@ let BasketballStatsPro = (function () {
         animation: { animateScale: true },
         options: {
           responsive: false,
-          cutoutPercentage: 75,
+          cutoutPercentage: 80,
           events: [],
           title: {
             display: true,
@@ -1731,6 +1752,14 @@ let BasketballStatsPro = (function () {
       .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked }) //remove repeat
       .map((entry) => { return entry.player.Position });
+  }
+
+  function getTeamJerseyNumbers(data, player_clicked) {
+    return data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked }) //remove repeat
+      .map((entry) => { return entry.player.JerseyNumber });
   }
 
   function getRadarChartData(data, player_clicked) {

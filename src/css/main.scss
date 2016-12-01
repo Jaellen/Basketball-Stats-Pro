@@ -293,7 +293,7 @@ h2 {
       width: 220px;
     }
     #doughnut-section-text {
-      margin: 8px 40px 100px 0;
+      margin: 8px 40px 120px 0;
       text-transform: capitalize;
     }
     #doughnut1-section-main, #doughnut2-section-main, 
@@ -360,9 +360,47 @@ h2 {
           color: $font1-shade-light;
         }
       }
-    }
-
+    } 
   }
+
+  //team section  
+  .section-main-team {
+    padding: $section-padding;
+    background-color: $color2-shade-light;
+    font-family: $font-roboto;
+    color: $font1-shade-medium;
+    .team-text {
+      margin: 8px 0 0 0;
+      font-size: 1.3em;
+      font-weight: 700;
+      text-transform: capitalize;
+      #team-name {
+        font-weight: 700;
+      }
+    }
+    #team-list {
+      list-style: none;
+      text-decoration: none;
+      span, a {
+        margin: 0 10px;
+      }
+      a {
+        padding: 10px;
+        background-color: $color1-shade-light;
+        color: $font1-shade-lightest;
+        font-family: $font-roboto;
+        font-size: 1.2em;
+      }
+      a:hover {
+        text-decoration: none;
+        background-color: $color1-shade-dark;
+        transition: 0.2s;
+        cursor: pointer;
+      }
+    }
+    
+  }
+
 }
 
 
