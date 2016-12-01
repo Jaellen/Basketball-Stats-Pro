@@ -420,7 +420,7 @@ let BasketballStatsPro = (function () {
       //set the center number
       let center_number;
       if (player_main_stats.FgPct === "0.0" ) {
-        center_number = "";
+        center_number = "0";
       } 
       else {
         center_number = player_main_stats.FgPct;
@@ -477,7 +477,7 @@ let BasketballStatsPro = (function () {
       //set the center number
       let center_number;
       if (player_main_stats.FtPct === "0.0" ) {
-        center_number = "";
+        center_number = "0";
       } 
       else {
         center_number = player_main_stats.FtPct;
@@ -534,7 +534,7 @@ let BasketballStatsPro = (function () {
       //set the center number
       let center_number;
       if (player_main_stats.Fg2PtPct === "0.0" ) {
-        center_number = "";
+        center_number = "0";
       } 
       else {
         center_number = player_main_stats.Fg2PtPct;
@@ -591,7 +591,7 @@ let BasketballStatsPro = (function () {
       //set the center number
       let center_number;
       if (player_main_stats.Fg3PtPct === "0.0" ) {
-        center_number = "";
+        center_number = "0";
       } 
       else {
         center_number = player_main_stats.Fg3PtPct;
@@ -669,12 +669,12 @@ let BasketballStatsPro = (function () {
         datasets: [
           {
             label: toNameUpperCase(current_player_clicked),
-            backgroundColor: "rgba(179,181,198,0.2)",
-            borderColor: "rgba(179,181,198,1)",
-            pointBackgroundColor: "rgba(179,181,198,1)",
+            backgroundColor: "rgba(38,165,154,0.2)",
+            borderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "rgba(38,165,154,1)",
             pointBorderColor: "#fff",
-            pointHoverBackgroundColor: "#fff",
-            pointHoverBorderColor: "rgba(179,181,198,1)",
+            pointHoverBackgroundColor: "rgba(38,165,154,1)",
+            pointHoverBorderColor: "rgba(75,192,192,1)",
             data: data_radar_main
           }
         ],
@@ -685,13 +685,24 @@ let BasketballStatsPro = (function () {
         type: 'radar',
         data: data,
         options: {
+          legend: {
+            labels: {
+              fontSize: 18,
+              fontColor: "#939393",
+              fontStyle: "bold"
+            }
+          },
           responsive: false,
           scale: {
+            scaleLabel: {
+              fontSize: 14,
+              fontStyle: "bold"
+            },    
             ticks: {
               beginAtZero: true,
               max: 100
             }
-          }
+          },
         }
       });
     }

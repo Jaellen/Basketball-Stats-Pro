@@ -78,11 +78,21 @@
       <!-- search section -->  
       <section class="section-search">
         <div class="row">
-        
-          <span class="glyphicon glyphicon-search"></span>
-          <input type="text" id="searchBox" class="search-field" placeholder="Search player" />
-          <ul id="searchResults" class="term-list hidden"></ul>
-        
+          
+          <div class="col-md-7">
+            <span class="glyphicon glyphicon-search"></span>
+            <input type="text" id="searchBox" class="search-field" placeholder="Search player" />
+            <ul id="searchResults" class="term-list hidden"></ul>
+          </div>
+
+          <div class="col-md-2">
+            <button id="button-compare">compare player</button>
+          </div>
+          
+          <div class="col-md-">
+            <button id="button-save-player">save player</button>
+          </div>
+
         </div>
       </section>
 
@@ -94,17 +104,17 @@
             <div id="profile-name"></div>
           </div>
           
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div id="profile-team"></div>
           </div>
           
-          <div class="col-md-2">
+          <div class="col-md-3">
             <div id="profile-jersey"></div>
             <div id="profile-position"></div>
             <div id="profile-age"></div>
           </div>
           
-          <div class="col-md-2">
+          <div class="col-md-3">
             <div id="profile-height"></div>
             <div id="profile-weight"></div>
           </div>
@@ -121,7 +131,7 @@
             <div id="stats-season-text"></div>
           </div>
           
-          <div class="col-md-10 stats-main">
+          <div class="col-md-8 stats-main">
             <ul id="stats-main"></ul>
             <table id="table-stats-main"></table>
           </div>
@@ -133,7 +143,7 @@
       <section class="section-main-doughnut-charts">
         <div class="row">
           
-          <div class="col-md-2" id="doughnut-section-text"></div>
+          <div class="col-md-1" id="doughnut-section-text"></div>
    
           <div class="col-md-2" id="doughnut1-section-main"></div>
           <div class="col-md-2" id="doughnut2-section-main"></div>
@@ -153,7 +163,7 @@
 
           <div class="col-md-4" id="radar-section-main"></div>
           
-          <div class="col-md-7 stats-secondary"> 
+          <div class="col-md-5 stats-secondary"> 
             <table id="table1-stats-secondary"></table><br>
             <table id="table2-stats-secondary"></table>
           </div>
@@ -161,8 +171,14 @@
         </div>
       </section>
 
+      <!-- team players section -->
+      <section class="section-main-team">
+        <div class="row">
+          
 
 
+        </div>
+      </section>
 
       <!-- Charts in Main Page -->
       <div class="row">
@@ -172,12 +188,7 @@
             
           </div>
 
-          <div class="col-md-2">
-            <h3>Options</h3>
-            <button class="btn btn-primary" id="button-compare">compare player</button>
-            <br><br>
-            <button class="btn btn-success" id="button-save-player">save player</button>
-        </div>   
+             
 
       </div>
     
@@ -213,23 +224,23 @@
       <div class="row">
 
         <!-- Player A -->
-        <div class="col-md-3"> 
+        <div class="col-md-2"> 
           <h4>Profile Data Player A</h4>
           <ul id="profile-data-player-a"></ul>
         </div>
                 
-        <div class="col-md-3"> 
+        <div class="col-md-2"> 
           <h4>Main Stats Player A</h4>
           <ul id="stats-main-player-a"></ul>
         </div>
           
         <!-- Player B -->
-        <div class="col-md-3">
+        <div class="col-md-2">
           <h4>Main Stats Player B</h4>
           <ul id="stats-main-player-b"></ul>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <h4>Profile Data Player B</h4>
           <ul id="profile-data-player-b"></ul>
         </div>
@@ -285,19 +296,19 @@
       <!-- Ranking Type Buttons -->
       <div class="row">
           
-        <div class="col-md-3">
+        <div class="col-md-2">
           <button class="btn btn-warning" id="button-pts-g">PTS/G</button> 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <button class="btn btn-warning" id="button-ast-g">AST/G</button> 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <button class="btn btn-warning" id="button-reb-g">REB/G</button> 
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <button class="btn btn-warning" id="button-blk-g">BLK/G</button> 
         </div>
 

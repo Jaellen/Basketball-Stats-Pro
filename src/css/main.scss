@@ -39,9 +39,7 @@ $section-padding: 30px 30px;
 
 //remove unwanted defaults
 p, h1, h2, h3, h4, h5, h6, .row, .container-fluid,
-.col-md-1, .col-md-2, .col-md-3, .col-md-4, 
-.col-md-5, .col-md-6, .col-md-7, .col-md-8,
-.col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+[class*="col-"] {
   margin: 0;
   padding: 0;
 }
@@ -163,8 +161,8 @@ h2 {
 /* --------------------------- Stats Page -----------------------------------*/
 
 .stats-page {
-  margin: 0 0 0 $sidebar-width;
-  padding: $header-height 0 0 0;
+  width: 100%;
+  padding: $header-height 0 0 $sidebar-width;
 
   //search section
   .section-search {
@@ -203,7 +201,26 @@ h2 {
         text-decoration: none;   
         text-transform: capitalize;
       }  
-    }  
+    }
+    #button-compare, #button-save-player {
+      width: 140px;
+      height: 55px;
+      border-radius: 5px;
+      border: none;
+      outline: 0;
+      background-color: $color1-shade-medium;
+      transition: 0.2s;
+      color: #fff;
+      font-size: 16px;
+      font-family: $font-museo; 
+      text-align: center;
+      text-transform: uppercase;
+    }
+    #button-compare:hover, #button-save-player:hover,
+    #button-compare:active, #button-save-player:active {
+      background-color: $color1-shade-dark;
+      transition: 0.2s;
+    }
   }
 
   //profile section
@@ -218,9 +235,12 @@ h2 {
       font-size: 1.3em;
       font-weight: 700;
     }
+    #profile-jersey, #profile-position, #profile-age {
+      padding: 0 0 0 40px;
+    }
   }
 
-  //stats section 
+  //main stats section 
   .section-main-stats {
     padding: $section-padding;
     background-color: $color2-shade-medium;
@@ -247,7 +267,7 @@ h2 {
     tr:first-of-type, {
       border-bottom: 3px solid $color1-shade-light;
       border-left: none;
-      width: 100%;
+      width: 80%;
     }
     table, tr, th:first-of-type, td:first-of-type {
       border-left: none;
@@ -262,7 +282,6 @@ h2 {
 
   //doughnut charts section
   .section-main-doughnut-charts {
-    height: 293px;
     padding: $section-padding;
     background-color: $color2-shade-light;
     font-family: $font-roboto;
@@ -274,7 +293,7 @@ h2 {
       width: 220px;
     }
     #doughnut-section-text {
-      margin: 8px 0 0 0;
+      margin: 8px 40px 100px 0;
       text-transform: capitalize;
     }
     #doughnut1-section-main, #doughnut2-section-main, 
@@ -303,11 +322,14 @@ h2 {
     font-family: $font-roboto;
     color: $font1-shade-medium;
     #secondary-stats-text {
+      margin: 8px 0 0 0;
       font-size: 1.3em;
       font-weight: 700;
       color: $font1-shade-medium;
       text-transform: capitalize;
-      margin: 8px 0 0 0;
+    }
+    #radar-chart-main {
+      margin: 0 50px;
     }
     .stats-secondary {
       font-weight: 500;
@@ -316,6 +338,7 @@ h2 {
         border: none;
       }
       #table1-stats-secondary, #table2-stats-secondary {
+        margin: 10px 0 20px 0;
         table, tr, th, td {
         border-color: $color1-shade-light;
         border-width: 3px;
