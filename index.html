@@ -132,7 +132,6 @@
           </div>
           
           <div class="col-md-8 stats-main">
-            <ul id="stats-main"></ul>
             <table id="table-stats-main"></table>
           </div>
 
@@ -194,91 +193,120 @@
   </section>
 
 <!--************************** COMPARE PAGE ********************************-->
+ 
+  <section id="compare-page" class="compare-page hidden">
+    <div class="container-fluid">
+      
+      <!-- profile compare section -->
+      <section class="profile-section-compare">
+            
+        <!-- player A -->
+        <div class="row player-a">
+        
+          <div class="col-md-3">
+            <div id="profile-name-compare-a"></div>
+          </div>
+          
+          <div class="col-md-4">
+            <div id="profile-team-compare-a"></div>
+          </div>
+
+          <div class="col-md-3">
+            <div id="profile-jersey-compare-a"></div>
+            <div id="profile-position-compare-a"></div>
+            <div id="profile-age-compare-a"></div>
+          </div>
+          
+          <div class="col-md-2">
+            <div id="profile-height-compare-a"></div>
+            <div id="profile-weight-compare-a"></div>
+          </div>
+        
+        </div>  
+
+        <!-- player B -->
+        <div class="row player-b">
+        
+          <div class="col-md-3">
+            <div id="profile-name-compare-b"></div>
+          </div>
+          
+          <div class="col-md-4">
+            <div id="profile-team-compare-b"></div>
+          </div>
+
+          <div class="col-md-3">
+            <div id="profile-jersey-compare-b"></div>
+            <div id="profile-position-compare-b"></div>
+            <div id="profile-age-compare-b"></div>
+          </div>
+          
+          <div class="col-md-2">
+            <div id="profile-height-compare-b"></div>
+            <div id="profile-weight-compare-b"></div>
+          </div>
+        
+        </div>  
+      </section>
+
+      <!-- compare profile Main Stats -->
+      <section class="section-main-stats-compare">       
+        <div class="row">      
+          
+          <div class="col-md-2 season"> 
+            <div id="stats-season-compare"></div>
+            <div id="stats-season-text-compare"></div>
+          </div>
+          
+          <div class="col-md-8 stats-main-compare">
+            <table id="table-stats-main-compare"></table>
+          </div>
+
+        </div>     
+      </section>    
+
+      <!-- doughnut chart section compare -->
+      <section class="section-doughnut-compare">
+        <div class="row">
+          
+          <div class="col-md-1" id="doughnut-section-text-compare"></div>
+   
+          <div class="col-md-2" id="doughnut1-section-compare"></div>
+          <div class="col-md-2" id="doughnut2-section-compare"></div>
+          <div class="col-md-2" id="doughnut3-section-compare"></div>
+          <div class="col-md-2" id="doughnut4-section-compare"></div>
+
+        </div>
+      </section>
+
+
+
+        <!-- Secondary Stats -->
+        <div class="row">
+          <!-- Player A -->
+          <div class="col-md-3 col-md-offset-2"> 
+            <h4>Secondary Stats Player A</h4>
+            <ul id="secondary-stats-player-a"></ul>
+          </div>
+            
+          <!-- Player B -->
+          <div class="col-md-3">
+            <h4>Secondary Stats Player B</h4>
+            <ul id="secondary-stats-player-b"></ul>
+          </div>    
+        </div>
+        
+        <!-- Charts in Compare Page -->
+        <div class="row">
+          <div class="col-md-4" id="radar-section-compare"></div>
+          <div class="col-md-6" id="bar-section-compare"></div>
+        </div>
+
+    </div>
+  </section>
 
 <!--************************** RANKINGS PAGE *******************************-->
-
-<!--************************* FAVOURITES PAGE ******************************-->
-
-<!-- ******* OLD STRUCTURE ******** -->
-<div class="old">  
-
-  <!-- STATS PAGE -->
-
-  
-  <!-- COMPARE PAGE --> 
-  <section id="compare-page" class="hidden">
-    <div class="container-fluid">
-    
-      <!-- Compare Profile Main Stats -->
-      <div class="row">
-
-        <!-- Player A -->
-        <div class="col-md-2"> 
-          <h4>Profile Data Player A</h4>
-          <ul id="profile-data-player-a"></ul>
-        </div>
-                
-        <div class="col-md-2"> 
-          <h4>Main Stats Player A</h4>
-          <ul id="stats-main-player-a"></ul>
-        </div>
-          
-        <!-- Player B -->
-        <div class="col-md-2">
-          <h4>Main Stats Player B</h4>
-          <ul id="stats-main-player-b"></ul>
-        </div>
-
-        <div class="col-md-2">
-          <h4>Profile Data Player B</h4>
-          <ul id="profile-data-player-b"></ul>
-        </div>
-
-      </div>
-      
-      <!-- Secondary Stats -->
-      <div class="row">
-        <!-- Player A -->
-        <div class="col-md-3 col-md-offset-2"> 
-          <h4>Secondary Stats Player A</h4>
-          <ul id="secondary-stats-player-a"></ul>
-        </div>
-          
-        <!-- Player B -->
-        <div class="col-md-3">
-          <h4>Secondary Stats Player B</h4>
-          <ul id="secondary-stats-player-b"></ul>
-        </div>    
-      </div>
-      
-      <!-- Charts in Compare Page -->
-      <div class="row">
-        <div class="col-md-4" id="radar-section-compare"></div>
-        <div class="col-md-6" id="bar-section-compare"></div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-5" id="doughnut1-section-compare"></div>
-        <div class="col-md-5" id="doughnut2-section-compare"></div>
-      </div>
-      
-    </div>
-  </section>
-  
-
-  <!-- FAVOURITES PAGE --> 
-  <section id="favourites-page" class="hidden">
-    <div class="container-fluid">
-
-      <!-- Favourites List -->    
-      <div class="row">  
-        <ul id="favourites"></ul>
-      </div>
-
-    </div>
-  </section>
-  
-  <!-- RANKINGS PAGE --> 
+ 
   <section id="rankings-page" class="hidden">
     <div class="container-fluid">
 
@@ -346,8 +374,27 @@
     </div>
   </section>
 
-</div>
+<!--************************* FAVOURITES PAGE ******************************-->
+
+  <section id="favourites-page" class="hidden">
+    <div class="container-fluid">
+
+      <!-- Favourites List -->    
+      <div class="row">  
+        <ul id="favourites"></ul>
+      </div>
+
+    </div>
+  </section>
   
+<!-- ******* OLD STRUCTURE ******** -->
+    <div class="old">  
+
+
+      
+    </div>
+  
+
   <!-- App Entry file -->
   <script src="bundle.js" charset="utf-8"></script>
 

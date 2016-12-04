@@ -15,7 +15,7 @@ $color2-shade-medium: #F0F0F0;
 $color2-shade-light: #F8F8F8;
 
 //palette color 3 is shades of yellow
-$color3-shade-medium: #ffce56;
+$color3-shade-medium: #FFCE56;
 
 //font color 1 is shades of black/white
 $font1-shade-darkest: #767887;
@@ -70,10 +70,12 @@ h2 {
   height: $header-height;
   z-index: 10;
   background-color: $color1-shade-light;
+  
   .logo-div, .col-md-2 {
     height: $header-height;
     width: $sidebar-width;
     background-color: $color1-shade-medium;
+    
     .glyphicon, .glyphicon-dashboard {
       color: $color3-shade-medium;
       font-size: 2.5em;
@@ -89,6 +91,7 @@ h2 {
     //   padding: 6%;
     // }
   }
+  
   .title-div {
     height: $header-height;
     padding: 0, 0, 0, 10%;
@@ -103,10 +106,12 @@ h2 {
       display: inline;
     }
   }
+  
   .admin-div {
     height: $header-height;
     background-color: $color1-shade-light;
     margin: 0 0 0 20px;
+    
     .glyphicon, .glyphicon-calendar, .glyphicon-cog, .glyphicon-info-sign {
       color: $color1-shade-darkest;
       transition: 0.2s;
@@ -114,6 +119,7 @@ h2 {
       font-size: 1.4em;
       margin: 13px 13px;
     }
+    
     #header-season:hover, #header-settings:hover,  #header-info:hover,  
     #header-season:active, #header-settings:active, #header-info:active, {
       cursor: pointer;
@@ -134,23 +140,28 @@ h2 {
     z-index: 9;
     margin: $header-height 0;
     background-color: $color2-shade-dark;
+    
     div {
       padding: 18px 0;
+      
       img {
         display: block;
         height: $sidebar-icon-heights;
         margin: auto;
       }
     }
+    
     div:hover {
       background-color: $color2-shade-darkest; 
       cursor: pointer;
     }
+    
     .sidebar-active {
       background-color: $color2-shade-darkest; 
       border-left: 4px solid $color1-shade-light;
       border-right: 4px solid $color2-shade-darkest; 
     }
+    
     .glyphicon, .glyphicon-user, .glyphicon-align-left, .glyphicon-flag, .glyphicon-heart-empty {
       color: $font1-shade-lightest;
       font-size: 1.9em;
@@ -168,6 +179,7 @@ h2 {
   .section-search {
     padding: $section-padding;
     background-color: $color2-shade-medium;
+    
     .glyphicon, .glyphicon-search {
       color: $font1-shade-medium;
       font-size: 3.1em;
@@ -175,9 +187,11 @@ h2 {
       vertical-align: middle;
       margin: 0 5px 0 0;
     }
+    
     input:focus {
       outline: none;
     }
+    
     .search-field {
       background-color: $color2-shade-medium;
       border: none;
@@ -185,13 +199,12 @@ h2 {
       font-size: 30px;
       font-family: $font-museo;
     }
+    
     ul {
       margin: 0 0 0 13px;
       list-style: none;
       font-size: 30px;
       font-family: $font-museo; 
-    }
-    ul {
       li:hover {
         cursor: pointer;
         color: $color3-shade-medium;
@@ -202,6 +215,7 @@ h2 {
         text-transform: capitalize;
       }  
     }
+
     #button-compare, #button-save-player {
       width: 140px;
       height: 55px;
@@ -216,6 +230,7 @@ h2 {
       text-align: center;
       text-transform: uppercase;
     }
+    
     #button-compare:hover, #button-save-player:hover,
     #button-compare:active, #button-save-player:active {
       background-color: $color1-shade-dark;
@@ -231,10 +246,12 @@ h2 {
     font-family: $font-roboto;
     font-weight: 500;
     color: $font1-shade-medium;
+    
     #profile-name {
       font-size: 1.3em;
       font-weight: 700;
     }
+    
     #profile-jersey, #profile-position, #profile-age {
       padding: 0 0 0 40px;
     }
@@ -247,6 +264,7 @@ h2 {
     font-family: $font-roboto;
     color: $font1-shade-medium;
   } 
+  
   .season {
     margin: 1.5% 0 0 0;
     font-size: 1.3em;
@@ -254,9 +272,11 @@ h2 {
     color: $font1-shade-medium;
     text-transform: capitalize;
   }
+  
   .stats-main {
     font-weight: 500;
     font-size: 1.2em;
+    
     table, tr, th, td {
       border-color: $color1-shade-light;
       border-width: 3px;
@@ -264,17 +284,21 @@ h2 {
       border-bottom: none;
       text-align: center;
     }
+    
     tr:first-of-type, {
       border-bottom: 3px solid $color1-shade-light;
       border-left: none;
       width: 80%;
     }
+    
     table, tr, th:first-of-type, td:first-of-type {
       border-left: none;
     }
+    
     table, tr, th:last-of-type, td:last-of-type {
       border-right: none;
     }
+    
     th {
       color: $font1-shade-light;
     }
@@ -288,22 +312,27 @@ h2 {
     font-size: 1.3em;
     font-weight: 700;
     color: $font1-shade-medium;
+    
     canvas {
       height: 220px; 
       width: 220px;
     }
+    
     #doughnut-section-text {
       margin: 8px 40px 120px 0;
       text-transform: capitalize;
     }
+    
     #doughnut1-section-main, #doughnut2-section-main, 
     #doughnut3-section-main, #doughnut4-section-main {
       margin: 0 20px 0 20px;
       position: relative;
+      
       canvas{
         position: absolute;
         z-index: 2;
       }
+      
       span {
         position: absolute;
         z-index: 3;
@@ -321,6 +350,7 @@ h2 {
     background-color: $color2-shade-medium;
     font-family: $font-roboto;
     color: $font1-shade-medium;
+    
     #secondary-stats-text {
       margin: 8px 0 0 0;
       font-size: 1.3em;
@@ -328,15 +358,19 @@ h2 {
       color: $font1-shade-medium;
       text-transform: capitalize;
     }
+    
     #radar-chart-main {
       margin: 0 50px;
     }
+    
     .stats-secondary {
       font-weight: 500;
       font-size: 1.2em;
+      
       table {
         border: none;
       }
+      
       #table1-stats-secondary, #table2-stats-secondary {
         margin: 10px 0 20px 0;
         table, tr, th, td {
@@ -346,16 +380,20 @@ h2 {
         border-bottom: none;
         text-align: center;
         }
+        
         tr:first-of-type, {
           border-bottom: 3px solid $color1-shade-light;
           border-left: none;
         }
+        
         table, tr, th:first-of-type, td:first-of-type {
           border-left: none;
         }
+        
         table, tr, th:last-of-type, td:last-of-type {
           border-right: none;
         }
+        
         th {
           color: $font1-shade-light;
         }
@@ -369,21 +407,26 @@ h2 {
     background-color: $color2-shade-light;
     font-family: $font-roboto;
     color: $font1-shade-medium;
+    
     .team-text {
       margin: 8px 0 0 0;
       font-size: 1.3em;
       font-weight: 700;
       text-transform: capitalize;
+      
       #team-name {
         font-weight: 700;
       }
     }
+    
     #team-list {
       list-style: none;
       text-decoration: none;
+      
       span, a {
         margin: 0 10px;
       }
+      
       a {
         padding: 10px;
         background-color: $color1-shade-light;
@@ -391,6 +434,7 @@ h2 {
         font-family: $font-roboto;
         font-size: 1.2em;
       }
+      
       a:hover {
         text-decoration: none;
         background-color: $color1-shade-dark;
@@ -400,9 +444,154 @@ h2 {
     }
     
   }
-
 }
 
+/* -------------------------- Compare Page ----------------------------------*/
+
+.compare-page {
+  width: 100%;
+  padding: $header-height 0 0 $sidebar-width;
+  
+  //profile compare section
+  .profile-section-compare {
+    padding: $section-padding;
+    background-color: $color2-shade-light;
+    font-size: 1.9em;
+    font-family: $font-roboto;
+    font-weight: 500;
+    color: $font1-shade-medium;
+    
+    #profile-name-compare-a {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: $color1-shade-lightest;
+    }
+
+    #profile-name-compare-b {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: $color3-shade-medium;
+    }
+    
+    #profile-jersey-compare, #profile-position-compare, #profile-age-compare {
+      padding: 0 0 0 40px;
+    }
+
+    .player-a {
+      border-bottom: 3px solid $color1-shade-lightest;
+      padding: 0 0 20px 0;
+    }
+
+    .player-b {
+      padding: 20px 0 0 0;
+    }
+  }
+
+  //main stats compare section
+  .section-main-stats-compare {
+    padding: $section-padding;
+    background-color: $color2-shade-medium;
+    font-family: $font-roboto;
+    color: $font1-shade-medium;
+  
+    .season {
+      margin: 1.5% 0 0 0;
+      font-size: 1.3em;
+      font-weight: 700;
+      color: $font1-shade-medium;
+      text-transform: capitalize;
+    }
+
+    .stats-main-compare {
+      font-weight: 500;
+      font-size: 1.2em;
+      
+      table, tr, th, td {
+        border-color: $color1-shade-light;
+        border-width: 3px;
+        border-top: none;
+        border-bottom: none;
+        text-align: center;
+      }
+      
+      tr:nth-of-type(1), tr:nth-of-type(2) {
+        border-bottom: 3px solid $color1-shade-light;
+        border-left: none;
+        width: 80%;
+      }
+      
+      table, tr, th:first-of-type, td:first-of-type {
+        border-left: none;
+      }
+      
+      table, tr, th:last-of-type, td:last-of-type {
+        border-right: none;
+      }
+      
+      th {
+        color: $font1-shade-light;
+      }
+    }
+  }
+
+  //doughnut chart compare section  
+  .section-doughnut-compare {
+    padding: $section-padding;
+    background-color: $color2-shade-light;
+    font-family: $font-roboto;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: $font1-shade-medium;
+
+    .row {
+      margin: 0 0 30px 0;
+    }
+
+    canvas {
+      height: 240px; 
+      width: 240px;
+    }
+    
+    #doughnut-section-text-compare {
+      margin: 8px 40px 120px 0;
+      text-transform: capitalize;
+    }
+    
+    #doughnut1-section-compare, #doughnut2-section-compare, 
+    #doughnut3-section-compare, #doughnut4-section-compare {
+      margin: 0 20px 0px 20px;
+      position: relative;
+      
+      canvas{
+        position: absolute;
+        z-index: 2;
+      }
+      
+      span {
+        position: absolute;
+        z-index: 3;
+        text-align: center;
+        font-size: 40px;
+        font-weight: 500;
+        text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+      }
+      
+      span:nth-of-type(1) {      
+        margin: 97px 0 0 77px;
+        color: $color1-shade-lightest;
+      }
+      
+      span:nth-of-type(2) {
+        margin: 137px 0 0 77px;
+        color: $color3-shade-medium;
+      }
+    }     
+  }
+
+  //radar chart compare section 
+
+
+}
 
 
 table, tr, th, td {
