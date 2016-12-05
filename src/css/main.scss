@@ -16,6 +16,7 @@ $color2-shade-light: #F8F8F8;
 
 //palette color 3 is shades of yellow
 $color3-shade-medium: #FFCE56;
+$color3-shade-dark: #FCC23A;
 
 //font color 1 is shades of black/white
 $font1-shade-darkest: #767887;
@@ -207,7 +208,7 @@ h2 {
       font-family: $font-museo; 
       li:hover {
         cursor: pointer;
-        color: $color3-shade-medium;
+        color: $color3-shade-dark;
       }
       a {
         color: $color1-shade-medium;
@@ -470,7 +471,7 @@ h2 {
     #profile-name-compare-b {
       font-size: 1.3em;
       font-weight: 700;
-      color: $color3-shade-medium;
+      color: $color3-shade-dark;
     }
     
     #profile-jersey-compare, #profile-position-compare, #profile-age-compare {
@@ -478,7 +479,7 @@ h2 {
     }
 
     .player-a {
-      border-bottom: 3px solid $color1-shade-lightest;
+      border-bottom: 3px solid #E0E0E0;
       padding: 0 0 20px 0;
     }
 
@@ -531,6 +532,21 @@ h2 {
       th {
         color: $font1-shade-light;
       }
+
+      table {
+
+        tr:nth-of-type(2) {
+          td:nth-of-type(1) {
+            color: $color1-shade-lightest;
+          }
+        }
+
+        tr:nth-of-type(3) {
+          td:nth-of-type(1) {
+            color: $color3-shade-dark;
+          }
+        }  
+      }
     }
   }
 
@@ -573,17 +589,16 @@ h2 {
         text-align: center;
         font-size: 40px;
         font-weight: 500;
-        text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
       }
       
       span:nth-of-type(1) {      
-        margin: 97px 0 0 77px;
+        margin: 97px 0 0 78px;
         color: $color1-shade-lightest;
       }
       
       span:nth-of-type(2) {
-        margin: 137px 0 0 77px;
-        color: $color3-shade-medium;
+        margin: 137px 0 0 78px;
+        color: $color3-shade-dark;
       }
     }     
   }

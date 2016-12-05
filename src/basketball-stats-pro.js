@@ -1089,7 +1089,7 @@ let BasketballStatsPro = (function () {
         {
           data: data_doughnut1_compare_b,
           backgroundColor: [
-            "#FFCE56",
+            "#FCC23A",
             "#E0E0E0"
           ]  
         }]
@@ -1113,9 +1113,237 @@ let BasketballStatsPro = (function () {
       });
     }
 
+    let setDoughnutCompareChart2 = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('doughnut2-section-compare');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('doughnut2-section-compare');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart2-compare'});
+
+      //set the center number player a
+      let center_number_a;
+      if (player_a_main_stats.FtPct === "0.0" ) {
+        center_number_a = "0";
+      } 
+      else {
+        center_number_a = player_a_main_stats.FtPct;
+      }
+
+      //display center number player a
+      canvas_section.appendChild(createElement('span', center_number_a));
+
+
+      //set the center number player b
+      let center_number_b;
+      if (player_b_main_stats.FtPct === "0.0" ) {
+        center_number_b = "0";
+      } 
+      else {
+        center_number_b = player_b_main_stats.FtPct;
+      }
+
+      //display center number player b 
+      canvas_section.appendChild(createElement('span', center_number_b));
+
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart2-compare');
+      
+      let data = {
+        datasets: 
+        [{
+          data: data_doughnut2_compare_a,
+          backgroundColor: [
+            "#4BC0C0",
+            "#E0E0E0"
+          ]
+        },
+        {
+          data: data_doughnut2_compare_b,
+          backgroundColor: [
+            "#FCC23A",
+            "#E0E0E0"
+          ]  
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false,
+          cutoutPercentage: 68,
+          events: [],
+          title: {
+            display: true,
+            text: "Free Throw %",
+            fontSize: 20,
+            fontColor: "#9E9E9E"
+          }
+        }
+      });
+    }
+
+    let setDoughnutCompareChart3 = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('doughnut3-section-compare');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('doughnut3-section-compare');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart3-compare'});
+
+      //set the center number player a
+      let center_number_a;
+      if (player_a_main_stats.Fg2PtPct === "0.0" ) {
+        center_number_a = "0";
+      } 
+      else {
+        center_number_a = player_a_main_stats.Fg2PtPct;
+      }
+
+      //display center number player a
+      canvas_section.appendChild(createElement('span', center_number_a));
+
+
+      //set the center number player b
+      let center_number_b;
+      if (player_b_main_stats.Fg2PtPct === "0.0" ) {
+        center_number_b = "0";
+      } 
+      else {
+        center_number_b = player_b_main_stats.Fg2PtPct;
+      }
+
+      //display center number player b 
+      canvas_section.appendChild(createElement('span', center_number_b));
+
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart3-compare');
+      
+      let data = {
+        datasets: 
+        [{
+          data: data_doughnut3_compare_a,
+          backgroundColor: [
+            "#4BC0C0",
+            "#E0E0E0"
+          ]
+        },
+        {
+          data: data_doughnut3_compare_b,
+          backgroundColor: [
+            "#FCC23A",
+            "#E0E0E0"
+          ]  
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false,
+          cutoutPercentage: 68,
+          events: [],
+          title: {
+            display: true,
+            text: "2 Point %",
+            fontSize: 20,
+            fontColor: "#9E9E9E"
+          }
+        }
+      });
+    }
+
+    let setDoughnutCompareChart4 = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('doughnut4-section-compare');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('doughnut4-section-compare');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'doughnut-chart4-compare'});
+
+      //set the center number player a
+      let center_number_a;
+      if (player_a_main_stats.Fg3PtPct === "0.0" ) {
+        center_number_a = "0";
+      } 
+      else {
+        center_number_a = player_a_main_stats.Fg3PtPct;
+      }
+
+      //display center number player a
+      canvas_section.appendChild(createElement('span', center_number_a));
+
+
+      //set the center number player b
+      let center_number_b;
+      if (player_b_main_stats.Fg3PtPct === "0.0" ) {
+        center_number_b = "0";
+      } 
+      else {
+        center_number_b = player_b_main_stats.Fg3PtPct;
+      }
+
+      //display center number player b 
+      canvas_section.appendChild(createElement('span', center_number_b));
+
+
+      //create the new chart
+      let chart = document.getElementById('doughnut-chart4-compare');
+      
+      let data = {
+        datasets: 
+        [{
+          data: data_doughnut4_compare_a,
+          backgroundColor: [
+            "#4BC0C0",
+            "#E0E0E0"
+          ]
+        },
+        {
+          data: data_doughnut4_compare_b,
+          backgroundColor: [
+            "#FCC23A",
+            "#E0E0E0"
+          ]  
+        }]
+      };
+  
+      let myChart = new Chart(chart, {
+        type: 'doughnut',
+        data: data,
+        animation: { animateScale: true },
+        options: {
+          responsive: false,
+          cutoutPercentage: 68,
+          events: [],
+          title: {
+            display: true,
+            text: "3 Point %",
+            fontSize: 20,
+            fontColor: "#9E9E9E"
+          }
+        }
+      });
+    }
+
     setRadarCompareChart();
     setBarCompareChart();
     setDoughnutCompareChart1();
+    setDoughnutCompareChart2();
+    setDoughnutCompareChart3();
+    setDoughnutCompareChart4();
   };
 
   //Save player functionality
