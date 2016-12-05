@@ -603,6 +603,79 @@ h2 {
     }     
   }
 
+  //secondary stats compare
+  .section-compare-secondary-stats {
+    padding: $section-padding;
+    background-color: $color2-shade-medium;
+    font-family: $font-roboto;
+    color: $font1-shade-medium;
+    
+    #secondary-stats-text-compare {
+      margin: 8px 0 0 0;
+      font-size: 1.3em;
+      font-weight: 700;
+      color: $font1-shade-medium;
+      text-transform: capitalize;
+    }
+
+    .stats-secondary-compare {
+      font-weight: 500;
+      font-size: 1.2em;
+      
+      table {
+        border: none;
+      }
+    
+      #table-stats-secondary-compare {
+        margin: 10px 0 20px 0;
+        
+        table, tr, th, td {
+        border-color: $color1-shade-light;
+        border-width: 3px;
+        border-top: none;
+        border-bottom: none;
+        text-align: center;
+        }
+        
+        tr:nth-of-type(1), tr:nth-of-type(2) {
+          border-bottom: 3px solid $color1-shade-light;
+          border-left: none;
+          width: 80%;
+        }
+
+        tr:first-of-type, {
+          border-bottom: 3px solid $color1-shade-light;
+          border-left: none;
+        }
+        
+        table, tr, th:first-of-type, td:first-of-type {
+          border-left: none;
+        }
+        
+        table, tr, th:last-of-type, td:last-of-type {
+          border-right: none;
+        }
+        
+        th {
+          color: $font1-shade-light;
+        }
+
+        tr:nth-of-type(2) {
+          td:nth-of-type(1) {
+            color: $color1-shade-lightest;
+          }
+        }
+
+        tr:nth-of-type(3) {
+          td:nth-of-type(1) {
+            color: $color3-shade-dark;
+          }
+        }
+
+      }  
+    }  
+  }
+
   //radar chart compare section 
 
 

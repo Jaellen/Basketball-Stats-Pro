@@ -799,7 +799,7 @@ let BasketballStatsPro = (function () {
       //update player_a_profile, player_a_main_stats, player_a_sec_stats
       player_a_profile = getPlayerProfile(all_profile_data, compare_player_a);
       player_a_main_stats = getPlayerMainStatsCompare(all_stats_data, compare_player_a); 
-      player_a_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_a);
+      player_a_sec_stats = getPlayerSecondaryStatsCompare(all_stats_data, compare_player_a);
       
       //set chart and graph data
       data_radar_compare_a = getRadarChartData(all_stats_data, compare_player_a);
@@ -814,7 +814,7 @@ let BasketballStatsPro = (function () {
       //update player_b_profile, player_b_main_stats, player_b_sec_stats
       player_b_profile = getPlayerProfile(all_profile_data, compare_player_b);
       player_b_main_stats = getPlayerMainStatsCompare(all_stats_data, compare_player_b); 
-      player_b_sec_stats = getPlayerSecondaryStats(all_stats_data, compare_player_b);
+      player_b_sec_stats = getPlayerSecondaryStatsCompare(all_stats_data, compare_player_b);
       
       //set chart and graph data
       data_radar_compare_b = getRadarChartData(all_stats_data, compare_player_b); 
@@ -875,19 +875,15 @@ let BasketballStatsPro = (function () {
 
     let displayCompareSecondaryStats = function() {
       
-      //clear any previous results and display secondary stats of player a
-      clearInnerHtml('secondary-stats-player-a');
+      //clear any previous results
+      clearInnerHtml('secondary-stats-text-compare');
 
-      for (let stat in player_a_sec_stats) {
-            document.getElementById('secondary-stats-player-a').appendChild(createElement( 'li', player_a_sec_stats[stat] ));
-      }
+      //display secondary stats section header text
+      document.getElementById('secondary-stats-text-compare').appendChild(createElement('p', current_season_picked));
+      document.getElementById('secondary-stats-text-compare').appendChild(createElement('p', "season stats"));
 
-      //clear any previous results and display secondary stats of player b
-      clearInnerHtml('secondary-stats-player-b');
-
-      for (let stat in player_b_sec_stats) {
-            document.getElementById('secondary-stats-player-b').appendChild(createElement( 'li', player_b_sec_stats[stat] ));
-      }
+      //display secondary stats table for both players  
+      displaySecondaryStatsTableCompare(player_a_sec_stats, player_b_sec_stats, 'table-stats-secondary-compare');
     }
 
     displayCompareProfiles();
@@ -1930,6 +1926,37 @@ let BasketballStatsPro = (function () {
     return array[0];
   }
 
+  function getPlayerSecondaryStatsCompare(data, player_clicked) {
+    let array = data
+      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
+      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
+      .map((entry) => { 
+        return  { 
+          Name: (entry.player.FirstName + " " + entry.player.LastName),
+          GamesPlayed: (entry.stats.GamesPlayed["#text"]),
+          MinSeconds: ((Number(entry.stats.MinSeconds["#text"]) / 60).toPrecision(3)),
+          Pts: (entry.stats.Pts["#text"]),
+          FgAtt: (entry.stats.FgAtt["#text"]),
+          FgMade: (entry.stats.FgMade["#text"]),
+          Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
+          Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
+          Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
+          Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
+          FtAtt: (entry.stats.FtAtt["#text"]),
+          FtMade: (entry.stats.FtMade["#text"]),
+          OffReb: (entry.stats.OffReb["#text"]),
+          DefReb: (entry.stats.DefReb["#text"]),
+          Reb: (entry.stats.Reb["#text"]),
+          Ast: (entry.stats.Ast["#text"]),
+          Blk: (entry.stats.Blk["#text"]),
+          Stl: (entry.stats.Stl["#text"]),
+          Tov: (entry.stats.Tov["#text"]),
+          FoulPers: (entry.stats.FoulPers["#text"])
+          } 
+      });
+    return array[0];
+  }
+
   function displaySecondaryStatsTable1(data, tableId) {
     
     //clear any current table
@@ -1986,6 +2013,55 @@ let BasketballStatsPro = (function () {
     //display each stat
     for (let stat in data) {
       document.getElementById('stats-row-table2').appendChild(createElement('td', data[stat]));  
+    }
+  }
+
+  function displaySecondaryStatsTableCompare(dataA, dataB, tableId) {
+    
+    //clear any current table
+    clearInnerHtml(tableId);
+
+    //create table headers 
+    document.getElementById(tableId).appendChild(
+      createElement('tr',
+        createElement('th', 'Player'),
+        createElement('th', 'GP'),
+        createElement('th', 'MIN'),
+        createElement('th', 'PTS'),
+        createElement('th', 'FGA'),
+        createElement('th', 'FGM'),
+        createElement('th', '2PM'),
+        createElement('th', '2PA'),
+        createElement('th', '3PM'),
+        createElement('th', '3PA'),
+        createElement('th', 'FTA'),
+        createElement('th', 'FTM'),
+        createElement('th', 'OREB'),
+        createElement('th', 'DREB'),
+        createElement('th', 'REB'),
+        createElement('th', 'AST'),
+        createElement('th', 'BLK'),
+        createElement('th', 'STL'),
+        createElement('th', 'TOV'),
+        createElement('th', 'PF')
+      ));
+
+    //create a row for the stats of player A
+    let row_a = document.getElementById(tableId).appendChild(createElement('tr'));
+    setAttributes(row_a, {id: 'stats-row-table-compare-a'});
+
+    //display each stat for player A
+    for (let stat in dataA) {
+      document.getElementById('stats-row-table-compare-a').appendChild(createElement('td', dataA[stat]));  
+    }
+
+    //create a row for the stats of player B
+    let row_b = document.getElementById(tableId).appendChild(createElement('tr'));
+    setAttributes(row_b, {id: 'stats-row-table-compare-b'});
+
+    //display each stat for player B
+    for (let stat in dataB) {
+      document.getElementById('stats-row-table-compare-b').appendChild(createElement('td', dataB[stat]));  
     }
   }
 
