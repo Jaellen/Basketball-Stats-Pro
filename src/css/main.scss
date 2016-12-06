@@ -38,14 +38,21 @@ $sidebar-width: 120px;
 //margins and paddings
 $section-padding: 30px 30px;
 
-//remove unwanted defaults
+//add/remove defaults
 p, h1, h2, h3, h4, h5, h6, .row, .container-fluid,
 [class*="col-"] {
   margin: 0;
   padding: 0;
 }
 
-//header font
+table, tr, th, td {
+  border-style: solid;
+  border-color: black;
+  border-width: 1px;
+  padding: 5px;
+}
+
+//header font style
 h1 {
   font-size: $title-font-size;
   font-family: $font-museo;
@@ -53,7 +60,7 @@ h1 {
   line-height: $header-height;
 }
 
-//sidebar font
+//sidebar font style
 h2 {
   margin: 10px auto 0 auto;
   text-align: center;
@@ -133,42 +140,42 @@ h2 {
 
 /* ----------------------------- SideBar ------------------------------------*/
 
- .sidebar {
-    width: $sidebar-width;
-    height: 100%;
-    position: fixed;
-    display: block;
-    z-index: 9;
-    margin: $header-height 0;
-    background-color: $color2-shade-dark;
+.sidebar {
+  width: $sidebar-width;
+  height: 100%;
+  position: fixed;
+  display: block;
+  z-index: 9;
+  margin: $header-height 0;
+  background-color: $color2-shade-dark;
     
-    div {
-      padding: 18px 0;
-      
-      img {
-        display: block;
-        height: $sidebar-icon-heights;
-        margin: auto;
-      }
+  div {
+    padding: 18px 0;
+    
+    img {
+      display: block;
+      height: $sidebar-icon-heights;
+      margin: auto;
     }
-    
-    div:hover {
-      background-color: $color2-shade-darkest; 
-      cursor: pointer;
-    }
-    
-    .sidebar-active {
-      background-color: $color2-shade-darkest; 
-      border-left: 4px solid $color1-shade-light;
-      border-right: 4px solid $color2-shade-darkest; 
-    }
-    
-    .glyphicon, .glyphicon-user, .glyphicon-align-left, .glyphicon-flag, .glyphicon-heart-empty {
-      color: $font1-shade-lightest;
-      font-size: 1.9em;
-      margin: 0 auto 0 39%;
-    } 
- }
+  }
+  
+  div:hover {
+    background-color: $color2-shade-darkest; 
+    cursor: pointer;
+  }
+  
+  .sidebar-active {
+    background-color: $color2-shade-darkest; 
+    border-left: 4px solid $color1-shade-light;
+    border-right: 4px solid $color2-shade-darkest; 
+  }
+  
+  .glyphicon, .glyphicon-user, .glyphicon-align-left, .glyphicon-flag, .glyphicon-heart-empty {
+    color: $font1-shade-lightest;
+    font-size: 1.9em;
+    margin: 0 auto 0 39%;
+  } 
+}
 
 /* --------------------------- Stats Page -----------------------------------*/
 
@@ -219,12 +226,11 @@ h2 {
 
     #button-compare, #button-save-player {
       width: 140px;
-      height: 55px;
-      border-radius: 5px;
+      height: 50px;
+      border-radius: 2px;
       border: none;
       outline: 0;
       background-color: $color1-shade-medium;
-      transition: 0.2s;
       color: #fff;
       font-size: 16px;
       font-family: $font-museo; 
@@ -438,12 +444,11 @@ h2 {
       
       a:hover {
         text-decoration: none;
-        background-color: $color1-shade-dark;
+        background-color: $color3-shade-dark;
         transition: 0.2s;
         cursor: pointer;
       }
-    }
-    
+    }  
   }
 }
 
@@ -671,25 +676,149 @@ h2 {
             color: $color3-shade-dark;
           }
         }
-
       }  
     }  
   }
 
-  //radar chart compare section 
+  //radar and bar chart compare section 
+  .section-compare-radar-chart {
+    padding: $section-padding;
+    background-color: $color2-shade-light;
+    font-family: $font-roboto;
+  
+    #radar-chart-text-compare {
+      margin: 8px 0 0 0;
+      font-size: 1.3em;
+      font-weight: 700;
+      color: $font1-shade-medium;
+      text-transform: capitalize;
+    }
 
+    #radar-section-compare {
+      margin: 0 0 0 35px;
+    }
 
+    #bar-section-compare {
+      margin: 0 0 50px 0;
+    }
+  }
 }
 
+/* ------------------------- Rankings Page ----------------------------------*/
 
-table, tr, th, td {
-  border-style: solid;
-  border-color: black;
-  border-width: 1px;
-  padding: 5px;
+.rankings-page {
+  width: 100%;
+  padding: $header-height 0 0 $sidebar-width;
+
+  .section-rankings-table {
+    padding: $section-padding;
+    background-color: $color2-shade-light;
+    font-family: $font-roboto;
+    font-size: 1.3em;
+    font-weight: 700;
+    color: $font1-shade-medium;
+
+    button {
+      background-color: $color1-shade-medium;
+      width: 100px;
+      height: 38px;
+      border-radius: 2px;
+      border: none;
+      outline: 0;   
+      color: #fff;
+      font-size: 16px;
+      font-family: $font-museo; 
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    button:hover {
+      background-color: $color1-shade-dark;
+    }
+
+    .rankings-button-active, .rankings-button-active:hover {
+      background-color: #14544C;
+      color: #FFF;
+    }
+
+    #section-table-a, #section-table-b, #section-table-c, #section-table-d {
+      margin: 0 0 180px 0;
+
+      table, tr, th, td {
+        border-color: $color1-shade-light;
+        border-width: 3px;
+        border-top: none;
+        border-bottom: none;
+        text-align: center;
+      }
+      
+      tr {
+        border-bottom: 3px solid $color1-shade-light;
+        border-left: none;
+        width: 80%;
+      }
+
+      tr:nth-of-type(9) {
+        border-bottom: none;
+      }
+      
+      table, tr, th:first-of-type, td:first-of-type {
+        border-left: none;
+      }
+      
+      table, tr, th:last-of-type, td:last-of-type {
+        border-right: none;
+      }
+      
+      th {
+        color: $font1-shade-light;
+      }
+    }
+  }  
 }
 
+/* ------------------------ Favourites Page ---------------------------------*/
 
- .old {
-    margin-left: $sidebar-width;
- }
+.favourites-page {
+  width: 100%;
+  padding: $header-height 0 0 $sidebar-width;
+
+  .section-save-player {
+  
+    background-color: $color2-shade-light;
+    font-family: $font-roboto;
+    font-size: 1.3em;
+    font-weight: 500;
+    color: $font1-shade-medium;
+    
+    #favourites-list {
+      padding-bottom: 100vh;
+      
+      div {
+        width: 15%;
+        background-color: $color1-shade-light;
+        color: #fff;
+        padding: 20px;
+        margin: 20px;
+      }
+
+      button {
+        width: 100px;
+        height: 38px;
+        background-color: $color1-shade-darkest;
+        color: #fff;
+        border-radius: 2px;
+        border: none;
+        outline: 0;   
+        font-size: 16px;
+        font-family: $font-museo; 
+        text-align: center;
+        text-transform: capitalize;
+      }
+
+      button:hover {
+        background-color: #14544C;
+      }
+    }
+  }  
+}

@@ -89,7 +89,7 @@
             <button id="button-compare">compare player</button>
           </div>
           
-          <div class="col-md-">
+          <div class="col-md-2">
             <button id="button-save-player">save player</button>
           </div>
 
@@ -249,7 +249,7 @@
         </div>  
       </section>
 
-      <!-- compare profile Main Stats -->
+      <!-- compare main stats section -->
       <section class="section-main-stats-compare">       
         <div class="row">      
           
@@ -265,7 +265,7 @@
         </div>     
       </section>    
 
-      <!-- doughnut chart section compare -->
+      <!-- doughnut chart compare section -->
       <section class="section-doughnut-compare">
         <div class="row">
           
@@ -279,7 +279,7 @@
         </div>
       </section>
 
-      <!-- secondary stats compare -->
+      <!-- secondary stats compare section -->
       <section class="section-compare-secondary-stats">
         <div class="row">
           
@@ -293,109 +293,107 @@
 
         </div>
       </section>
-
-        
+    
+      <!-- radar and bar charts compare section -->
+      <section class="section-compare-radar-chart">
         <div class="row">
-          <!-- Player A -->
-          <div class="col-md-3 col-md-offset-2"> 
-            <h4>Secondary Stats Player A</h4>
-            <ul id="secondary-stats-player-a"></ul>
+        
+          <div class="col-md-2"> 
+            <div id="radar-chart-text-compare"></div>
           </div>
-            
-          <!-- Player B -->
-          <div class="col-md-3">
-            <h4>Secondary Stats Player B</h4>
-            <ul id="secondary-stats-player-b"></ul>
-          </div>    
-        </div>
-        
-        <!-- Charts in Compare Page -->
-        <div class="row">
+
           <div class="col-md-4" id="radar-section-compare"></div>
-          <div class="col-md-6" id="bar-section-compare"></div>
+          <div class="col-md-4" id="bar-section-compare"></div>
+          
         </div>
+      </section>  
+        
 
     </div>
   </section>
 
 <!--************************** RANKINGS PAGE *******************************-->
  
-  <section id="rankings-page" class="hidden">
+  <section id="rankings-page" class="rankings-page hidden">
     <div class="container-fluid">
 
-      <!-- Ranking Type Buttons -->
-      <div class="row">
-          
-        <div class="col-md-2">
-          <button class="btn btn-warning" id="button-pts-g">PTS/G</button> 
-        </div>
+      <section class="section-rankings-table">
+        <div class="row">
 
-        <div class="col-md-2">
-          <button class="btn btn-warning" id="button-ast-g">AST/G</button> 
-        </div>
-
-        <div class="col-md-2">
-          <button class="btn btn-warning" id="button-reb-g">REB/G</button> 
-        </div>
-
-        <div class="col-md-2">
-          <button class="btn btn-warning" id="button-blk-g">BLK/G</button> 
-        </div>
-
-      </div> 
-      <br>
-
-      <!-- Rangings Tables -->
-      <div class="container-fluid">
-        <div class="row"> 
-        
-          <!-- Table A: PTS/G -->
-          <section id="section-table-a" >
-            <div class="row">
-              <h4>Table A: PTS/G</h4>
-              <table id="table-pts-g"></table>
+          <!-- rankings buttons -->
+          <div class="row">
+              
+            <div class="col-md-2">
+              <button id="button-pts-g" class="rankings-button-active">PTS/G</button> 
             </div>
-          </section>
 
-          <!-- Table B: AST/G -->
-          <section class="hidden" id="section-table-b">
-            <div class="row">
-              <h4>Table B: AST/G</h4>
-              <table id="table-ast-g"></table>
+            <div class="col-md-2">
+              <button id="button-ast-g">AST/G</button> 
             </div>
-          </section>
 
-          <!-- Table C: REB/G -->
-          <section class="hidden" id="section-table-c">
-            <div class="row">
-              <h4>Table C: REB/G</h4>
-              <table id="table-reb-g"></table>
+            <div class="col-md-2">
+              <button id="button-reb-g">REB/G</button> 
             </div>
-          </section>
 
-          <!-- Table D: BLK/G -->
-          <section class="hidden" id="section-table-d">
-            <div class="row">
-              <h4>Table D: BLK/G</h4>
-              <table id="table-blk-g"></table>
+            <div class="col-md-2">
+              <button id="button-blk-g">BLK/G</button> 
             </div>
-          </section>
+
+          </div> 
+          <br>
+
+          <!-- rangings Tables -->
+          <div class="container-fluid">
+            <div class="row"> 
+            
+              <!-- Table A: PTS/G -->
+              <section id="section-table-a" >
+                <div class="row">
+                  <table id="table-pts-g"></table>
+                </div>
+              </section>
+
+              <!-- Table B: AST/G -->
+              <section class="hidden" id="section-table-b">
+                <div class="row">
+                  <table id="table-ast-g"></table>
+                </div>
+              </section>
+
+              <!-- Table C: REB/G -->
+              <section class="hidden" id="section-table-c">
+                <div class="row">
+                  <table id="table-reb-g"></table>
+                </div>
+              </section>
+
+              <!-- Table D: BLK/G -->
+              <section class="hidden" id="section-table-d">
+                <div class="row">
+                  <table id="table-blk-g"></table>
+                </div>
+              </section>
+
+            </div>
+          </div>  
 
         </div>
-      </div>  
+      </section>
 
     </div>
   </section>
 
 <!--************************* FAVOURITES PAGE ******************************-->
 
-  <section id="favourites-page" class="hidden">
+  <section id="favourites-page" class="hidden favourites-page">
     <div class="container-fluid">
 
-      <!-- Favourites List -->    
-      <div class="row">  
-        <ul id="favourites"></ul>
-      </div>
+      <section class="section-save-player"> 
+          
+        <div id="favourites-list" class="row"></div>  
+      
+      </section> 
+      
 
     </div>
   </section>

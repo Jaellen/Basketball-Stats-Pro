@@ -173,6 +173,7 @@ let BasketballStatsPro = (function () {
     }, false);
   };
 
+
   //Main stats page functionality
   let setAllStatsData = function() {  
     //set all_stats_data
@@ -375,14 +376,13 @@ let BasketballStatsPro = (function () {
       //i = 1 in order to achieve a loop where every third element adds a break
       for (let i = 1; i <= player_team_list.length; i++ ) {
 
-        //after every third element in the list, start a new line
+        //display player and after every third element in the list, start a new line
         if (i % 3 === 0) {
         document.getElementById('team-list')
           .appendChild(createElement( 'span', 
                          createElement('a', player_team_list[(i-1)], " #", player_team_jerseys[(i-1)], " | ", player_team_positions[(i-1)] ) ))
           .setAttribute('id', player_team_list[(i-1)]);
 
-        //note: these two lines are the difference between the if else code
         document.getElementById('team-list').appendChild(createElement('br'));
         document.getElementById('team-list').appendChild(createElement('br'));
         document.getElementById('team-list').appendChild(createElement('br'));
@@ -731,6 +731,7 @@ let BasketballStatsPro = (function () {
     setRadarChart();
   }
 
+
   //Compare player functionality
   let getComparePlayer = function() {
 
@@ -894,11 +895,15 @@ let BasketballStatsPro = (function () {
   let displayCompareCharts = function() {
     
     //clear any previous results
-    clearInnerHtml('doughnut-section-text-compare');
+    clearInnerHtml('doughnut-section-text-compare', 'radar-chart-text-compare');
     
     //display doughnut charts section header text
     document.getElementById('doughnut-section-text-compare').appendChild(createElement('p', current_season_picked));
     document.getElementById('doughnut-section-text-compare').appendChild(createElement('p', "key percentage stats"));
+
+    //display doughnut charts section header text
+    document.getElementById('radar-chart-text-compare').appendChild(createElement('p', current_season_picked));
+    document.getElementById('radar-chart-text-compare').appendChild(createElement('p', "key comparison stats"));
 
     //charts global config
     Chart.scaleService.updateScaleDefaults('linear', {
@@ -906,133 +911,6 @@ let BasketballStatsPro = (function () {
         min: 0
       }
     })
-
-    let setRadarCompareChart = function() { 
-      
-      //clear any previous charts
-      clearInnerHtml('radar-section-compare');
-
-      //add a new canvas 
-      let canvas_section = document.getElementById('radar-section-compare');
-      let canvas = canvas_section.appendChild(createElement('canvas'));
-      setAttributes(canvas, {id: 'radar-chart-compare', width: '300', height: '300'});
-
-      //create the new chart
-      let chart = document.getElementById('radar-chart-compare');
-
-      let data = {
-        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
-        datasets: [
-          {
-            label: compare_player_a,
-            backgroundColor: "rgba(75,192,192,0.2)",
-            borderColor: "rgba(75,192,192,1)",
-            pointBackgroundColor: "rgba(75,192,192,1)",
-            pointBorderColor: "#fff",
-            pointHoverBackgroundColor: "#fff",
-            pointHoverBorderColor: "rgba(75,192,192,1)",
-            data: data_radar_compare_a
-          },
-          {
-            label: compare_player_b,
-            backgroundColor: "rgba(255,61,103,0.2)",
-            borderColor: "rgba(255,61,103,1)",
-            pointBackgroundColor: "rgba(255,61,103,1)",
-            pointBorderColor: "#fff",
-            pointHoverBackgroundColor: "#fff",
-            pointHoverBorderColor: "rgba(255,61,103,1)",
-            data: data_radar_compare_b
-          }
-        ],
-        yLabels: [0, 20, 40, 60, 80, 100]
-      };
-        
-      let myRadarChart = new Chart(chart, {
-        type: 'radar',
-        data: data,
-        options: {
-          responsive: false,
-          scale: {
-            ticks: {
-              beginAtZero: true,
-              max: 100
-            }
-          }
-        }
-      });
-    }
-
-    let setBarCompareChart = function() {
-
-      //clear any previous charts
-      clearInnerHtml('bar-section-compare');
-
-      //add a new canvas 
-      let canvas_section = document.getElementById('bar-section-compare');
-      let canvas = canvas_section.appendChild(createElement('canvas'));
-      setAttributes(canvas, {id: 'bar-chart-compare', width: '400', height: '300'});
-
-      //create the new chart
-      let chart = document.getElementById('bar-chart-compare');
-      
-      var data = {
-        labels: ["PTS/G", "AST/G", "REB/G", "BLK/G", "PF/G", "2PM/G", "3PM/G"],
-        datasets: [
-          {
-            label: compare_player_a,
-            backgroundColor: [
-              'rgba(34,206,206,0.2)',
-              'rgba(34,206,206,0.2)',
-              'rgba(34,206,206,0.2)',
-              'rgba(34,206,206,0.2)',
-              'rgba(34,206,206,0.2)',
-              'rgba(34,206,206,0.2)',
-              'rgba(34,206,206,0.2)'
-            ],
-            borderColor: [
-              'rgba(34,206,206,1)',
-              'rgba(34,206,206,1)',
-              'rgba(34,206,206,1)',
-              'rgba(34,206,206,1)',
-              'rgba(34,206,206,1)',
-              'rgba(34,206,206,1)',
-              'rgba(34,206,206,1)'
-            ],
-            borderWidth: 1,
-            data: data_bar_compare_a
-          },
-          {
-            label: compare_player_b,
-            backgroundColor: [
-              'rgba(255,61,103,0.2)',
-              'rgba(255,61,103,0.2)',
-              'rgba(255,61,103,0.2)',
-              'rgba(255,61,103,0.2)',
-              'rgba(255,61,103,0.2)',
-              'rgba(255,61,103,0.2)',
-              'rgba(255,61,103,0.2)'
-            ],
-            borderColor: [
-              'rgba(255,61,103,1)',
-              'rgba(255,61,103,1)',
-              'rgba(255,61,103,1)',
-              'rgba(255,61,103,1)',
-              'rgba(255,61,103,1)',
-              'rgba(255,61,103,1)',
-              'rgba(255,61,103,1)'
-            ],
-            borderWidth: 1,
-            data: data_bar_compare_b,
-          }
-        ],
-        xLabels: [0, 5, 10, 15, 20, 25, 30, 35, 40]
-      };
-
-      let myBarChart = new Chart(chart, {
-        type: 'horizontalBar',
-        data: data
-      });
-    }
 
     let setDoughnutCompareChart1 = function() { 
       
@@ -1333,115 +1211,146 @@ let BasketballStatsPro = (function () {
         }
       });
     }
+  
+    let setRadarCompareChart = function() { 
+      
+      //clear any previous charts
+      clearInnerHtml('radar-section-compare');
 
-    setRadarCompareChart();
-    setBarCompareChart();
+      //add a new canvas 
+      let canvas_section = document.getElementById('radar-section-compare');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'radar-chart-compare', width: '300', height: '300'});
+
+      //create the new chart
+      let chart = document.getElementById('radar-chart-compare');
+
+      let data = {
+        labels: ["eFG%", "FT%", "3P%", "TS%", "2P%", "FG%"],
+        datasets: [
+          {
+            label: compare_player_a,
+            backgroundColor: "rgba(75,192,192,0.2)",
+            borderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "rgba(75,192,192,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "rgba(75,192,192,0.5)",
+            pointHoverBorderColor: "rgba(75,192,192,1)",
+            data: data_radar_compare_a
+          },
+          {
+            label: compare_player_b,
+            backgroundColor: "rgba(252,194,58,0.2)",
+            borderColor: "rgba(252,194,58,1)",
+            pointBackgroundColor: "rgba(252,194,58,1)",
+            pointBorderColor: "#fff",
+            pointHoverBackgroundColor: "rgba(252,194,58,0.5)",
+            pointHoverBorderColor: "rgba(252,194,58,1)",
+            data: data_radar_compare_b
+          }
+        ],
+        yLabels: [0, 20, 40, 60, 80, 100]
+      };
+        
+      let myRadarChart = new Chart(chart, {
+        type: 'radar',
+        data: data,
+        options: {
+          responsive: false,
+          scale: {
+            ticks: {
+              beginAtZero: true,
+              max: 100
+            }
+          }
+        }
+      });
+    }
+
+    let setBarCompareChart = function() {
+
+      //clear any previous charts
+      clearInnerHtml('bar-section-compare');
+
+      //add a new canvas 
+      let canvas_section = document.getElementById('bar-section-compare');
+      let canvas = canvas_section.appendChild(createElement('canvas'));
+      setAttributes(canvas, {id: 'bar-chart-compare', width: '400', height: '400'});
+
+      //create the new chart
+      let chart = document.getElementById('bar-chart-compare');
+      
+      var data = {
+        labels: ["PTS/G", "AST/G", "REB/G", "BLK/G", "PF/G", "2PM/G", "3PM/G"],
+        datasets: [
+          {
+            label: compare_player_a,
+            backgroundColor: [
+              'rgba(75,192,192,0.2)',
+              'rgba(75,192,192,0.2)',
+              'rgba(75,192,192,0.2)',
+              'rgba(75,192,192,0.2)',
+              'rgba(75,192,192,0.2)',
+              'rgba(75,192,192,0.2)',
+              'rgba(75,192,192,0.2)'
+            ],
+            borderColor: [
+              'rgba(75,192,192,1)',
+              'rgba(75,192,192,1)',
+              'rgba(75,192,192,1)',
+              'rgba(75,192,192,1)',
+              'rgba(75,192,192,1)',
+              'rgba(75,192,192,1)',
+              'rgba(75,192,192,1)'
+            ],
+            borderWidth: 3,
+            data: data_bar_compare_a
+          },
+          {
+            label: compare_player_b,
+            backgroundColor: [
+              'rgba(252,194,58,0.2)',
+              'rgba(252,194,58,0.2)',
+              'rgba(252,194,58,0.2)',
+              'rgba(252,194,58,0.2)',
+              'rgba(252,194,58,0.2)',
+              'rgba(252,194,58,0.2)',
+              'rgba(252,194,58,0.2)'
+            ],
+            borderColor: [
+              'rgba(252,194,58,1)',
+              'rgba(252,194,58,1)',
+              'rgba(252,194,58,1)',
+              'rgba(252,194,58,1)',
+              'rgba(252,194,58,1)',
+              'rgba(252,194,58,1)',
+              'rgba(252,194,58,1)'
+            ],
+            borderWidth: 3,
+            data: data_bar_compare_b,
+          }
+        ],
+        xLabels: [0, 5, 10, 15, 20, 25, 30, 35, 40]
+      };
+
+      let myBarChart = new Chart(chart, {
+        type: 'horizontalBar',
+        data: data
+      });
+    }
+
     setDoughnutCompareChart1();
     setDoughnutCompareChart2();
     setDoughnutCompareChart3();
     setDoughnutCompareChart4();
+
+    setRadarCompareChart();
+    setBarCompareChart();
   };
 
-  //Save player functionality
-  let setSavePlayerList = function() {
-    
-    //set save player button (main page)
-    let setAddPlayer = () => {
-      
-      //case: if no player is clicked as of yet
-      if (current_player_clicked === undefined) {
-        return;
-      }
-
-      //test if player being saved is already saved
-      if ( isSavePlayerRepeated(save_player_list) === true ) {
-        alert("You already have this player saved"); 
-      }
-      
-      if ( isSavePlayerRepeated(save_player_list) === false ) {
-        updateSavePlayerList("add");
-        alert(current_player_clicked + " has been added to favourites list!");
-      } 
-    };
-
-    //add event listener for button
-    document.getElementById('button-save-player').addEventListener('click', setAddPlayer, false);
-
-    //set remove player button (favourites page)
-  };
-
-  let updateSavePlayerList = function(AddOrRemove, index) {
-    
-    //add player to list
-    if (AddOrRemove === "add") {
-      save_player_clicked = current_player_clicked;
-      save_player_profile = getSavePlayerProfile(all_profile_data, save_player_clicked)[0];
-      save_player_list.push(save_player_profile);
-    } 
-
-    //remove player from list
-    if (AddOrRemove === "remove") {
-      save_player_list.splice(index, 1);
-    }
-
-    //update the save player list
-    displaySavePlayerList();
-  };
-
-  let displaySavePlayerList = function() {
-    
-    //clear any previous list
-    clearInnerHtml('favourites');
-
-    //go through each player in the save player list and display their properties
-    save_player_list.forEach( (player, i) => {   
-      
-      for (let prop in player) {
-        document.getElementById('favourites').appendChild(createElement( 'li', player[prop] ));
-      }
-      //add a button to remove player from list
-      let button = document.getElementById('favourites').appendChild(createElement( 'button', "remove" ));
-      
-      //add an id to identify each player in list 
-      let identifier = ('button' + i);
-      let attr = { id: identifier };
-      setAttributes(button, attr);
-
-      //add event listener for button
-      document.getElementById(identifier).addEventListener('click', function() {
-        updateSavePlayerList("remove", i);    
-      });
-      
-      //add a space between player profiles
-      document.getElementById('favourites').appendChild(createElement( 'br' ));
-      document.getElementById('favourites').appendChild(createElement( 'br' ));
-    });
-  };
 
   //Ranking tables functionality
   let setRankingsTables = function() {
-
-    let setRankingsButtons = function() {
-      
-      //when button is clicked, show the corresponding table
-      document.getElementById('button-pts-g').addEventListener('click', function() {
-        setCurrentRankingsTable("a");
-      }, false);
-
-      document.getElementById('button-ast-g').addEventListener('click', function() {
-        setCurrentRankingsTable("b");
-      }, false);
-      
-      document.getElementById('button-reb-g').addEventListener('click', function() {
-        setCurrentRankingsTable("c");
-      }, false); 
-
-      document.getElementById('button-blk-g').addEventListener('click', function() {
-        setCurrentRankingsTable("d");
-      }, false);
-
-      setChangeSeason();
-    };
 
     table_a = createRankingsTable(rankings_data_table_a, all_stats_data, "a");
     table_b = createRankingsTable(rankings_data_table_b, all_stats_data, "b");
@@ -1450,6 +1359,37 @@ let BasketballStatsPro = (function () {
 
     setRankingsButtons();
     displayRankings();
+  };
+
+  let setRankingsButtons = function() {
+
+    let button_a = document.getElementById('button-pts-g');
+    let button_b = document.getElementById('button-ast-g');
+    let button_c = document.getElementById('button-reb-g');
+    let button_d = document.getElementById('button-blk-g');
+
+    //when button is clicked, show the corresponding table
+    button_a.addEventListener('click', function() {
+      setCurrentRankingsTable("a");
+      setRankingsButtonActive("a");
+    }, false);
+
+    button_b.addEventListener('click', function() {
+      setCurrentRankingsTable("b");
+      setRankingsButtonActive("b");
+    }, false);
+    
+    button_c.addEventListener('click', function() {
+      setCurrentRankingsTable("c");
+      setRankingsButtonActive("c");
+    }, false); 
+
+    button_d.addEventListener('click', function() {
+      setCurrentRankingsTable("d");
+      setRankingsButtonActive("d");
+    }, false);
+
+    setChangeSeason();
   };
 
   let displayRankings = function() {
@@ -1515,6 +1455,90 @@ let BasketballStatsPro = (function () {
       </div> 
     */
   };
+
+
+  //Save player functionality
+  let setSavePlayerList = function() {
+    
+    //set save player button (main page)
+    let setAddPlayer = () => {
+      
+      //case: if no player is clicked as of yet
+      if (current_player_clicked === undefined) {
+        return;
+      }
+
+      //test if player being saved is already saved
+      if ( isSavePlayerRepeated(save_player_list) === true ) {
+        alert("You already have this player saved"); 
+      }
+      
+      if ( isSavePlayerRepeated(save_player_list) === false ) {
+        updateSavePlayerList("add");
+        alert(current_player_clicked + " has been added to favourites list!");
+      } 
+    };
+
+    //add event listener for button
+    let button = document.getElementById('button-save-player');
+    button.addEventListener('click', setAddPlayer, false);
+  };
+
+  let updateSavePlayerList = function(AddOrRemove, index) {
+    
+    //add player to list
+    if (AddOrRemove === "add") {
+      save_player_clicked = current_player_clicked;
+      save_player_profile = getSavePlayerProfile(all_profile_data, save_player_clicked);
+      save_player_list.push(save_player_profile);
+    } 
+
+    //remove player from list
+    if (AddOrRemove === "remove") {
+      save_player_list.splice(index, 1);
+    }
+
+    //update the save player list
+    displaySavePlayerList();
+  };
+
+  let displaySavePlayerList = function() {
+    
+    //clear previous list
+    clearInnerHtml('favourites-list')
+
+    //go through each player in the save player list
+    save_player_list.forEach( (player, i) => {   
+    
+      //add a enclosing box
+      let list_section = document.getElementById('favourites-list');
+      let list_box = list_section.appendChild(createElement('div'));
+      setAttributes( list_box, { 'id': ("list-element" + i), 'class': "col-md-2" });
+
+      //for each player property, display stat
+      for (let prop in player) {
+        
+        document.getElementById("list-element" + i).appendChild(
+          createElement('p', player[prop]));
+      }
+
+      list_box.appendChild(createElement('br'));
+
+      //add a button to remove player from list
+      let button = document.getElementById("list-element" + i).appendChild(createElement( 'button', "Unfavourite" ));
+      
+      //add an id to identify each player in list 
+      let identifier = ('button' + i);
+      let attr = { id: identifier };
+      setAttributes(button, attr);
+
+      //add event listener for button
+      document.getElementById(identifier).addEventListener('click', function() {
+        updateSavePlayerList("remove", i);    
+      });
+    });
+  };
+
 
   /* ------------------ Utility and Helper functions ----------------------- */
 
@@ -1592,7 +1616,7 @@ let BasketballStatsPro = (function () {
     }
   }
 
-  //navbar utilities 
+  //Navbar utilities 
   function setNavRoute(option) {
     let pageA = document.getElementById('stats-page');
     let pageB = document.getElementById('compare-page');
@@ -1712,7 +1736,7 @@ let BasketballStatsPro = (function () {
     }
   }
 
-  //stats and compare utilities
+  //Stats and compare utilities
   function createFirstandLastNameArray(data) { 
     return data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
@@ -1738,7 +1762,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getSavePlayerProfile(data, player_clicked) {
-    return data
+    let array = data
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
       .map((entry) => { 
         return  { 
@@ -1750,6 +1774,7 @@ let BasketballStatsPro = (function () {
           weight: (entry.player.Weight + " lbs") 
         } 
       });
+    return array[0]; 
   }
 
   function getPlayerMainStats(data, player_clicked) {
@@ -2251,18 +2276,7 @@ let BasketballStatsPro = (function () {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }
 
-  //favourites utilities
-  function isSavePlayerRepeated(list) {
-    let test_array = list
-                       .map((element) => { return element.name.toLowerCase(); })
-                       .filter((element) => { return element == current_player_clicked.toLowerCase();
-                       });
-
-    if (test_array.length > 0) { return true }
-    else { return false }
-  }
-
-  //rankings utilities
+  //Rankings utilities
   function createRankingsTable(table, data, option) {
     
     //Table A: PTS/G 
@@ -2353,15 +2367,11 @@ let BasketballStatsPro = (function () {
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 PtsPerGame: (entry.stats.PtsPerGame["#text"]),
                 GamesPlayed: (entry.stats.GamesPlayed["#text"]),
-                MinSeconds: (entry.stats.MinSeconds["#text"]),
+                MinSeconds: ((Number(entry.stats.MinSeconds["#text"]) / 60).toPrecision(3)),
                 Pts: (entry.stats.Pts["#text"]),
-                FgAtt: (entry.stats.FgAtt["#text"]),
                 FgMade: (entry.stats.FgMade["#text"]),
                 Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
                 Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: (entry.stats.FtAtt["#text"]),
                 FtMade: (entry.stats.FtMade["#text"]),
                 OffReb: (entry.stats.OffReb["#text"]),
                 DefReb: (entry.stats.DefReb["#text"]),
@@ -2383,15 +2393,11 @@ let BasketballStatsPro = (function () {
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 AstPerGame: (entry.stats.AstPerGame["#text"]),
                 GamesPlayed: (entry.stats.GamesPlayed["#text"]),
-                MinSeconds: (entry.stats.MinSeconds["#text"]),
+                MinSeconds: ((Number(entry.stats.MinSeconds["#text"]) / 60).toPrecision(3)),
                 Pts: (entry.stats.Pts["#text"]),
-                FgAtt: (entry.stats.FgAtt["#text"]),
                 FgMade: (entry.stats.FgMade["#text"]),
                 Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
                 Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: (entry.stats.FtAtt["#text"]),
                 FtMade: (entry.stats.FtMade["#text"]),
                 OffReb: (entry.stats.OffReb["#text"]),
                 DefReb: (entry.stats.DefReb["#text"]),
@@ -2413,15 +2419,11 @@ let BasketballStatsPro = (function () {
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 RebPerGame: (entry.stats.RebPerGame["#text"]),
                 GamesPlayed: (entry.stats.GamesPlayed["#text"]),
-                MinSeconds: (entry.stats.MinSeconds["#text"]),
+                MinSeconds: ((Number(entry.stats.MinSeconds["#text"]) / 60).toPrecision(3)),
                 Pts: (entry.stats.Pts["#text"]),
-                FgAtt: (entry.stats.FgAtt["#text"]),
                 FgMade: (entry.stats.FgMade["#text"]),
                 Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
                 Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: (entry.stats.FtAtt["#text"]),
                 FtMade: (entry.stats.FtMade["#text"]),
                 OffReb: (entry.stats.OffReb["#text"]),
                 DefReb: (entry.stats.DefReb["#text"]),
@@ -2443,15 +2445,11 @@ let BasketballStatsPro = (function () {
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 BlkPerGame: (entry.stats.BlkPerGame["#text"]),
                 GamesPlayed: (entry.stats.GamesPlayed["#text"]),
-                MinSeconds: (entry.stats.MinSeconds["#text"]),
+                MinSeconds: ((Number(entry.stats.MinSeconds["#text"]) / 60).toPrecision(3)),
                 Pts: (entry.stats.Pts["#text"]),
-                FgAtt: (entry.stats.FgAtt["#text"]),
                 FgMade: (entry.stats.FgMade["#text"]),
                 Fg2PtMade: (entry.stats.Fg2PtMade["#text"]),
-                Fg2PtAtt: (entry.stats.Fg2PtAtt["#text"]),
                 Fg3PtMade: (entry.stats.Fg3PtMade["#text"]),
-                Fg3PtAtt: (entry.stats.Fg3PtAtt["#text"]),
-                FtAtt: (entry.stats.FtAtt["#text"]),
                 FtMade: (entry.stats.FtMade["#text"]),
                 OffReb: (entry.stats.OffReb["#text"]),
                 DefReb: (entry.stats.DefReb["#text"]),
@@ -2496,13 +2494,9 @@ let BasketballStatsPro = (function () {
         createElement('th', 'GP'),
         createElement('th', 'MIN'),
         createElement('th', 'PTS'),
-        createElement('th', 'FGA'),
         createElement('th', 'FGM'),
         createElement('th', '2PM'),
-        createElement('th', '2PA'),
         createElement('th', '3PM'),
-        createElement('th', '3PA'),
-        createElement('th', 'FTA'),
         createElement('th', 'FTM'),
         createElement('th', 'OREB'),
         createElement('th', 'DREB'),
@@ -2567,6 +2561,53 @@ let BasketballStatsPro = (function () {
     }
   }
 
+  function setRankingsButtonActive(option) {
+    let button_a = document.getElementById('button-pts-g');
+    let button_b = document.getElementById('button-ast-g');
+    let button_c = document.getElementById('button-reb-g');
+    let button_d = document.getElementById('button-blk-g');
+
+    if (option === 'a') {
+      //set the button clicked to active
+      addClass(button_a, 'rankings-button-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_b, 'rankings-button-active');
+      removeClass(button_c, 'rankings-button-active');
+      removeClass(button_d, 'rankings-button-active');
+    }
+
+    if (option === 'b') {
+      //set the button clicked to active
+      addClass(button_b, 'rankings-button-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_a, 'rankings-button-active');
+      removeClass(button_c, 'rankings-button-active');
+      removeClass(button_d, 'rankings-button-active');
+    }
+
+    if (option === 'c') {
+      //set the button clicked to active
+      addClass(button_c, 'rankings-button-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_a, 'rankings-button-active');
+      removeClass(button_b, 'rankings-button-active');
+      removeClass(button_d, 'rankings-button-active');
+    }
+
+    if (option === 'd') {
+      //set the button clicked to active
+      addClass(button_d, 'rankings-button-active');
+
+      //remove active class from previously clicked button
+      removeClass(button_a, 'rankings-button-active');
+      removeClass(button_b, 'rankings-button-active');
+      removeClass(button_c, 'rankings-button-active');
+    }
+  }
+
   function setSeason(option) {
     if (option === "a") {
       cumulative_player_data_url = STATS_2016_2017;
@@ -2579,14 +2620,28 @@ let BasketballStatsPro = (function () {
     }
   }
 
+  //Favourites utilities
+  function isSavePlayerRepeated(list) {
+    let test_array = list
+      .map((element) => { return element.name.toLowerCase(); })
+      .filter((element) => { return element == current_player_clicked.toLowerCase();
+    });
+
+    if (test_array.length > 0) { return true }
+    else { 
+      return false 
+    }
+  }
+
+
   return {
 
     init: function() {
 
       setNav();
-      // setAllStatsData(); TEMP!! REMOVE TO USE AJAX REQUEST
-      setSearch(); //TEMP!! REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!
-      setRankingsTables(); //TEMP!! REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!
+      // setAllStatsData(); TEMP!! REMOVE THIS COMMENT TO USE AJAX REQUEST
+      setSearch(); //TEMP!! < -- REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!
+      setRankingsTables(); //TEMP!! <-- REMOVE THIS LINE ONCE COMMENT ABOVE REMOVED!
       
       getComparePlayer();
       setSavePlayerList();
