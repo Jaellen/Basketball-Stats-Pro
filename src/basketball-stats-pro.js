@@ -830,7 +830,11 @@ let BasketballStatsPro = (function () {
     }
 
     displayComparePlayerStats();
-    displayCompareCharts();
+    
+    //display charts only if player b is defined
+    if (player_b_profile !== undefined ) {
+      displayCompareCharts();
+    }  
   };
 
   let displayComparePlayerStats = function() {
@@ -854,14 +858,16 @@ let BasketballStatsPro = (function () {
       document.getElementById('profile-height-compare-a').appendChild(createElement('p', player_a_profile.height));
       document.getElementById('profile-weight-compare-a').appendChild(createElement('p', player_a_profile.weight));
 
-      //player b profile
-      document.getElementById('profile-name-compare-b').appendChild(createElement('p', player_b_profile.name));
-      document.getElementById('profile-team-compare-b').appendChild(createElement('p', player_b_profile.team));
-      document.getElementById('profile-jersey-compare-b').appendChild(createElement('p', player_b_profile.jersey, " | ",
+      //player b profile (display if player b has been selected)
+      if (player_b_profile !== undefined ) {
+        document.getElementById('profile-name-compare-b').appendChild(createElement('p', player_b_profile.name));
+        document.getElementById('profile-team-compare-b').appendChild(createElement('p', player_b_profile.team));
+        document.getElementById('profile-jersey-compare-b').appendChild(createElement('p', player_b_profile.jersey, " | ",
                                                               createElement('span', player_b_profile.position)));
-      document.getElementById('profile-age-compare-b').appendChild(createElement('p', player_b_profile.age));
-      document.getElementById('profile-height-compare-b').appendChild(createElement('p', player_b_profile.height));
-      document.getElementById('profile-weight-compare-b').appendChild(createElement('p', player_b_profile.weight));
+        document.getElementById('profile-age-compare-b').appendChild(createElement('p', player_b_profile.age));
+        document.getElementById('profile-height-compare-b').appendChild(createElement('p', player_b_profile.height));
+        document.getElementById('profile-weight-compare-b').appendChild(createElement('p', player_b_profile.weight));  
+      }
     }
 
     let displayCompareMainStats = function() {
