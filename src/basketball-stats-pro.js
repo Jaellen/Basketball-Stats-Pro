@@ -1,6 +1,6 @@
 "use strict";
 
-/* FIND ALL INSTANCES OF 'TEMP' TO USE AJAX REQUEST AGAIN */
+/* FIND AND DELETE ALL INSTANCES OF 'TEMP' TO USE AJAX REQUEST AGAIN */
 
 /*!
   rx.js v4.1.0
@@ -25,7 +25,8 @@ var Chart = require('chart.js');
 
 
 //css styling
-require("./css/main.scss");
+require('./css/main.scss');
+
 
 //For testing: 
 //var chai = require('chai');
@@ -127,7 +128,7 @@ let BasketballStatsPro = (function () {
     let button_d = document.getElementById('sidebar-favourites');
 
     //button 'stats'
-    button_a.addEventListener('click', function() { 
+    button_a.addEventListener('click', () => { 
       //change page
       setNavRoute('a');
       //set title of current page and button to active
@@ -135,7 +136,7 @@ let BasketballStatsPro = (function () {
     }, false);
 
     //button 'compare'
-    button_b.addEventListener('click', function() {
+    button_b.addEventListener('click', () => {
       //change page
       setNavRoute('b');
       //set title of current page and button to active
@@ -143,7 +144,7 @@ let BasketballStatsPro = (function () {
     }, false);
     
     //button 'rankings'
-    button_c.addEventListener('click', function() {
+    button_c.addEventListener('click', () => {
       //change page
       setNavRoute('c');
       //set the title of current page and button to active
@@ -151,7 +152,7 @@ let BasketballStatsPro = (function () {
     }, false);
 
     //button 'favourites'
-    button_d.addEventListener('click', function() {
+    button_d.addEventListener('click', () => {
       //change page
       setNavRoute('d');
       //set the title of current page and button to active
@@ -396,10 +397,12 @@ let BasketballStatsPro = (function () {
         }
 
         //add a click event listener  
-        document.getElementById(player_team_list[(i-1)]).addEventListener('click', function(event) {            
+        document.getElementById(player_team_list[(i-1)]).addEventListener('click', (event) => {            
           current_player_clicked = event.currentTarget.getAttribute('id').toLowerCase();
+          
           //display that player's data
           setPlayerStats();
+        
         });
 
       }
@@ -744,13 +747,13 @@ let BasketballStatsPro = (function () {
 
       //case: if player clicked is already in compare slot a 
       if (current_player_clicked === compare_player_a) {
-        alert("This player is already in compare slot a");
+        // alert("This player is already in compare slot a");
         return;    
       }
 
       //case: if player clicked is already in compare slot b 
       if (current_player_clicked === compare_player_b) {
-        alert("This player is already in compare slot b");
+        // alert("This player is already in compare slot b");
         return;    
       }
 
@@ -761,7 +764,7 @@ let BasketballStatsPro = (function () {
         //update compare_player_a
         compare_player_a = compare_player_clicked;
         setComparePlayerStats("a");
-        alert("Added player to slot A");
+        // alert("Added player to slot A");
       }
       
       //case: if one slot empty, fill empty slot
@@ -769,7 +772,7 @@ let BasketballStatsPro = (function () {
         //update compare_player_b
         compare_player_b = compare_player_clicked
         setComparePlayerStats("b");
-        alert("Added player to slot B");
+        // alert("Added player to slot B");
       }
 
       //case: if no slots empty, ask user which slot to replace or neither
@@ -842,7 +845,7 @@ let BasketballStatsPro = (function () {
         'profile-height-compare-b', 'profile-weight-compare-a', 'profile-weight-compare-b', 
         'profile-age-compare-b', 'profile-height-compare-b' );
 
-      //player a
+      //player a profile
       document.getElementById('profile-name-compare-a').appendChild(createElement('p', player_a_profile.name));
       document.getElementById('profile-team-compare-a').appendChild(createElement('p', player_a_profile.team));
       document.getElementById('profile-jersey-compare-a').appendChild(createElement('p', player_a_profile.jersey, " | ",
@@ -851,7 +854,7 @@ let BasketballStatsPro = (function () {
       document.getElementById('profile-height-compare-a').appendChild(createElement('p', player_a_profile.height));
       document.getElementById('profile-weight-compare-a').appendChild(createElement('p', player_a_profile.weight));
 
-      //player b
+      //player b profile
       document.getElementById('profile-name-compare-b').appendChild(createElement('p', player_b_profile.name));
       document.getElementById('profile-team-compare-b').appendChild(createElement('p', player_b_profile.team));
       document.getElementById('profile-jersey-compare-b').appendChild(createElement('p', player_b_profile.jersey, " | ",
@@ -1369,22 +1372,22 @@ let BasketballStatsPro = (function () {
     let button_d = document.getElementById('button-blk-g');
 
     //when button is clicked, show the corresponding table
-    button_a.addEventListener('click', function() {
+    button_a.addEventListener('click', () => {
       setCurrentRankingsTable("a");
       setRankingsButtonActive("a");
     }, false);
 
-    button_b.addEventListener('click', function() {
+    button_b.addEventListener('click', () => {
       setCurrentRankingsTable("b");
       setRankingsButtonActive("b");
     }, false);
     
-    button_c.addEventListener('click', function() {
+    button_c.addEventListener('click', () => {
       setCurrentRankingsTable("c");
       setRankingsButtonActive("c");
     }, false); 
 
-    button_d.addEventListener('click', function() {
+    button_d.addEventListener('click', () => {
       setCurrentRankingsTable("d");
       setRankingsButtonActive("d");
     }, false);
@@ -1470,12 +1473,12 @@ let BasketballStatsPro = (function () {
 
       //test if player being saved is already saved
       if ( isSavePlayerRepeated(save_player_list) === true ) {
-        alert("You already have this player saved"); 
+        // alert("You already have this player saved"); 
       }
       
       if ( isSavePlayerRepeated(save_player_list) === false ) {
         updateSavePlayerList("add");
-        alert(current_player_clicked + " has been added to favourites list!");
+        // alert(current_player_clicked + " has been added to favourites list!");
       } 
     };
 
@@ -1533,7 +1536,7 @@ let BasketballStatsPro = (function () {
       setAttributes(button, attr);
 
       //add event listener for button
-      document.getElementById(identifier).addEventListener('click', function() {
+      document.getElementById(identifier).addEventListener('click', () => {
         updateSavePlayerList("remove", i);    
       });
     });
@@ -1549,8 +1552,9 @@ let BasketballStatsPro = (function () {
   }
 
   function getRequest(url) {
+   
     //Return a new promise
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       var req = new XMLHttpRequest();
       req.open('GET', url, true);
       
@@ -1576,6 +1580,7 @@ let BasketballStatsPro = (function () {
   }
 
   function createElement(type) {
+   
     var node = document.createElement(type);
     for (var i = 1; i < arguments.length; i++) {
       var child = arguments[i];
@@ -1588,6 +1593,7 @@ let BasketballStatsPro = (function () {
   } 
 
   function setAttributes(el, attrs) {
+    
     // for multiple attributes, send attrs in the form of { attr: value, attr: value... }
     for(let key in attrs) {
       el.setAttribute(key, attrs[key]);
@@ -1595,11 +1601,13 @@ let BasketballStatsPro = (function () {
   }
 
   function addClass(el, className) {
-      if (el.classList) el.classList.add(className);
-      else if (!hasClass(el, className)) el.className += ' ' + className;
+      
+    if (el.classList) el.classList.add(className);
+    else if (!hasClass(el, className)) el.className += ' ' + className;
   }
 
   function removeClass(el, className) {
+      
       if (el.classList) el.classList.remove(className);
       else el.className = el.className.replace(new RegExp('\\b'+ className+'\\b', 'g'), '');
   }
@@ -1610,6 +1618,7 @@ let BasketballStatsPro = (function () {
   }
 
   function clearInnerHtml(ids) {
+    
     //can take multiple arguments  
     for(let id in arguments) {
       document.getElementById(arguments[id]).innerHTML = "";
@@ -1618,6 +1627,7 @@ let BasketballStatsPro = (function () {
 
   //Navbar utilities 
   function setNavRoute(option) {
+    
     let pageA = document.getElementById('stats-page');
     let pageB = document.getElementById('compare-page');
     let pageC = document.getElementById('rankings-page');
@@ -1653,6 +1663,7 @@ let BasketballStatsPro = (function () {
   }
 
   function setNavActive(option) {
+    
     let title_div = document.getElementById('title-div')
     let button_a = document.getElementById('sidebar-stats');
     let button_b = document.getElementById('sidebar-compare');
@@ -1738,6 +1749,7 @@ let BasketballStatsPro = (function () {
 
   //Stats and compare utilities
   function createFirstandLastNameArray(data) { 
+    
     return data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .map((entry) => { return entry.player.FirstName + " " + entry.player.LastName; 
@@ -1745,6 +1757,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getPlayerProfile(data, player_clicked) { 
+    
     let array = data
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
       .map((entry) => { 
@@ -1762,6 +1775,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getSavePlayerProfile(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
       .map((entry) => { 
@@ -1778,6 +1792,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getPlayerMainStats(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
@@ -1804,6 +1819,7 @@ let BasketballStatsPro = (function () {
   }
   
   function getPlayerMainStatsCompare(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
@@ -1911,6 +1927,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getPlayerSecondaryStats1(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
@@ -1931,6 +1948,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getPlayerSecondaryStats2(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
@@ -1952,6 +1970,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getPlayerSecondaryStatsCompare(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
@@ -2091,6 +2110,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getPlayerSecondaryStats(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
@@ -2121,6 +2141,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getTeamName(data, player_clicked) {
+    
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
@@ -2129,6 +2150,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getTeamList(data, player_clicked) {
+    
     return data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
@@ -2137,6 +2159,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getTeamPositions(data, player_clicked) {
+    
     return data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
@@ -2145,6 +2168,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getTeamJerseyNumbers(data, player_clicked) {
+    
     return data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
       .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
@@ -2153,6 +2177,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getRadarChartData(data, player_clicked) {
+    
     //return an array with numbers for the chart
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
@@ -2171,6 +2196,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getBarChartData(data, player_clicked) {
+    
     //return an array with numbers for the chart
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
@@ -2190,6 +2216,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getDoughnutChart1Data(data, player_clicked) {
+    
     //return an array with numbers for the chart
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
@@ -2204,6 +2231,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getDoughnutChart2Data(data, player_clicked) {
+    
     //return an array with numbers for the chart
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
@@ -2218,6 +2246,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getDoughnutChart3Data(data, player_clicked) {
+    
     //return an array with numbers for the chart
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
@@ -2232,6 +2261,7 @@ let BasketballStatsPro = (function () {
   }
 
   function getDoughnutChart4Data(data, player_clicked) {
+    
     //return an array with numbers for the chart
     let array = data
       .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
@@ -2304,7 +2334,7 @@ let BasketballStatsPro = (function () {
       table = getAllRankingsDataTable(data, option);
 
       //sort the data 
-      table.sort(function (a, b) {
+      table.sort((a, b) => {
         if ( Number(a.AstPerGame) > Number(b.AstPerGame) ) {
           return -1;
         }
@@ -2322,7 +2352,7 @@ let BasketballStatsPro = (function () {
       table = getAllRankingsDataTable(data, option);
 
       //sort the data
-      table.sort(function (a, b) {
+      table.sort((a, b) => {
         if ( Number(a.RebPerGame) > Number(b.RebPerGame) ) {
           return -1;
         }
@@ -2340,7 +2370,7 @@ let BasketballStatsPro = (function () {
       table = getAllRankingsDataTable(data, option);
 
       //sort the data
-      table.sort(function (a, b) {
+      table.sort((a, b) => {
         if ( Number(a.BlkPerGame) > Number(b.BlkPerGame) ) {
           return -1;
         }
@@ -2622,6 +2652,7 @@ let BasketballStatsPro = (function () {
 
   //Favourites utilities
   function isSavePlayerRepeated(list) {
+    
     let test_array = list
       .map((element) => { return element.name.toLowerCase(); })
       .filter((element) => { return element == current_player_clicked.toLowerCase();
@@ -2636,7 +2667,7 @@ let BasketballStatsPro = (function () {
 
   return {
 
-    init: function() {
+    init: () => {
 
       setNav();
       // setAllStatsData(); TEMP!! REMOVE THIS COMMENT TO USE AJAX REQUEST
