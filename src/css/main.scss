@@ -128,8 +128,8 @@ h2 {
       margin: 13px 13px;
     }
     
-    #header-season:hover, #header-settings:hover,  #header-info:hover,  
-    #header-season:active, #header-settings:active, #header-info:active, {
+    .header-season:hover, .header-settings:hover,  .header-info:hover,  
+    .header-season:active, .header-settings:active, .header-info:active, {
       cursor: pointer;
       color: $font1-shade-lightest;
       transition: 0.2s;
@@ -224,7 +224,7 @@ h2 {
       }  
     }
 
-    #button-compare, #button-save-player {
+    .button-compare, .button-save-player {
       width: 140px;
       height: 50px;
       border-radius: 2px;
@@ -238,8 +238,8 @@ h2 {
       text-transform: uppercase;
     }
     
-    #button-compare:hover, #button-save-player:hover,
-    #button-compare:active, #button-save-player:active {
+    .button-compare:hover, .button-save-player:hover,
+    .button-compare:active, .button-save-player:active {
       background-color: $color1-shade-dark;
       transition: 0.2s;
     }
@@ -254,12 +254,12 @@ h2 {
     font-weight: 500;
     color: $font1-shade-medium;
     
-    #profile-name {
+    .profile-name {
       font-size: 1.3em;
       font-weight: 700;
     }
     
-    #profile-jersey, #profile-position, #profile-age {
+    .profile-jersey, .profile-position, .profile-age {
       padding: 0 0 0 40px;
     }
   }
@@ -325,13 +325,12 @@ h2 {
       width: 220px;
     }
     
-    #doughnut-section-text {
+    .doughnut-section-text {
       margin: 8px 40px 120px 0;
       text-transform: capitalize;
     }
     
-    #doughnut1-section-main, #doughnut2-section-main, 
-    #doughnut3-section-main, #doughnut4-section-main {
+    .doughnut-section {
       margin: 0 20px 0 20px;
       position: relative;
       
@@ -358,16 +357,12 @@ h2 {
     font-family: $font-roboto;
     color: $font1-shade-medium;
     
-    #secondary-stats-text {
+    .secondary-stats-text {
       margin: 8px 0 0 0;
       font-size: 1.3em;
       font-weight: 700;
       color: $font1-shade-medium;
       text-transform: capitalize;
-    }
-    
-    #radar-chart-main {
-      margin: 0 50px;
     }
     
     .stats-secondary {
@@ -378,7 +373,7 @@ h2 {
         border: none;
       }
       
-      #table1-stats-secondary, #table2-stats-secondary {
+      .table-stats-secondary {
         margin: 10px 0 20px 0;
         table, tr, th, td {
         border-color: $color1-shade-light;
@@ -421,12 +416,12 @@ h2 {
       font-weight: 700;
       text-transform: capitalize;
       
-      #team-name {
+      .team-name {
         font-weight: 700;
       }
     }
     
-    #team-list {
+    .team-list {
       list-style: none;
       text-decoration: none;
       
@@ -467,19 +462,19 @@ h2 {
     font-weight: 500;
     color: $font1-shade-medium;
     
-    #profile-name-compare-a {
+    .profile-name-compare-a {
       font-size: 1.3em;
       font-weight: 700;
       color: $color1-shade-lightest;
     }
 
-    #profile-name-compare-b {
+    .profile-name-compare-b {
       font-size: 1.3em;
       font-weight: 700;
       color: $color3-shade-dark;
     }
     
-    #profile-jersey-compare, #profile-position-compare, #profile-age-compare {
+    .profile-jersey-compare, .profile-position-compare, .profile-age-compare {
       padding: 0 0 0 40px;
     }
 
@@ -573,13 +568,12 @@ h2 {
       width: 240px;
     }
     
-    #doughnut-section-text-compare {
+    .doughnut-section-text-compare {
       margin: 8px 40px 120px 0;
       text-transform: capitalize;
     }
     
-    #doughnut1-section-compare, #doughnut2-section-compare, 
-    #doughnut3-section-compare, #doughnut4-section-compare {
+    .doughnut-section-compare {
       margin: 0 20px 0px 20px;
       position: relative;
       
@@ -615,7 +609,7 @@ h2 {
     font-family: $font-roboto;
     color: $font1-shade-medium;
     
-    #secondary-stats-text-compare {
+    .secondary-stats-text-compare {
       margin: 8px 0 0 0;
       font-size: 1.3em;
       font-weight: 700;
@@ -631,7 +625,7 @@ h2 {
         border: none;
       }
     
-      #table-stats-secondary-compare {
+      .table-stats-secondary-compare {
         margin: 10px 0 20px 0;
         
         table, tr, th, td {
@@ -686,7 +680,7 @@ h2 {
     background-color: $color2-shade-light;
     font-family: $font-roboto;
   
-    #radar-chart-text-compare {
+    .radar-chart-text-compare {
       margin: 8px 0 0 0;
       font-size: 1.3em;
       font-weight: 700;
@@ -694,11 +688,11 @@ h2 {
       text-transform: capitalize;
     }
 
-    #radar-section-compare {
+    .radar-section-compare {
       margin: 0 0 0 35px;
     }
 
-    #bar-section-compare {
+    .bar-section-compare {
       margin: 0 0 50px 0;
     }
   }
@@ -741,7 +735,7 @@ h2 {
       color: #FFF;
     }
 
-    #section-table-a, #section-table-b, #section-table-c, #section-table-d {
+    .section-table {
       margin: 0 0 180px 0;
 
       table, tr, th, td {
@@ -791,7 +785,7 @@ h2 {
     font-weight: 500;
     color: $font1-shade-medium;
     
-    #favourites-list {
+    .favourites-list {
       padding-bottom: 100vh;
       
       div {
