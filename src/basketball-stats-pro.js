@@ -7,7 +7,7 @@
   License:  Microsoft Open Technologies, Inc
   https://github.com/Reactive-Extensions/RxJS/tree/master/doc
 */
-var Rx = require('rx');
+var Rx = require('rx/dist/rx.lite.min.js');
 
 /*!
   superagent.js v2.3.0
