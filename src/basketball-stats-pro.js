@@ -89,11 +89,11 @@ let BasketballStatsPro = (function () {
   all_profile_data = require("./js/data2");
 
   //async get requests 
-  let getAllProfileData = Rx.Observable.create((observer) => {
+  let getAllProfileData = Rx.Observable.create(observer => {
     xhrRequest
       .get(profile_data_url)
       .auth('jaellen', 'adanaC4032')
-      .end(function(err, res) {
+      .end((err, res) => {
         if (err) {
           return observer.onError(err);
         }
@@ -103,11 +103,11 @@ let BasketballStatsPro = (function () {
       return () => {};
   });
   
-  let getAllStatsData = Rx.Observable.create((observer) => {
+  let getAllStatsData = Rx.Observable.create(observer => {
     xhrRequest
      .get(cumulative_player_data_url)
      .auth('jaellen', 'adanaC4032')
-     .end(function(err, res) {
+     .end((err, res) => {
         if (err) {
           return observer.onError(err);
         }
@@ -181,8 +181,8 @@ let BasketballStatsPro = (function () {
     getAllStatsData
       .take(1)
       .subscribe({
-      onNext: (data) => { all_stats_data = data.cumulativeplayerstats.playerstatsentry; },
-      onError: (error) => { console.error("Error in XMLHttpRequest") },
+      onNext: data => all_stats_data = data.cumulativeplayerstats.playerstatsentry,
+      onError: error => console.error("Error in XMLHttpRequest"),
       onCompleted: () => {
         setSearch();
         setRankingsTables();
@@ -195,8 +195,8 @@ let BasketballStatsPro = (function () {
     getAllProfileData
       .take(1)
       .subscribe({
-      onNext: (data) => { all_profile_data = data.activeplayers.playerentry; },
-      onError: (error) => { console.error("Error in XMLHttpRequest") },
+      onNext: data => all_profile_data = data.activeplayers.playerentry,
+      onError: error => console.error("Error in XMLHttpRequest"),
       onCompleted: () => {},
     });  
   };
@@ -1572,14 +1572,10 @@ let BasketballStatsPro = (function () {
         if (req.status === 200) {
           resolve(req.response);
         }
-        else {
-          reject(Error(req.statusText));
-        }
+        else { reject(Error(req.statusText)); }
       };
       //Handle network errors
-      req.onerror = () => {
-        reject(Error("Network Error"))
-      };
+      req.onerror = () => { reject(Error("Network Error")) };
       //Make the request
       req.send();
     });
@@ -1757,16 +1753,15 @@ let BasketballStatsPro = (function () {
   function createFirstandLastNameArray(data) { 
     
     return data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .map((entry) => { return entry.player.FirstName + " " + entry.player.LastName; 
-      });
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .map(entry => entry.player.FirstName + " " + entry.player.LastName);
   }
 
   function getPlayerProfile(data, player_clicked) { 
     
     let array = data
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           name: (entry.player.FirstName + " " + entry.player.LastName),
           team: (entry.team.City + " " + entry.team.Name),
@@ -1783,8 +1778,8 @@ let BasketballStatsPro = (function () {
   function getSavePlayerProfile(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           name: (entry.player.FirstName + " " + entry.player.LastName),
           team: (entry.team.City + " " + entry.team.Name),
@@ -1800,9 +1795,9 @@ let BasketballStatsPro = (function () {
   function getPlayerMainStats(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           PtsPerGame: (entry.stats.PtsPerGame["#text"]),
           AstPerGame: (entry.stats.AstPerGame["#text"]),
@@ -1827,9 +1822,9 @@ let BasketballStatsPro = (function () {
   function getPlayerMainStatsCompare(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           Name: (entry.player.FirstName + " " + entry.player.LastName),
           PtsPerGame: (entry.stats.PtsPerGame["#text"]),
@@ -1935,9 +1930,9 @@ let BasketballStatsPro = (function () {
   function getPlayerSecondaryStats1(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           GamesPlayed: (entry.stats.GamesPlayed["#text"]),
           MinSeconds: ((Number(entry.stats.MinSeconds["#text"]) / 60).toPrecision(3)),
@@ -1956,9 +1951,9 @@ let BasketballStatsPro = (function () {
   function getPlayerSecondaryStats2(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           FtAtt: (entry.stats.FtAtt["#text"]),
           FtMade: (entry.stats.FtMade["#text"]),
@@ -1978,9 +1973,9 @@ let BasketballStatsPro = (function () {
   function getPlayerSecondaryStatsCompare(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           Name: (entry.player.FirstName + " " + entry.player.LastName),
           GamesPlayed: (entry.stats.GamesPlayed["#text"]),
@@ -2118,9 +2113,9 @@ let BasketballStatsPro = (function () {
   function getPlayerSecondaryStats(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { 
         return  { 
           GamesPlayed: ("GP: " + entry.stats.GamesPlayed["#text"]),
           MinSeconds: ("MIN: " + entry.stats.MinSeconds["#text"]),
@@ -2149,46 +2144,46 @@ let BasketballStatsPro = (function () {
   function getTeamName(data, player_clicked) {
     
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { return entry.team.City + " " + entry.team.Name });
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => entry.team.City + " " + entry.team.Name);
     return array[0];
   }
 
   function getTeamList(data, player_clicked) {
     
     return data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked }) //remove repeat
-      .map((entry) => { return entry.player.FirstName + " " + entry.player.LastName });
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.team.City + " " + entry.team.Name) === player_team_name.toString())
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked) //remove repeat
+      .map(entry => entry.player.FirstName + " " + entry.player.LastName);
   }
 
   function getTeamPositions(data, player_clicked) {
     
     return data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked }) //remove repeat
-      .map((entry) => { return entry.player.Position });
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.team.City + " " + entry.team.Name) === player_team_name.toString())
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked) //remove repeat
+      .map(entry => entry.player.Position);
   }
 
   function getTeamJerseyNumbers(data, player_clicked) {
     
     return data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.team.City + " " + entry.team.Name) === player_team_name.toString() })
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked }) //remove repeat
-      .map((entry) => { return entry.player.JerseyNumber });
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.team.City + " " + entry.team.Name) === player_team_name.toString())
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() !== player_clicked) //remove repeat
+      .map(entry => entry.player.JerseyNumber);
   }
 
   function getRadarChartData(data, player_clicked) {
     
     //return an array with numbers for the chart
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { return [
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { return [
           Number(getEfgPct(entry)), 
           Number(entry.stats.FtPct["#text"]), 
           Number(entry.stats.Fg3PtPct["#text"]),  
@@ -2205,9 +2200,9 @@ let BasketballStatsPro = (function () {
     
     //return an array with numbers for the chart
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { return [ 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { return [ 
           Number(entry.stats.PtsPerGame["#text"]), 
           Number(entry.stats.AstPerGame["#text"]),
           Number(entry.stats.RebPerGame["#text"]),
@@ -2225,9 +2220,9 @@ let BasketballStatsPro = (function () {
     
     //return an array with numbers for the chart
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { return [ 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { return [ 
           Number(entry.stats.FgMade["#text"]), 
           Number( Number(entry.stats.FgAtt["#text"]) - Number(entry.stats.FgMade["#text"]) )
         ]
@@ -2240,9 +2235,9 @@ let BasketballStatsPro = (function () {
     
     //return an array with numbers for the chart
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { return [ 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { return [ 
           Number(entry.stats.FtMade["#text"]), 
           Number( Number(entry.stats.FtAtt["#text"]) - Number(entry.stats.FtMade["#text"]) )
         ]
@@ -2255,9 +2250,9 @@ let BasketballStatsPro = (function () {
     
     //return an array with numbers for the chart
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { return [ 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { return [ 
           Number(entry.stats.Fg2PtPct["#text"]), 
           Number( 100 - Number(entry.stats.Fg2PtPct["#text"]) )
         ]
@@ -2270,9 +2265,9 @@ let BasketballStatsPro = (function () {
     
     //return an array with numbers for the chart
     let array = data
-      .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-      .filter((entry) => { return (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked })
-      .map((entry) => { return [ 
+      .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+      .filter(entry => (entry.player.FirstName + " " + entry.player.LastName).toLowerCase() === player_clicked)
+      .map(entry => { return [ 
           Number(entry.stats.Fg3PtPct["#text"]), 
           Number( 100 - Number(entry.stats.Fg3PtPct["#text"]) )
         ]
@@ -2397,8 +2392,8 @@ let BasketballStatsPro = (function () {
     
     if (option === "a") {
       return data
-            .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-            .map((entry) =>  { 
+            .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+            .map(entry => { 
               return  { 
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 PtsPerGame: (entry.stats.PtsPerGame["#text"]),
@@ -2423,8 +2418,8 @@ let BasketballStatsPro = (function () {
 
     if (option === "b") {
       return data
-            .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-            .map((entry) => { 
+            .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+            .map(entry => { 
               return  { 
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 AstPerGame: (entry.stats.AstPerGame["#text"]),
@@ -2449,8 +2444,8 @@ let BasketballStatsPro = (function () {
 
     if (option === "c") {
       return data
-            .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-            .map((entry) => { 
+            .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+            .map(entry => { 
               return  { 
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 RebPerGame: (entry.stats.RebPerGame["#text"]),
@@ -2475,8 +2470,8 @@ let BasketballStatsPro = (function () {
 
     if (option === "d") {
       return data
-            .filter((entry) => { return (entry.stats.PtsPerGame !== undefined) }) //filter out undefined stats in the data set
-            .map((entry) => { 
+            .filter(entry => entry.stats.PtsPerGame !== undefined) //filter out undefined stats in the data set
+            .map(entry => { 
               return  { 
                 Player: (entry.player.FirstName + " " + entry.player.LastName),
                 BlkPerGame: (entry.stats.BlkPerGame["#text"]),
@@ -2660,9 +2655,8 @@ let BasketballStatsPro = (function () {
   function isSavePlayerRepeated(list) {
     
     let test_array = list
-      .map((element) => { return element.name.toLowerCase(); })
-      .filter((element) => { return element == current_player_clicked.toLowerCase();
-    });
+      .map(element => element.name.toLowerCase())
+      .filter(element => element == current_player_clicked.toLowerCase());
 
     if (test_array.length > 0) { return true }
     else { 
