@@ -84,20 +84,19 @@ h2 {
     width: $sidebar-width;
     background-color: $color1-shade-medium;
     
-    .glyphicon, .glyphicon-dashboard {
-      color: $color3-shade-medium;
-      font-size: 2.5em;
-      line-height: $header-height;
-      vertical-align: middle;
-      margin: 0 37%;
-    }
-    // logo styling: 
-    // img {
-    //   height: 100%;
-    //   display: block;
-    //   margin: auto;
-    //   padding: 6%;
+    // .glyphicon, .glyphicon-dashboard {
+    //   color: $color3-shade-medium;
+    //   font-size: 2.5em;
+    //   line-height: $header-height;
+    //   vertical-align: middle;
+    //   margin: 0 37%;
     // }
+   
+    img {
+      height: 80%;
+      display: block;
+      margin: 3% auto;
+    }
   }
   
   .title-div {
