@@ -7,7 +7,8 @@
     "start": "webpack-dev-server",
     "test-server": "webpack-dev-server mocha!./test/test.js --output-file testBundle.js",
     "test-browser": "open http://localhost:8080/webpack-dev-server/testBundle",
-    "test": "npm run test-browser && npm run test-server"
+    "test": "npm run test-browser && npm run test-server",
+    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress"
   },
   "repository": {
     "type": "git",
