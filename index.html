@@ -13,11 +13,11 @@
 <body>
 
 <!--************************** TOP HEADER **********************************-->
-  
+
   <header class="header">
     <div class="container-fluid">
       <div class="row">
-        
+
         <!-- logo -->
         <div class="col-md-2 logo-div">
           <!-- <span class="glyphicon glyphicon-dashboard"></span> -->
@@ -41,44 +41,44 @@
   </header>
 
 <!--****************************** SIDE BAR ********************************-->
-  
+
   <nav class="sidebar">
-    
+
     <!-- stats -->
     <div id="sidebar-stats" class="sidebar-active">
       <span class="glyphicon glyphicon-user"></span>
       <h2>Stats</h2>
     </div>
-    
+
     <!-- compare -->
     <div id="sidebar-compare">
       <span class="glyphicon glyphicon-align-left"></span>
       <h2>Compare</h2>
     </div>
-    
+
     <!-- rankings -->
     <div id="sidebar-rankings">
       <span class="glyphicon glyphicon-flag"></span>
       <h2>Rankings</h2>
     </div>
-    
+
     <!-- favourites -->
     <div id="sidebar-favourites">
       <span class="glyphicon glyphicon-heart-empty"></span>
       <h2>Favourites</h2>
     </div>
-  
+
   </nav>
 
 <!--****************************** STATS PAGE ******************************-->
-  
+
   <section id="stats-page" class="stats-page">
     <div class="container-fluid">
 
-      <!-- search section -->  
+      <!-- search section -->
       <section class="section-search">
         <div class="row">
-          
+
           <div class="col-md-7">
             <span class="glyphicon glyphicon-search"></span>
             <input type="text" id="searchBox" class="search-field" placeholder="Search player" />
@@ -99,7 +99,7 @@
 
             </div>
           </div>
-          
+
           <div class="col-md-2">
             <button class="button-save-player" id="button-save-player">save player</button>
           </div>
@@ -110,38 +110,38 @@
       <!-- profile section -->
       <section class="section-profile">
         <div class="row">
-          
+
           <div class="col-md-3">
             <div class="profile-name" id="profile-name"></div>
           </div>
-          
+
           <div class="col-md-3">
             <div class="profile-team" id="profile-team"><span>No player selected</span></div>
           </div>
-          
+
           <div class="col-md-3">
             <div class="profile-jersey" id="profile-jersey"></div>
             <div class="profile-position" id="profile-position"></div>
             <div class="profile-age" id="profile-age"></div>
           </div>
-          
+
           <div class="col-md-3">
             <div id="profile-height"></div>
             <div id="profile-weight"></div>
           </div>
 
         </div>
-      </section>   
-      
-      <!-- main stats section --> 
-      <section class="section-main-stats">  
-        <div class="row">      
-          
-          <div class="col-md-2 season"> 
+      </section>
+
+      <!-- main stats section -->
+      <section class="section-main-stats">
+        <div class="row">
+
+          <div class="col-md-2 season">
             <div id="stats-season"></div>
             <div id="stats-season-text"></div>
           </div>
-          
+
           <div class="col-md-8 stats-main">
             <table id="table-stats-main"></table>
           </div>
@@ -149,12 +149,12 @@
         </div>
       </section>
 
-      <!-- main doughnut charts section --> 
+      <!-- main doughnut charts section -->
       <section class="section-main-doughnut-charts">
         <div class="row">
-          
+
           <div class="col-md-1 doughnut-section-text" id="doughnut-section-text"></div>
-   
+
           <div class="col-md-2 doughnut-section" id="doughnut1-section-main"></div>
           <div class="col-md-2 doughnut-section" id="doughnut2-section-main"></div>
           <div class="col-md-2 doughnut-section" id="doughnut3-section-main"></div>
@@ -166,14 +166,14 @@
       <!-- secondary stats section -->
       <section class="section-main-secondary-stats">
         <div class="row">
-          
-          <div class="col-md-1"> 
+
+          <div class="col-md-1">
             <div class="secondary-stats-text" id="secondary-stats-text"></div>
           </div>
 
           <div class="col-md-4" id="radar-section-main"></div>
-          
-          <div class="col-md-5 stats-secondary"> 
+
+          <div class="col-md-5 stats-secondary">
             <table class="table-stats-secondary" id="table1-stats-secondary"></table><br>
             <table class="table-stats-secondary" id="table2-stats-secondary"></table>
           </div>
@@ -184,7 +184,7 @@
       <!-- team players section -->
       <section class="section-main-team">
         <div class="row">
-            
+
           <div class="col-md-2">
             <div class="team-text">
               <div class="team-name" id="team-name"></div>
@@ -192,32 +192,32 @@
           </div>
 
           <div class="col-md-8">
-            <div class="team-list" id="team-list"></div>  
+            <div class="team-list" id="team-list"></div>
           <div>
 
           <br><br><br>
-            
+
         </div>
       </section>
-    
+
     </div>
   </section>
 
 <!--************************** COMPARE PAGE ********************************-->
- 
+
   <section id="compare-page" class="compare-page hidden">
     <div class="container-fluid">
-      
+
       <!-- profile compare section -->
       <section class="profile-section-compare">
-            
+
         <!-- player A -->
         <div class="row player-a">
-        
+
           <div class="col-md-3">
             <div class="profile-name-compare-a" id="profile-name-compare-a"></div>
           </div>
-          
+
           <div class="col-md-4">
             <div class="profile-team-compare-a" id="profile-team-compare-a"><span>No player A selected</span></div>
           </div>
@@ -227,21 +227,21 @@
             <div class="profile-position-compare-a" id="profile-position-compare-a"></div>
             <div class="profile-age-compare-a" id="profile-age-compare-a"></div>
           </div>
-          
+
           <div class="col-md-2">
             <div class="profile-height-compare-a" id="profile-height-compare-a"></div>
             <div class="profile-weight-compare-a" id="profile-weight-compare-a"></div>
           </div>
-        
-        </div>  
+
+        </div>
 
         <!-- player B -->
         <div class="row player-b">
-        
+
           <div class="col-md-3">
             <div class="profile-name-compare-b" id="profile-name-compare-b"></div>
           </div>
-          
+
           <div class="col-md-4">
             <div class="profile-team-compare-b" id="profile-team-compare-b"><span>No player B selected</span></div>
           </div>
@@ -251,37 +251,37 @@
             <div class="profile-position-compare-b" id="profile-position-compare-b"></div>
             <div class="profile-age-compare-b" id="profile-age-compare-b"></div>
           </div>
-          
+
           <div class="col-md-2">
             <div class="profile-height-compare-b" id="profile-height-compare-b"></div>
             <div class="profile-weight-compare-b" id="profile-weight-compare-b"></div>
           </div>
-        
-        </div>  
+
+        </div>
       </section>
 
       <!-- compare main stats section -->
-      <section class="section-main-stats-compare">       
-        <div class="row">      
-          
-          <div class="col-md-2 season"> 
+      <section class="section-main-stats-compare">
+        <div class="row">
+
+          <div class="col-md-2 season">
             <div id="stats-season-compare"></div>
             <div id="stats-season-text-compare"></div>
           </div>
-          
+
           <div class="col-md-8 stats-main-compare">
             <table id="table-stats-main-compare"></table>
           </div>
 
-        </div>     
-      </section>    
+        </div>
+      </section>
 
       <!-- doughnut chart compare section -->
       <section class="section-doughnut-compare">
         <div class="row">
-          
+
           <div class="col-md-1 doughnut-section-text-compare" id="doughnut-section-text-compare"></div>
-   
+
           <div class="col-md-2 doughnut-section-compare" id="doughnut1-section-compare"></div>
           <div class="col-md-2 doughnut-section-compare" id="doughnut2-section-compare"></div>
           <div class="col-md-2 doughnut-section-compare" id="doughnut3-section-compare"></div>
@@ -293,38 +293,38 @@
       <!-- secondary stats compare section -->
       <section class="section-compare-secondary-stats">
         <div class="row">
-          
-          <div class="col-md-2"> 
+
+          <div class="col-md-2">
             <div class="secondary-stats-text-compare" id="secondary-stats-text-compare"></div>
           </div>
-          
-          <div class="col-md-8 stats-secondary-compare"> 
+
+          <div class="col-md-8 stats-secondary-compare">
             <table class="table-stats-secondary-compare" id="table-stats-secondary-compare"></table>
           </div>
 
         </div>
       </section>
-    
+
       <!-- radar and bar charts compare section -->
       <section class="section-compare-radar-chart">
         <div class="row">
-        
-          <div class="col-md-2"> 
+
+          <div class="col-md-2">
             <div class="radar-chart-text-compare" id="radar-chart-text-compare"></div>
           </div>
 
           <div class="col-md-4 radar-section-compare" id="radar-section-compare"></div>
           <div class="col-md-4 bar-section-compare" id="bar-section-compare"></div>
-          
+
         </div>
-      </section>  
-        
+      </section>
+
 
     </div>
   </section>
 
 <!--************************** RANKINGS PAGE *******************************-->
- 
+
   <section id="rankings-page" class="rankings-page hidden">
     <div class="container-fluid">
 
@@ -333,30 +333,30 @@
 
           <!-- rankings buttons -->
           <div class="row">
-              
+
             <div class="col-md-2">
-              <button id="button-pts-g" class="rankings-button-active">PTS/G</button> 
+              <button id="button-pts-g" class="rankings-button-active">PTS/G</button>
             </div>
 
             <div class="col-md-2">
-              <button id="button-ast-g">AST/G</button> 
+              <button id="button-ast-g">AST/G</button>
             </div>
 
             <div class="col-md-2">
-              <button id="button-reb-g">REB/G</button> 
+              <button id="button-reb-g">REB/G</button>
             </div>
 
             <div class="col-md-2">
-              <button id="button-blk-g">BLK/G</button> 
+              <button id="button-blk-g">BLK/G</button>
             </div>
 
-          </div> 
+          </div>
           <br>
 
           <!-- rangings Tables -->
           <div class="container-fluid">
-            <div class="row"> 
-            
+            <div class="row">
+
               <!-- Table A: PTS/G -->
               <section class="section-table" id="section-table-a" >
                 <div class="row">
@@ -386,7 +386,7 @@
               </section>
 
             </div>
-          </div>  
+          </div>
 
         </div>
       </section>
@@ -399,13 +399,13 @@
   <section id="favourites-page" class="hidden favourites-page">
     <div class="container-fluid">
 
-      <section class="section-save-player"> 
-        <div id="favourites-list" class="row favourites-list"></div>   
-      </section> 
-      
+      <section class="section-save-player">
+        <div id="favourites-list" class="row favourites-list"></div>
+      </section>
+
     </div>
   </section>
-  
+
 
   <!-- App Entry file -->
   <script src="./node_modules/jquery/dist/jquery.min.js"></script>
