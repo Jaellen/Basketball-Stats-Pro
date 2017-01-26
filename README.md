@@ -13,3 +13,5 @@ Upcoming Changes:
 - Currently building a RESTful api, Node/Express back-end
 - Refactoring front-end to use React for UI
 - Optimizing for mobile
+
+![alt tag](https://raw.github.com/Jaellen/Basketball-Stats-Pro/tree/master/src/img/screenshot.png)
