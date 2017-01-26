@@ -14,4 +14,4 @@ Upcoming Changes:
 - Refactoring front-end to use React for UI
 - Optimizing for mobile
 
-![alt tag](https://raw.github.com/Jaellen/Basketball-Stats-Pro/tree/master/src/img/screenshot.png)
+![alt tag](https://github.com/Jaellen/Basketball-Stats-Pro/blob/master/src/img/screenshot.png)
