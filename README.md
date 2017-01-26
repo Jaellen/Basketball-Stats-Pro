@@ -1,7 +1,9 @@
 # Basketball-Stats-Pro
 A web app for live, pro stats of NBA players
 
-To View:
+![alt tag](https://github.com/Jaellen/Basketball-Stats-Pro/blob/master/src/img/screenshot.png)
+
+To View Locally:
 
 1) clone or download the repo
 
@@ -14,4 +16,4 @@ Upcoming Changes:
 - Refactoring front-end to use React for UI
 - Optimizing for mobile
 
-![alt tag](https://github.com/Jaellen/Basketball-Stats-Pro/blob/master/src/img/screenshot.png)
+
