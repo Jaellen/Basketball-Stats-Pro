@@ -1,4 +1,12 @@
 # Basketball-Stats-Pro
 A web app for live, pro stats of NBA players
 
-Currently building a RESTful api backend, soon to go live. 
+To view:
+1. clone or download the repo
+2. npm install
+3. npm start
+
+Next Steps:
+- Currently building a RESTful api, Node/Express back-end
+- Refactoring front-end to use React for UI
+- Optimizing for mobile
