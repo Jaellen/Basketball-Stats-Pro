@@ -14,6 +14,8 @@ To View Locally:
 
 3) npm start
 
+4) open browser to localhost:8080
+
 Upcoming Changes:
 - Currently building a RESTful api, Node/Express back-end
 - Refactoring front-end to use React for UI
